@@ -101,6 +101,7 @@
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             z-index: 1;
+            cursor: pointer;
         }
 
         .btn-neon:hover {
@@ -136,6 +137,7 @@
             font-family: 'Orbitron', sans-serif;
             position: relative;
             transition: color 0.3s ease;
+            cursor: pointer;
         }
 
         .navbar .nav-link:hover {
@@ -633,10 +635,10 @@
         <div class="container">
             <h2 class="mb-4 glitch">Subscriu-te al nostre butlletí</h2>
             <p class="lead mb-4">Rep actualitzacions sobre GarBotGPT i la IA!</p>
-            <form class="d-flex justify-content-center gap-2" id="subscription-form">
-                <input type="email" class="form-control glass" placeholder="Introdueix el teu correu electrònic" required aria-label="Correu electrònic">
-                <button type="submit" class="btn btn-neon">Subscriu-te</button>
-            </form>
+            <div class="d-flex justify-content-center gap-2" id="subscription-form">
+                <input type="email" class="form-control glass" id="subscription-email" placeholder="Introdueix el teu correu electrònic" required aria-label="Correu electrònic">
+                <button type="button" class="btn btn-neon" id="subscription-submit">Subscriu-te</button>
+            </div>
             <div id="subscription-feedback" class="mt-3" style="display: none;"></div>
         </div>
     </section>
@@ -718,8 +720,13 @@
             try {
                 const preloader = document.getElementById('preloader');
                 if (preloader) {
-                    gsap.to(preloader, { opacity: 0, duration: 0.3, onComplete: () => preloader.style.display = 'none' });
+                    if (typeof gsap !== 'undefined') {
+                        gsap.to(preloader, { opacity: 0, duration: 0.3, onComplete: () => preloader.style.display = 'none' });
+                    } else {
+                        preloader.style.display = 'none';
+                    }
                 }
+                console.log('Preloader ocultat');
             } catch (error) {
                 console.error('Error amagant preloader:', error);
                 const preloader = document.getElementById('preloader');
@@ -739,7 +746,7 @@
         // Inicializar todo
         document.addEventListener('DOMContentLoaded', () => {
             try {
-                // Inicializar Swiper con efecto creativo
+                // Inicializar Swiper
                 if (typeof Swiper !== 'undefined') {
                     new Swiper('.swiper-container', {
                         loop: true,
@@ -752,6 +759,9 @@
                             next: { translate: ['100%', 0, 0], rotate: [0, 0, 0], opacity: 0 }
                         }
                     });
+                    console.log('Swiper inicialitzat');
+                } else {
+                    console.warn('Swiper no disponible');
                 }
 
                 // Inicializar Particles.js
@@ -792,9 +802,12 @@
                         },
                         retina_detect: true
                     });
+                    console.log('Particles.js inicialitzat');
+                } else {
+                    console.warn('Particles.js no disponible');
                 }
 
-                // Inicializar Three.js para fondo 3D
+                // Inicializar Three.js
                 if (typeof THREE !== 'undefined') {
                     const scene = new THREE.Scene();
                     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -828,9 +841,12 @@
                         camera.updateProjectionMatrix();
                         renderer.setSize(window.innerWidth, window.innerHeight);
                     });
+                    console.log('Three.js inicialitzat');
+                } else {
+                    console.warn('Three.js no disponible');
                 }
 
-                // Inicializar GSAP para animaciones
+                // Inicializar GSAP
                 if (typeof gsap !== 'undefined') {
                     gsap.utils.toArray('.feature-card, .use-case-card, .timeline-content').forEach((el, i) => {
                         gsap.from(el, {
@@ -844,10 +860,12 @@
                             }
                         });
                     });
-
                     gsap.utils.toArray('.swiper-slide h1').forEach(el => {
                         gsap.from(el, { opacity: 0, scale: 0.8, duration: 1, ease: 'power3.out' });
                     });
+                    console.log('GSAP inicialitzat');
+                } else {
+                    console.warn('GSAP no disponible');
                 }
 
                 // Inicializar tooltips
@@ -855,25 +873,34 @@
                     document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
                         bootstrap.Tooltip.getOrCreateInstance(el);
                     });
+                    console.log('Tooltips inicialitzats');
+                } else {
+                    console.warn('Bootstrap no disponible');
                 }
 
-                // Cambiar tema claro/oscuro
+                // Botón de cambio de tema
                 const themeToggle = document.getElementById('theme-toggle');
                 if (themeToggle) {
                     themeToggle.addEventListener('click', () => {
-                        const body = document.body;
-                        const currentTheme = body.classList.contains('dark-theme') ? 'dark' : 'light';
-                        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                        body.classList.toggle('dark-theme');
-                        const icon = themeToggle.querySelector('i');
-                        icon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
-                        localStorage.setItem('theme', newTheme);
-                        if (typeof particlesJS !== 'undefined') {
-                            particlesJS('particles-js', {
-                                particles: {
-                                    color: { value: newTheme === 'light' ? ['#00f7ff', '#ff00ff', '#8b00ff'] : ['#ffffff', '#cccccc'] }
-                                }
-                            });
+                        try {
+                            const body = document.body;
+                            const currentTheme = body.classList.contains('dark-theme') ? 'dark' : 'light';
+                            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                            body.classList.toggle('dark-theme');
+                            const icon = themeToggle.querySelector('i');
+                            icon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+                            localStorage.setItem('theme', newTheme);
+                            if (typeof particlesJS !== 'undefined') {
+                                particlesJS('particles-js', {
+                                    particles: {
+                                        color: { value: newTheme === 'light' ? ['#00f7ff', '#ff00ff', '#8b00ff'] : ['#ffffff', '#cccccc'] }
+                                    }
+                                });
+                            }
+                            console.log('Tema canviat a:', newTheme);
+                        } catch (error) {
+                            console.error('Error canviant tema:', error);
+                            alert('Error al canviar el tema');
                         }
                     });
                     const savedTheme = localStorage.getItem('theme');
@@ -881,75 +908,102 @@
                         document.body.classList.add('dark-theme');
                         themeToggle.querySelector('i').className = 'fas fa-sun';
                     }
+                    console.log('Botó de tema configurat');
+                } else {
+                    console.warn('Botó de tema no trobat');
                 }
 
-                // Modo inmersivo
+                // Botón de modo inmersivo
                 const immersiveMode = document.getElementById('immersive-mode');
                 if (immersiveMode) {
                     immersiveMode.addEventListener('click', () => {
-                        document.documentElement.requestFullscreen().catch(err => console.error('Error en mode immersiu:', err));
-                        gsap.to('.gradient-bg', { opacity: 0.8, duration: 0.5 });
-                        if (typeof particlesJS !== 'undefined') {
-                            particlesJS('particles-js', { particles: { number: { value: 200 } } });
+                        try {
+                            document.documentElement.requestFullscreen().catch(err => console.error('Error en mode immersiu:', err));
+                            if (typeof gsap !== 'undefined') {
+                                gsap.to('.gradient-bg', { opacity: 0.8, duration: 0.5 });
+                            }
+                            if (typeof particlesJS !== 'undefined') {
+                                particlesJS('particles-js', { particles: { number: { value: 200 } } });
+                            }
+                            console.log('Mode immersiu activat');
+                        } catch (error) {
+                            console.error('Error activant mode immersiu:', error);
+                            alert('Error al activar el mode immersiu');
                         }
                     });
+                    console.log('Botó de mode immersiu configurat');
+                } else {
+                    console.warn('Botó de mode immersiu no trobat');
                 }
 
                 // Selector de idioma
                 const languageSelector = document.getElementById('language-selector');
                 if (languageSelector) {
                     languageSelector.addEventListener('change', (e) => {
-                        const lang = e.target.value;
-                        // Simulación de cambio de idioma (reemplazar con lógica real)
-                        const translations = {
-                            ca: { title: 'GarBotGPT', subtitle: 'El teu assistent intel·ligent' },
-                            es: { title: 'GarBotGPT', subtitle: 'Tu asistente inteligente' },
-                            en: { title: 'GarBotGPT', subtitle: 'Your intelligent assistant' }
-                        };
-                        document.querySelector('.swiper-slide h1').textContent = translations[lang].title;
-                        document.querySelector('.swiper-slide p').textContent = translations[lang].subtitle;
+                        try {
+                            const lang = e.target.value;
+                            const translations = {
+                                ca: { title: 'GarBotGPT', subtitle: 'El teu assistent intel·ligent' },
+                                es: { title: 'GarBotGPT', subtitle: 'Tu asistente inteligente' },
+                                en: { title: 'GarBotGPT', subtitle: 'Your intelligent assistant' }
+                            };
+                            document.querySelector('.swiper-slide h1').textContent = translations[lang].title;
+                            document.querySelector('.swiper-slide p').textContent = translations[lang].subtitle;
+                            console.log('Idioma canviat a:', lang);
+                        } catch (error) {
+                            console.error('Error canviant idioma:', error);
+                            alert('Error al canviar l’idioma');
+                        }
                     });
+                    console.log('Selector d’idioma configurat');
+                } else {
+                    console.warn('Selector d’idioma no trobat');
                 }
 
                 // Chat preview
                 const chatPreview = document.getElementById('chat-preview');
                 const closeChat = document.getElementById('close-chat');
                 if (chatPreview && closeChat) {
-                    setTimeout(() => chatPreview.classList.add('active'), 2000);
+                    setTimeout(() => {
+                        chatPreview.classList.add('active');
+                        if (typeof gsap !== 'undefined') {
+                            gsap.from(chatPreview, { opacity: 0, y: 50, duration: 0.5 });
+                        }
+                        console.log('Chat preview mostrat');
+                    }, 2000);
                     closeChat.addEventListener('click', () => {
-                        gsap.to(chatPreview, { opacity: 0, duration: 0.3, onComplete: () => chatPreview.classList.remove('active') });
+                        try {
+                            if (typeof gsap !== 'undefined') {
+                                gsap.to(chatPreview, { opacity: 0, duration: 0.3, onComplete: () => chatPreview.classList.remove('active') });
+                            } else {
+                                chatPreview.classList.remove('active');
+                            }
+                            console.log('Chat preview tancat');
+                        } catch (error) {
+                            console.error('Error tancant chat preview:', error);
+                            alert('Error al tancar el chat preview');
+                        }
                     });
+                    console.log('Chat preview configurat');
+                } else {
+                    console.warn('Chat preview o botó de tancar no trobats');
                 }
 
-                // Animaciones en scroll
-                const animateOnScroll = () => {
-                    const elements = document.querySelectorAll('.animate__animated:not(.animate__fadeIn)');
-                    elements.forEach(el => {
-                        const rect = el.getBoundingClientRect();
-                        if (rect.top < window.innerHeight * 0.85) {
-                            gsap.to(el, { opacity: 1, y: 0, duration: 0.8 });
-                            el.classList.add('animate__fadeIn');
-                        }
-                    });
-                };
-                window.addEventListener('scroll', animateOnScroll);
-                animateOnScroll();
-
                 // Formulario de suscripción
-                const subscriptionForm = document.getElementById('subscription-form');
+                const subscriptionSubmit = document.getElementById('subscription-submit');
+                const subscriptionEmail = document.getElementById('subscription-email');
                 const feedback = document.getElementById('subscription-feedback');
-                if (subscriptionForm && feedback) {
-                    subscriptionForm.addEventListener('submit', async (e) => {
-                        e.preventDefault();
-                        const email = subscriptionForm.querySelector('input[type="email"]').value;
-                        if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-                            feedback.style.display = 'block';
-                            feedback.textContent = 'Introdueix un correu electrònic vàlid';
-                            feedback.style.color = '#ff00ff';
-                            return;
-                        }
+                if (subscriptionSubmit && subscriptionEmail && feedback) {
+                    subscriptionSubmit.addEventListener('click', async () => {
                         try {
-                            // Simulación de API
+                            const email = subscriptionEmail.value;
+                            if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                                feedback.style.display = 'block';
+                                feedback.textContent = 'Introdueix un correu electrònic vàlid';
+                                feedback.style.color = '#ff00ff';
+                                console.log('Correu electrònic invàlid');
+                                return;
+                            }
                             const response = await fetch('/subscribe', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
@@ -960,7 +1014,7 @@
                             feedback.textContent = data.success ? 'Subscripció exitosa!' : 'Error: ' + data.error;
                             feedback.style.color = data.success ? '#00f7ff' : '#ff00ff';
                             if (data.success) {
-                                subscriptionForm.reset();
+                                subscriptionEmail.value = '';
                                 if (typeof particlesJS !== 'undefined') {
                                     particlesJS('subscription-feedback', {
                                         particles: {
@@ -972,12 +1026,18 @@
                                     });
                                 }
                             }
+                            console.log('Subscripció processada:', data);
                         } catch (error) {
                             feedback.style.display = 'block';
                             feedback.textContent = 'Error: No s’ha pogut connectar al servidor';
                             feedback.style.color = '#ff00ff';
+                            console.error('Error en la subscripció:', error);
+                            alert('Error en la subscripció');
                         }
                     });
+                    console.log('Formulari de subscripció configurat');
+                } else {
+                    console.warn('Elements del formulari de subscripció no trobats');
                 }
 
                 // Contadores animados
@@ -1000,9 +1060,46 @@
                         snap: { innerHTML: 1 },
                         scrollTrigger: { trigger: '.stats-section', start: 'top 80%' }
                     });
+                    console.log('Contadores animados configurats');
+                } else {
+                    console.warn('GSAP no disponible per contadores');
                 }
+
+                // Animaciones en scroll
+                const animateOnScroll = () => {
+                    const elements = document.querySelectorAll('.animate__animated:not(.animate__fadeIn)');
+                    elements.forEach(el => {
+                        const rect = el.getBoundingClientRect();
+                        if (rect.top < window.innerHeight * 0.85) {
+                            if (typeof gsap !== 'undefined') {
+                                gsap.to(el, { opacity: 1, y: 0, duration: 0.8 });
+                            }
+                            el.classList.add('animate__fadeIn');
+                        }
+                    });
+                };
+                window.addEventListener('scroll', animateOnScroll);
+                animateOnScroll();
+                console.log('Animacions en scroll configurades');
+
+                // Verificar enlaces de navegación
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        try {
+                            const href = link.getAttribute('href');
+                            console.log('Navegant a:', href);
+                            // Descomenta la siguiente línea si usas Flask con rutas reales
+                            // window.location.href = href;
+                        } catch (error) {
+                            console.error('Error en navegació:', error);
+                            alert('Error al navegar');
+                        }
+                    });
+                });
+                console.log('Enllaços de navegació configurats');
             } catch (error) {
-                console.error('Error en l’inicialització:', error);
+                console.error('Error en l’inicialització general:', error);
+                alert('Error en la càrrega de la pàgina. Revisa la consola per més detalls.');
             }
         });
     </script>
