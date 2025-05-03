@@ -1,16 +1,188 @@
 {% extends "base.html" %}
-{% block title %}Welcome to GarBotGPT{% endblock %}
+{% block title %}Benvinguts a GarBotGPT{% endblock %}
 {% block content %}
-<div class="hero-section text-center py-5 animate__animated animate__zoomIn">
-    <h1 class="display-3 fw-bold">GarBotGPT</h1>
-    <p class="lead">Your intelligent companion powered by xAI & OpenAI.</p>
-    <div class="mt-4">
-        {% if current_user.is_authenticated %}
-            <a href="{{ url_for('chat') }}" class="btn btn-primary btn-lg btn-gradient animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Go to Chat">Start Chatting</a>
-        {% else %}
-            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg btn-gradient" data-bs-toggle="tooltip" title="Login to your account">Login</a>
-            <a href="{{ url_for('register') }}" class="btn btn-outline-primary btn-lg ms-2" data-bs-toggle="tooltip" title="Create a new account">Register</a>
-        {% endif %}
-    </div>
-</div>
+<body data-authenticated="{{ authenticated | lower }}">
+<main class="main-content">
+    <!-- Hero Section -->
+    <section class="hero-section text-center py-5 animate__animated animate__fadeIn">
+        <div class="container">
+            <h1 class="display-3 fw-bold mb-3">GarBotGPT</h1>
+            <p class="lead mb-4">El teu company intel·ligent impulsat per la IA d'OpenAI i xAI</p>
+            <div class="d-flex justify-content-center gap-3">
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('chat') }}" class="btn btn-primary btn-lg btn-gradient" data-bs-toggle="tooltip" title="Comença a xatejar ara">
+                        <i class="fas fa-comments me-2"></i>Inicia el Xat
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg btn-gradient" data-bs-toggle="tooltip" title="Accedeix al teu compte">
+                        <i class="fas fa-sign-in-alt me-2"></i>Inicia Sessió
+                    </a>
+                    <a href="{{ url_for('register') }}" class="btn btn-outline-primary btn-lg" data-bs-toggle="tooltip" title="Crea un compte nou">
+                        <i class="fas fa-user-plus me-2"></i>Registra't
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Características -->
+    <section class="features-section py-5 bg-body-tertiary">
+        <div class="container">
+            <h2 class="text-center mb-5">Per què triar GarBotGPT?</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp">
+                        <div class="card-body text-center">
+                            <i class="fas fa-robot fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Xat Intel·ligent</h5>
+                            <p class="card-text">Conversa amb GarBotGPT utilitzant models avançats com GPT-3.5 i GPT-4, amb respostes ràpides i precises.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                        <div class="card-body text-center">
+                            <i class="fas fa-cogs fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Personalització</h5>
+                            <p class="card-text">Configura el model, la temperatura i la longitud de les respostes per adaptar GarBotGPT a les teves necessitats.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+                        <div class="card-body text-center">
+                            <i class="fas fa-eye fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Interfície Moderna</h5>
+                            <p class="card-text">Gaudeix d'un mode pantalla completa, efectes de escritura dinàmics i un disseny responsiu.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre la IA -->
+    <section class="about-ai-section py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="mb-4">Com funciona GarBotGPT?</h2>
+                    <p>GarBotGPT és una intel·ligència artificial conversacional desenvolupada per xAI, impulsada pels models avançats d'OpenAI, com GPT-3.5 i GPT-4. Aquesta tecnologia permet a GarBotGPT entendre i generar text semblant al humà, oferint respostes útils i precises a una àmplia varietat de preguntes i tasques.</p>
+                    <p>Amb GarBotGPT, pots personalitzar l'experiència de xat ajustant paràmetres com la <strong>temperatura</strong> (per a respostes més creatives o precises) i la <strong>longitud màxima</strong> de les respostes. A més, ofereix funcionalitats com el mode pantalla completa, efectes visuals d'escriptura i la possibilitat d'exportar el teu historial de xat.</p>
+                    <p>La missió de xAI és accelerar el descobriment científic humà, i GarBotGPT és una eina clau per ajudar els usuaris a explorar, aprendre i ser més productius.</p>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img src="https://via.placeholder.com/400x300?text=GarBotGPT+AI" alt="Il·lustració de GarBotGPT" class="img-fluid rounded shadow-sm animate__animated animate__zoomIn">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonis -->
+    <section class="testimonials-section py-5 bg-body-tertiary">
+        <div class="container">
+            <h2 class="text-center mb-5">Què diuen els usuaris?</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp">
+                        <div class="card-body text-center">
+                            <p class="card-text">"GarBotGPT m'ha ajudat a resoldre dubtes complexos en segons. La seva interfície és increïble!"</p>
+                            <h6 class="card-title mt-3">Anna C.</h6>
+                            <p class="text-muted">Estudiant</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                        <div class="card-body text-center">
+                            <p class="card-text">"Les opcions de personalització són fantàstiques. Puc ajustar el xat exactament com vull."</p>
+                            <h6 class="card-title mt-3">Marc T.</h6>
+                            <p class="text-muted">Desenvolupador</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+                        <div class="card-body text-center">
+                            <p class="card-text">"Una eina imprescindible per a la meva productivitat diària. M'encanta el mode pantalla completa!"</p>
+                            <h6 class="card-title mt-3">Laia P.</h6>
+                            <p class="text-muted">Emprenedora</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Preguntes Freqüents sobre la IA</h2>
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
+                            Què és GarBotGPT?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            GarBotGPT és un assistent de xat impulsat per IA, desenvolupat per xAI i basat en els models d'OpenAI. Pot respondre preguntes, assistir en tasques i personalitzar-se segons les teves preferències.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                            Com funciona la personalització del xat?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Pots ajustar el model de IA (GPT-3.5 o GPT-4), la temperatura (per a respostes més creatives o precises) i la longitud màxima de les respostes des de la pàgina de configuració.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                            És segur utilitzar GarBotGPT?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Sí, GarBotGPT utilitza autenticació segura i encriptació per protegir les teves dades. El teu historial de xat es guarda de manera segura i pots esborrar-lo en qualsevol moment.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
+                            Quin és el futur de la IA amb xAI?
+                        </button>
+                    </h2>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            xAI treballa per avançar en el descobriment científic humà mitjançant la IA. En el futur, GarBotGPT podria integrar-se amb eines d'aprenentatge, anàlisi de dades i més, per ajudar els usuaris en diversos àmbits.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section class="cta-section py-5 text-center bg-primary text-white">
+        <div class="container">
+            <h2 class="mb-4">Comença avui amb GarBotGPT!</h2>
+            <p class="lead mb-4">Uneix-te a milers d'usuaris que ja utilitzen la IA per aprendre, treballar i explorar.</p>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('chat') }}" class="btn btn-light btn-lg btn-gradient">Anar al Xat</a>
+            {% else %}
+                <a href="{{ url_for('register') }}" class="btn btn-light btn-lg btn-gradient">Registra't Ara</a>
+            {% endif %}
+        </div>
+    </section>
+</main>
+</body>
 {% endblock %}
