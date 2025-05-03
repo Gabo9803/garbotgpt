@@ -1,26 +1,43 @@
 {% extends "base.html" %}
-{% block title %}Login to GarBotGPT{% endblock %}
+{% block title %}Inici de sessió a GarBotGPT{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-        <div class="card shadow-lg border-0 animate__animated animate__fadeInUp">
-            <div class="card-body">
-                <h2 class="card-title text-center mb-4">Login to GarBotGPT</h2>
-                <form method="POST">
-                    <div class="mb-3">
-                        <label for="username" class="form-label"><i class="bi bi-person-fill me-2"></i>Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label"><i class="bi bi-lock-fill me-2"></i>Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-gradient animate__animated animate__pulse" data-bs-toggle="tooltip" title="Login to your account">Login</button>
-                    </div>
-                </form>
+<section class="py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-lg border-0 animate__animated animate__fadeIn">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Inici de sessió a GarBotGPT</h2>
+                    <form method="POST" id="login-form" novalidate>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Nom d'usuari</label>
+                            <input type="text" class="form-control" id="username" name="username" required aria-describedby="usernameHelp">
+                            <div id="usernameHelp" class="form-text">Introdueix el teu nom d'usuari.</div>
+                            <div class="invalid-feedback">El nom d'usuari és obligatori.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contrasenya</label>
+                            <input type="password" class="form-control" id="password" name="password" required aria-describedby="passwordHelp">
+                            <div id="passwordHelp" class="form-text">Introdueix la teva contrasenya.</div>
+                            <div class="invalid-feedback">La contrasenya és obligatòria.</div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-gradient">Inicia sessió</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+<script>
+    // Validació del formulari al client
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        const form = this;
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+</script>
 {% endblock %}
