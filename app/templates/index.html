@@ -1,645 +1,63 @@
-<!DOCTYPE html>
-<html lang="ca">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="GarBotGPT, l’assistent de xat intel·ligent de xAI amb efecte cristal i tecnologia futurista. Personalitza i explora la IA com mai abans.">
-    <meta name="keywords" content="GarBotGPT, IA, xAI, OpenAI, glassmorphism, xat intel·ligent, cyberpunk, assistent virtual">
-    <meta name="author" content="xAI">
-    <!-- Open Graph -->
-    <meta property="og:title" content="GarBotGPT - Assistent de Xat Futurista">
-    <meta property="og:description" content="Descobreix GarBotGPT, amb efecte cristal, animacions 3D i tecnologia xAI.">
-    <meta property="og:image" content="https://via.placeholder.com/1200x630?text=GarBotGPT">
-    <meta property="og:url" content="https://garbotgpt.x.ai">
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "GarBotGPT",
-        "url": "https://garbotgpt.x.ai",
-        "description": "Assistent de xat intel·ligent amb tecnologia xAI i disseny cristal·lí."
-    }
-    </script>
-    <title>GarBotGPT - L’Era de la IA Futurista</title>
-    <!-- CDN para Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- CDN para Swiper.js -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <!-- CDN para Animate.css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-c42qTSw/wPZ3/5LBzD+Bw5f7bSF2oxou6wEb+I/lqeaKV5FDIfMvvRp772y4jcJLKuGUOpbJMdg/BTl50fJYAw==" crossorigin="anonymous">
-    <!-- CDN para Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous">
-    <!-- Google Fonts: Orbitron + Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <!-- Estilos personalizados -->
-    <style>
-        :root {
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-bg-dark: rgba(10, 10, 20, 0.2);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --neon-cyan: #00f7ff;
-            --neon-magenta: #ff00ff;
-            --neon-purple: #8b00ff;
-            --text-light: #f0f0f5;
-            --text-dark: #b0b0c0;
-            --shadow-neon: 0 0 20px rgba(0, 247, 255, 0.6);
-            --glitch-duration: 0.3s;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #0a0a15;
-            color: var(--text-light);
-            overflow-x: hidden;
-            margin: 0;
-            min-height: 100vh;
-            position: relative;
-        }
-
-        body.dark-theme {
-            background: #05050a;
-        }
-
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            box-shadow: var(--shadow-neon);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .glass::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(0, 247, 255, 0.1), rgba(255, 0, 255, 0.1));
-            opacity: 0.3;
-            pointer-events: none;
-        }
-
-        .glass-dark {
-            background: var(--glass-bg-dark);
-        }
-
-        .btn-neon {
-            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
-            color: var(--text-light);
-            border: none;
-            padding: 12px 30px;
-            border-radius: 12px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            text-transform: uppercase;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            z-index: 1;
-            cursor: pointer;
-        }
-
-        .btn-neon:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0, 247, 255, 0.8);
-        }
-
-        .btn-neon::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
-            z-index: -1;
-        }
-
-        .btn-neon:hover::before {
-            left: 100%;
-        }
-
-        .navbar.glass {
-            padding: 15px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .navbar .nav-link {
-            font-family: 'Orbitron', sans-serif;
-            position: relative;
-            transition: color 0.3s ease;
-            cursor: pointer;
-        }
-
-        .navbar .nav-link:hover {
-            color: var(--neon-cyan);
-        }
-
-        .navbar .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--neon-cyan);
-            transition: width 0.3s ease;
-        }
-
-        .navbar .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .hero-section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #three-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        .swiper-container {
-            width: 100%;
-            height: 100%;
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
-        .swiper-slide {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 30px;
-            background: var(--glass-bg-dark);
-            transform: scale(0.9);
-            transition: transform 0.5s ease, box-shadow 0.5s ease;
-        }
-
-        .swiper-slide-active {
-            transform: scale(1);
-            box-shadow: var(--shadow-neon);
-        }
-
-        .swiper-slide h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 4rem;
-            text-shadow: 0 0 15px var(--neon-cyan);
-            position: relative;
-        }
-
-        .swiper-slide h1.glitch {
-            animation: glitch var(--glitch-duration) infinite;
-        }
-
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(2px, -2px); }
-            60% { transform: translate(-2px, 0); }
-            80% { transform: translate(2px, 2px); }
-            100% { transform: translate(0); }
-        }
-
-        .feature-card, .use-case-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-            transform: perspective(1000px) rotateX(0) rotateY(0);
-        }
-
-        .feature-card:hover, .use-case-card:hover {
-            transform: perspective(1000px) rotateX(5deg) rotateY(5deg);
-            box-shadow: var(--shadow-neon);
-        }
-
-        .timeline {
-            position: relative;
-            padding: 50px 0;
-        }
-
-        .timeline:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(var(--neon-cyan), var(--neon-magenta));
-            left: 50%;
-            margin-left: -2px;
-            box-shadow: 0 0 15px var(--neon-cyan);
-        }
-
-        .timeline-item {
-            padding: 10px 40px;
-            position: relative;
-            background: inherit;
-            width: 50%;
-        }
-
-        .timeline-item:nth-child(odd) {
-            left: 0;
-            text-align: right;
-        }
-
-        .timeline-item:nth-child(even) {
-            left: 50%;
-        }
-
-        .timeline-item:before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            width: 20px;
-            height: 20px;
-            background: var(--neon-cyan);
-            border-radius: 50%;
-            right: -10px;
-            box-shadow: 0 0 20px var(--neon-cyan);
-            animation: pulse 2s infinite;
-        }
-
-        .timeline-item:nth-child(even):before {
-            left: -10px;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .timeline-content {
-            padding: 20px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            position: relative;
-            color: var(--text-dark);
-            transition: transform 0.3s ease;
-        }
-
-        .timeline-content:hover {
-            transform: scale(1.05);
-        }
-
-        .subscription-section input {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            color: var(--text-light);
-            border-radius: 10px;
-            padding: 12px;
-            max-width: 400px;
-        }
-
-        .subscription-section input::placeholder {
-            color: var(--text-dark);
-        }
-
-        footer {
-            background: var(--glass-bg-dark);
-            border-top: 1px solid var(--glass-border);
-        }
-
-        .chat-preview {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 300px;
-            background: var(--glass-bg-dark);
-            border-radius: 15px;
-            box-shadow: var(--shadow-neon);
-            padding: 15px;
-            z-index: 1000;
-            display: none;
-        }
-
-        .chat-preview.active {
-            display: block;
-        }
-
-        .chat-message {
-            background: var(--glass-bg);
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-
-        .stats-counter {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .stat-item {
-            text-align: center;
-            background: var(--glass-bg);
-            padding: 20px;
-            border-radius: 15px;
-            min-width: 150px;
-        }
-
-        @media (max-width: 768px) {
-            .timeline:before {
-                left: 20px;
-            }
-
-            .timeline-item {
-                width: 100%;
-                padding-left: 60px;
-                padding-right: 20px;
-            }
-
-            .timeline-item:nth-child(even),
-            .timeline-item:nth-child(odd) {
-                left: 0;
-                text-align: left;
-            }
-
-            .timeline-item:before {
-                left: 10px;
-                right: auto;
-            }
-
-            .hero-section {
-                min-height: 80vh;
-            }
-
-            .swiper-slide h1 {
-                font-size: 2.5rem;
-            }
-
-            .chat-preview {
-                width: 90%;
-                right: 5%;
-            }
-        }
-
-        .glitch {
-            animation: glitch var(--glitch-duration) infinite;
-        }
-
-        .gradient-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0a0a15, #1a1a30, var(--neon-cyan), var(--neon-magenta));
-            background-size: 300% 300%;
-            animation: gradientAnimation 12s ease infinite;
-            z-index: -1;
-            opacity: 0.5;
-        }
-
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-    </style>
-</head>
-<body>
-    <!-- Fondo Gradiente Animado -->
-    <div class="gradient-bg"></div>
-
-    <!-- Preloader -->
-    <div id="preloader" class="d-flex align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75" style="z-index: 9999;">
-        <div class="spinner-border" style="color: var(--neon-cyan);" role="status">
-            <span class="visually-hidden">Carregant...</span>
-        </div>
-    </div>
-
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg glass glass-dark" aria-label="Navegació principal">
+{% extends "base.html" %}
+{% block title %}Benvinguts a GarBotGPT{% endblock %}
+{% block content %}
+<body data-authenticated="{{ authenticated | lower }}">
+<main class="main-content">
+    <!-- Hero Section -->
+    <section class="hero-section text-center py-5 animate__animated animate__fadeIn">
         <div class="container">
-            <a class="navbar-brand fw-bold text-light" href="#">
-                <i class="fas fa-robot me-2"></i>GarBotGPT
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Activa/desactiva la navegació">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link text-light" href="#chat" data-bs-toggle="tooltip" title="Xat amb GarBotGPT"><i class="fas fa-comments me-1"></i>Xat</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-light" href="#settings" data-bs-toggle="tooltip" title="Configuració"><i class="fas fa-cog me-1"></i>Configuració</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-light" href="#login" data-bs-toggle="tooltip" title="Iniciar Sessió"><i class="fas fa-sign-in-alt me-1"></i>Iniciar Sessió</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-light" href="#register" data-bs-toggle="tooltip" title="Registrar-se"><i class="fas fa-user-plus me-1"></i>Registrar-se</a>
-                    </li>
-                    <li class="nav-item">
-                        <select id="language-selector" class="form-select glass ms-2" style="width: auto;" aria-label="Selecciona idioma">
-                            <option value="ca" selected>Català</option>
-                            <option value="es">Español</option>
-                            <option value="en">English</option>
-                        </select>
-                    </li>
-                    <li class="nav-item">
-                        <button id="theme-toggle" class="btn btn-neon ms-2" data-bs-toggle="tooltip" title="Canviar tema">
-                            <i class="fas fa-moon"></i>
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button id="immersive-mode" class="btn btn-neon ms-2" data-bs-toggle="tooltip" title="Mode immersiu">
-                            <i class="fas fa-vr-cardboard"></i>
-                        </button>
-                    </li>
-                </ul>
+            <h1 class="display-3 fw-bold mb-3">GarBotGPT</h1>
+            <p class="lead mb-4">El teu company intel·ligent impulsat per la IA d'OpenAI i xAI</p>
+            <div class="d-flex justify-content-center gap-3">
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('chat') }}" class="btn btn-primary btn-lg btn-gradient" data-bs-toggle="tooltip" title="Comença a xatejar ara">
+                        <i class="fas fa-comments me-2"></i>Inicia el Xat
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg btn-gradient" data-bs-toggle="tooltip" title="Accedeix al teu compte">
+                        <i class="fas fa-sign-in-alt me-2"></i>Inicia Sessió
+                    </a>
+                    <a href="{{ url_for('register') }}" class="btn btn-outline-primary btn-lg" data-bs-toggle="tooltip" title="Crea un compte nou">
+                        <i class="fas fa-user-plus me-2"></i>Registra't
+                    </a>
+                {% endif %}
             </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section con Slider -->
-    <section class="hero-section text-center position-relative overflow-hidden" id="hero-slider">
-        <canvas id="three-canvas"></canvas>
-        <div id="particles-js" class="position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;"></div>
-        <div class="swiper-container position-relative glass glass-dark" style="z-index: 2;">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide text-white">
-                    <div class="container py-5">
-                        <h1 class="glitch">GarBotGPT</h1>
-                        <p class="lead mb-4">El teu assistent intel·ligent amb tecnologia xAI i OpenAI</p>
-                        <a href="#chat" class="btn btn-neon" data-bs-toggle="tooltip" title="Comença ara">Inicia el Xat</a>
-                    </div>
-                </div>
-                <div class="swiper-slide text-white">
-                    <div class="container py-5">
-                        <h1 class="glitch">Personalització 3D</h1>
-                        <p class="lead mb-4">Configura el teu xat amb models avançats i estils cyberpunk</p>
-                        <a href="#settings" class="btn btn-neon" data-bs-toggle="tooltip" title="Personalitza ara">Configura Ara</a>
-                    </div>
-                </div>
-                <div class="swiper-slide text-white">
-                    <div class="container py-5">
-                        <h1 class="glitch">Disseny Cristal·lí</h1>
-                        <p class="lead mb-4">Viu una experiència immersiva amb efectes WebGL</p>
-                        <a href="#chat" class="btn btn-neon" data-bs-toggle="tooltip" title="Prova-ho ara">Prova-ho Ara</a>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
         </div>
     </section>
 
     <!-- Características -->
-    <section class="features-section py-5">
+    <section class="features-section py-5 bg-body-tertiary">
         <div class="container">
-            <h2 class="text-center mb-5 glitch">Per què triar GarBotGPT?</h2>
+            <h2 class="text-center mb-5">Per què triar GarBotGPT?</h2>
             <div class="row g-4">
                 <div class="col-md-4">
-                    <div class="card h-100 feature-card">
+                    <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp">
                         <div class="card-body text-center">
-                            <i class="fas fa-robot fa-3x mb-3" style="color: var(--neon-cyan);"></i>
-                            <h5 class="card-title text-light">Xat Intel·ligent</h5>
-                            <p class="card-text text-dark">Conversa amb models com GPT-4 amb respostes ràpides i precises.</p>
+                            <i class="fas fa-robot fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Xat Intel·ligent</h5>
+                            <p class="card-text">Conversa amb GarBotGPT utilitzant models avançats com GPT-3.5 i GPT-4, amb respostes ràpides i precises.</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card h-100 feature-card">
+                    <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
                         <div class="card-body text-center">
-                            <i class="fas fa-cogs fa-3x mb-3" style="color: var(--neon-cyan);"></i>
-                            <h5 class="card-title text-light">Personalització</h5>
-                            <p class="card-text text-dark">Ajusta el model, temperatura i estil per a una experiència única.</p>
+                            <i class="fas fa-cogs fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Personalització</h5>
+                            <p class="card-text">Configura el model, la temperatura i la longitud de les respostes per adaptar GarBotGPT a les teves necessitats.</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card h-100 feature-card">
+                    <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
                         <div class="card-body text-center">
-                            <i class="fas fa-eye fa-3x mb-3" style="color: var(--neon-cyan);"></i>
-                            <h5 class="card-title text-light">Interfície Futurista</h5>
-                            <p class="card-text text-dark">Efectes cristal·lins, WebGL i disseny responsiu.</p>
+                            <i class="fas fa-eye fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Interfície Moderna</h5>
+                            <p class="card-text">Gaudeix d'un mode pantalla completa, efectes de escritura dinàmics i un disseny responsiu.</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Estadísticas -->
-    <section class="stats-section py-5">
-        <div class="container">
-            <h2 class="text-center mb-5 glitch">GarBotGPT en Xifres</h2>
-            <div class="stats-counter">
-                <div class="stat-item glass">
-                    <h3 id="users-count">0</h3>
-                    <p>Usuaris Actius</p>
-                </div>
-                <div class="stat-item glass">
-                    <h3 id="messages-count">0</h3>
-                    <p>Missatges Processats</p>
-                </div>
-                <div class="stat-item glass">
-                    <h3 id="models-count">0</h3>
-                    <p>Models d’IA</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Timeline de la IA -->
-    <section class="timeline-section py-5">
-        <div class="container">
-            <h2 class="text-center mb-5 glitch">La Història de la IA</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-content glass" data-bs-toggle="tooltip" title="El naixement de la IA">
-                        <h5>1950s: Els Orígens</h5>
-                        <p>Alan Turing proposa el Test de Turing, marcant l'inici de la IA conversacional.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-content glass" data-bs-toggle="tooltip" title="Revolució del deep learning">
-                        <h5>2010s: Aprenentatge Profund</h5>
-                        <p>Les xarxes neuronals i el deep learning revolucionen la IA.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-content glass" data-bs-toggle="tooltip" title="Llançament de GarBotGPT">
-                        <h5>2025: GarBotGPT</h5>
-                        <p>xAI llança GarBotGPT, combinant IA avançada amb personalització.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Galería de Casos de Uso -->
-    <section class="use-cases-section py-5">
-        <div class="container">
-            <h2 class="text-center mb-5 glitch">Com pots utilitzar GarBotGPT?</h2>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card h-100 use-case-card">
-                        <img src="https://via.placeholder.com/400x200?text=Educació" class="card-img-top" alt="Educació" loading="lazy">
-                        <div class="card-body">
-                            <h5 class="card-title text-light">Educació</h5>
-                            <p class="card-text text-dark">Resol dubtes, aprèn conceptes i rep ajuda amb deures.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 use-case-card">
-                        <img src="https://via.placeholder.com/400x200?text=Programació" class="card-img-top" alt="Programació" loading="lazy">
-                        <div class="card-body">
-                            <h5 class="card-title text-light">Programació</h5>
-                            <p class="card-text text-dark">Escriu codi, depura errors i aprèn nous llenguatges.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 use-case-card">
-                        <img src="https://via.placeholder.com/400x200?text=Creativitat" class="card-img-top" alt="Creativitat" loading="lazy">
-                        <div class="card-body">
-                            <h5 class="card-title text-light">Creativitat</h5>
-                            <p class="card-text text-dark">Escriu poemes, històries o crea contingut original.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Formulario de Suscripción -->
-    <section class="subscription-section py-5 text-center">
-        <div class="container">
-            <h2 class="mb-4 glitch">Subscriu-te al nostre butlletí</h2>
-            <p class="lead mb-4">Rep actualitzacions sobre GarBotGPT i la IA!</p>
-            <div class="d-flex justify-content-center gap-2" id="subscription-form">
-                <input type="email" class="form-control glass" id="subscription-email" placeholder="Introdueix el teu correu electrònic" required aria-label="Correu electrònic">
-                <button type="button" class="btn btn-neon" id="subscription-submit">Subscriu-te</button>
-            </div>
-            <div id="subscription-feedback" class="mt-3" style="display: none;"></div>
         </div>
     </section>
 
@@ -648,460 +66,123 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6">
-                    <h2 class="mb-4 glitch">Com funciona GarBotGPT?</h2>
-                    <p>GarBotGPT és una IA conversacional desenvolupada per xAI, impulsada pels models d'OpenAI com GPT-4. Entén i genera text semblant al humà, oferint respostes útils per a diverses tasques.</p>
-                    <p>Personalitza l'experiència ajustant paràmetres com la temperatura i la longitud de les respostes. Gaudeix de funcions com el mode pantalla completa i l'exportació d'historial.</p>
-                    <p>La missió de xAI és accelerar el descobriment científic, i GarBotGPT és una eina clau per explorar i aprendre.</p>
+                    <h2 class="mb-4">Com funciona GarBotGPT?</h2>
+                    <p>GarBotGPT és una intel·ligència artificial conversacional desenvolupada per xAI, impulsada pels models avançats d'OpenAI, com GPT-3.5 i GPT-4. Aquesta tecnologia permet a GarBotGPT entendre i generar text semblant al humà, oferint respostes útils i precises a una àmplia varietat de preguntes i tasques.</p>
+                    <p>Amb GarBotGPT, pots personalitzar l'experiència de xat ajustant paràmetres com la <strong>temperatura</strong> (per a respostes més creatives o precises) i la <strong>longitud màxima</strong> de les respostes. A més, ofereix funcionalitats com el mode pantalla completa, efectes visuals d'escriptura i la possibilitat d'exportar el teu historial de xat.</p>
+                    <p>La missió de xAI és accelerar el descobriment científic humà, i GarBotGPT és una eina clau per ajudar els usuaris a explorar, aprendre i ser més productius.</p>
                 </div>
                 <div class="col-lg-6 text-center">
-                    <img src="https://via.placeholder.com/400x300?text=GarBotGPT+AI" alt="Il·lustració de GarBotGPT" class="img-fluid rounded glass" loading="lazy">
+                    <img src="https://via.placeholder.com/400x300?text=GarBotGPT+AI" alt="Il·lustració de GarBotGPT" class="img-fluid rounded shadow-sm animate__animated animate__zoomIn">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonis -->
+    <section class="testimonials-section py-5 bg-body-tertiary">
+        <div class="container">
+            <h2 class="text-center mb-5">Què diuen els usuaris?</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp">
+                        <div class="card-body text-center">
+                            <p class="card-text">"GarBotGPT m'ha ajudat a resoldre dubtes complexos en segons. La seva interfície és increïble!"</p>
+                            <h6 class="card-title mt-3">Anna C.</h6>
+                            <p class="text-muted">Estudiant</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                        <div class="card-body text-center">
+                            <p class="card-text">"Les opcions de personalització són fantàstiques. Puc ajustar el xat exactament com vull."</p>
+                            <h6 class="card-title mt-3">Marc T.</h6>
+                            <p class="text-muted">Desenvolupador</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+                        <div class="card-body text-center">
+                            <p class="card-text">"Una eina imprescindible per a la meva productivitat diària. M'encanta el mode pantalla completa!"</p>
+                            <h6 class="card-title mt-3">Laia P.</h6>
+                            <p class="text-muted">Emprenedora</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Preguntes Freqüents sobre la IA</h2>
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
+                            Què és GarBotGPT?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            GarBotGPT és un assistent de xat impulsat per IA, desenvolupat per xAI i basat en els models d'OpenAI. Pot respondre preguntes, assistir en tasques i personalitzar-se segons les teves preferències.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                            Com funciona la personalització del xat?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Pots ajustar el model de IA (GPT-3.5 o GPT-4), la temperatura (per a respostes més creatives o precises) i la longitud màxima de les respostes des de la pàgina de configuració.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                            És segur utilitzar GarBotGPT?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Sí, GarBotGPT utilitza autenticació segura i encriptació per protegir les teves dades. El teu historial de xat es guarda de manera segura i pots esborrar-lo en qualsevol moment.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
+                            Quin és el futur de la IA amb xAI?
+                        </button>
+                    </h2>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            xAI treballa per avançar en el descobriment científic humà mitjançant la IA. En el futur, GarBotGPT podria integrar-se amb eines d'aprenentatge, anàlisi de dades i més, per ajudar els usuaris en diversos àmbits.
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- CTA Final -->
-    <section class="cta-section py-5 text-center">
+    <section class="cta-section py-5 text-center bg-primary text-white">
         <div class="container">
-            <h2 class="mb-4 glitch">Comença avui amb GarBotGPT!</h2>
-            <p class="lead mb-4">Uneix-te a milers d'usuaris que utilitzen la IA per aprendre i crear.</p>
-            <a href="#register" class="btn btn-neon">Registra't Ara</a>
+            <h2 class="mb-4">Comença avui amb GarBotGPT!</h2>
+            <p class="lead mb-4">Uneix-te a milers d'usuaris que ja utilitzen la IA per aprendre, treballar i explorar.</p>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('chat') }}" class="btn btn-light btn-lg btn-gradient">Anar al Xat</a>
+            {% else %}
+                <a href="{{ url_for('register') }}" class="btn btn-light btn-lg btn-gradient">Registra't Ara</a>
+            {% endif %}
         </div>
     </section>
-
-    <!-- Chat Preview -->
-    <div class="chat-preview" id="chat-preview">
-        <div class="chat-header d-flex justify-content-between align-items-center">
-            <h6 class="text-light mb-0">Prova GarBotGPT</h6>
-            <button id="close-chat" class="btn btn-sm btn-neon"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="chat-body">
-            <div class="chat-message">Hola! Com et puc ajudar avui?</div>
-            <div class="chat-message typing-dots">Escrivint...</div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="py-4 mt-auto">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h5 class="text-light">GarBotGPT</h5>
-                    <p class="text-dark">El teu assistent de xat intel·ligent per explorar, aprendre i crear amb IA.</p>
-                </div>
-                <div class="col-md-4">
-                    <h5 class="text-light">Enllaços</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-dark">Inici</a></li>
-                        <li><a href="https://x.ai" class="text-dark" target="_blank">Sobre xAI</a></li>
-                        <li><a href="https://openai.com" class="text-dark" target="_blank">Sobre OpenAI</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <h5 class="text-light">Contacte</h5>
-                    <p><a href="mailto:support@x.ai" class="text-dark">support@x.ai</a></p>
-                </div>
-            </div>
-            <div class="text-center mt-3">
-                <p class="mb-0 text-dark">© 2025 GarBotGPT. Tots els drets reservats.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
-    <script>
-        // Ocultar preloader
-        window.addEventListener('load', () => {
-            try {
-                const preloader = document.getElementById('preloader');
-                if (preloader) {
-                    if (typeof gsap !== 'undefined') {
-                        gsap.to(preloader, { opacity: 0, duration: 0.3, onComplete: () => preloader.style.display = 'none' });
-                    } else {
-                        preloader.style.display = 'none';
-                    }
-                }
-                console.log('Preloader ocultat');
-            } catch (error) {
-                console.error('Error amagant preloader:', error);
-                const preloader = document.getElementById('preloader');
-                if (preloader) preloader.style.display = 'none';
-            }
-        });
-
-        // Timeout de seguridad para preloader
-        setTimeout(() => {
-            const preloader = document.getElementById('preloader');
-            if (preloader && preloader.style.display !== 'none') {
-                preloader.style.display = 'none';
-                console.warn('Preloader amagat per timeout');
-            }
-        }, 5000);
-
-        // Inicializar todo
-        document.addEventListener('DOMContentLoaded', () => {
-            try {
-                // Inicializar Swiper
-                if (typeof Swiper !== 'undefined') {
-                    new Swiper('.swiper-container', {
-                        loop: true,
-                        autoplay: { delay: 5000, disableOnInteraction: false },
-                        pagination: { el: '.swiper-pagination', clickable: true },
-                        navigation: { nextEl: '.swiper-button-prev', prevEl: '.swiper-button-next' },
-                        effect: 'creative',
-                        creativeEffect: {
-                            prev: { translate: [0, 0, -400], rotate: [0, 0, 0], opacity: 0 },
-                            next: { translate: ['100%', 0, 0], rotate: [0, 0, 0], opacity: 0 }
-                        }
-                    });
-                    console.log('Swiper inicialitzat');
-                } else {
-                    console.warn('Swiper no disponible');
-                }
-
-                // Inicializar Particles.js
-                if (typeof particlesJS !== 'undefined') {
-                    particlesJS('particles-js', {
-                        particles: {
-                            number: { value: 120, density: { enable: true, value_area: 800 } },
-                            color: { value: ['#00f7ff', '#ff00ff', '#8b00ff'] },
-                            shape: { type: 'polygon', polygon: { nb_sides: 6 } },
-                            opacity: { value: 0.7, random: true },
-                            size: { value: 5, random: true },
-                            line_linked: {
-                                enable: true,
-                                distance: 100,
-                                color: '#00f7ff',
-                                opacity: 0.5,
-                                width: 1
-                            },
-                            move: {
-                                enable: true,
-                                speed: 5,
-                                direction: 'none',
-                                random: true,
-                                straight: false
-                            }
-                        },
-                        interactivity: {
-                            detect_on: 'canvas',
-                            events: {
-                                onhover: { enable: true, mode: 'grab' },
-                                onclick: { enable: true, mode: 'push' },
-                                resize: true
-                            },
-                            modes: {
-                                grab: { distance: 150, line_linked: { opacity: 0.8 } },
-                                push: { particles_nb: 5 }
-                            }
-                        },
-                        retina_detect: true
-                    });
-                    console.log('Particles.js inicialitzat');
-                } else {
-                    console.warn('Particles.js no disponible');
-                }
-
-                // Inicializar Three.js
-                if (typeof THREE !== 'undefined') {
-                    const scene = new THREE.Scene();
-                    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-                    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), alpha: true });
-                    renderer.setSize(window.innerWidth, window.innerHeight);
-                    camera.position.z = 5;
-
-                    const geometry = new THREE.BufferGeometry();
-                    const vertices = [];
-                    for (let i = 0; i < 1000; i++) {
-                        vertices.push(
-                            Math.random() * 10 - 5,
-                            Math.random() * 10 - 5,
-                            Math.random() * 10 - 5
-                        );
-                    }
-                    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-                    const material = new THREE.PointsMaterial({ color: 0x00f7ff, size: 0.05 });
-                    const points = new THREE.Points(geometry, material);
-                    scene.add(points);
-
-                    const animateThree = () => {
-                        requestAnimationFrame(animateThree);
-                        points.rotation.y += 0.002;
-                        renderer.render(scene, camera);
-                    };
-                    animateThree();
-
-                    window.addEventListener('resize', () => {
-                        camera.aspect = window.innerWidth / window.innerHeight;
-                        camera.updateProjectionMatrix();
-                        renderer.setSize(window.innerWidth, window.innerHeight);
-                    });
-                    console.log('Three.js inicialitzat');
-                } else {
-                    console.warn('Three.js no disponible');
-                }
-
-                // Inicializar GSAP
-                if (typeof gsap !== 'undefined') {
-                    gsap.utils.toArray('.feature-card, .use-case-card, .timeline-content').forEach((el, i) => {
-                        gsap.from(el, {
-                            opacity: 0,
-                            y: 50,
-                            duration: 0.8,
-                            delay: i * 0.2,
-                            scrollTrigger: {
-                                trigger: el,
-                                start: 'top 80%'
-                            }
-                        });
-                    });
-                    gsap.utils.toArray('.swiper-slide h1').forEach(el => {
-                        gsap.from(el, { opacity: 0, scale: 0.8, duration: 1, ease: 'power3.out' });
-                    });
-                    console.log('GSAP inicialitzat');
-                } else {
-                    console.warn('GSAP no disponible');
-                }
-
-                // Inicializar tooltips
-                if (typeof bootstrap !== 'undefined') {
-                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
-                        bootstrap.Tooltip.getOrCreateInstance(el);
-                    });
-                    console.log('Tooltips inicialitzats');
-                } else {
-                    console.warn('Bootstrap no disponible');
-                }
-
-                // Botón de cambio de tema
-                const themeToggle = document.getElementById('theme-toggle');
-                if (themeToggle) {
-                    themeToggle.addEventListener('click', () => {
-                        try {
-                            const body = document.body;
-                            const currentTheme = body.classList.contains('dark-theme') ? 'dark' : 'light';
-                            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                            body.classList.toggle('dark-theme');
-                            const icon = themeToggle.querySelector('i');
-                            icon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
-                            localStorage.setItem('theme', newTheme);
-                            if (typeof particlesJS !== 'undefined') {
-                                particlesJS('particles-js', {
-                                    particles: {
-                                        color: { value: newTheme === 'light' ? ['#00f7ff', '#ff00ff', '#8b00ff'] : ['#ffffff', '#cccccc'] }
-                                    }
-                                });
-                            }
-                            console.log('Tema canviat a:', newTheme);
-                        } catch (error) {
-                            console.error('Error canviant tema:', error);
-                            alert('Error al canviar el tema');
-                        }
-                    });
-                    const savedTheme = localStorage.getItem('theme');
-                    if (savedTheme === 'dark') {
-                        document.body.classList.add('dark-theme');
-                        themeToggle.querySelector('i').className = 'fas fa-sun';
-                    }
-                    console.log('Botó de tema configurat');
-                } else {
-                    console.warn('Botó de tema no trobat');
-                }
-
-                // Botón de modo inmersivo
-                const immersiveMode = document.getElementById('immersive-mode');
-                if (immersiveMode) {
-                    immersiveMode.addEventListener('click', () => {
-                        try {
-                            document.documentElement.requestFullscreen().catch(err => console.error('Error en mode immersiu:', err));
-                            if (typeof gsap !== 'undefined') {
-                                gsap.to('.gradient-bg', { opacity: 0.8, duration: 0.5 });
-                            }
-                            if (typeof particlesJS !== 'undefined') {
-                                particlesJS('particles-js', { particles: { number: { value: 200 } } });
-                            }
-                            console.log('Mode immersiu activat');
-                        } catch (error) {
-                            console.error('Error activant mode immersiu:', error);
-                            alert('Error al activar el mode immersiu');
-                        }
-                    });
-                    console.log('Botó de mode immersiu configurat');
-                } else {
-                    console.warn('Botó de mode immersiu no trobat');
-                }
-
-                // Selector de idioma
-                const languageSelector = document.getElementById('language-selector');
-                if (languageSelector) {
-                    languageSelector.addEventListener('change', (e) => {
-                        try {
-                            const lang = e.target.value;
-                            const translations = {
-                                ca: { title: 'GarBotGPT', subtitle: 'El teu assistent intel·ligent' },
-                                es: { title: 'GarBotGPT', subtitle: 'Tu asistente inteligente' },
-                                en: { title: 'GarBotGPT', subtitle: 'Your intelligent assistant' }
-                            };
-                            document.querySelector('.swiper-slide h1').textContent = translations[lang].title;
-                            document.querySelector('.swiper-slide p').textContent = translations[lang].subtitle;
-                            console.log('Idioma canviat a:', lang);
-                        } catch (error) {
-                            console.error('Error canviant idioma:', error);
-                            alert('Error al canviar l’idioma');
-                        }
-                    });
-                    console.log('Selector d’idioma configurat');
-                } else {
-                    console.warn('Selector d’idioma no trobat');
-                }
-
-                // Chat preview
-                const chatPreview = document.getElementById('chat-preview');
-                const closeChat = document.getElementById('close-chat');
-                if (chatPreview && closeChat) {
-                    setTimeout(() => {
-                        chatPreview.classList.add('active');
-                        if (typeof gsap !== 'undefined') {
-                            gsap.from(chatPreview, { opacity: 0, y: 50, duration: 0.5 });
-                        }
-                        console.log('Chat preview mostrat');
-                    }, 2000);
-                    closeChat.addEventListener('click', () => {
-                        try {
-                            if (typeof gsap !== 'undefined') {
-                                gsap.to(chatPreview, { opacity: 0, duration: 0.3, onComplete: () => chatPreview.classList.remove('active') });
-                            } else {
-                                chatPreview.classList.remove('active');
-                            }
-                            console.log('Chat preview tancat');
-                        } catch (error) {
-                            console.error('Error tancant chat preview:', error);
-                            alert('Error al tancar el chat preview');
-                        }
-                    });
-                    console.log('Chat preview configurat');
-                } else {
-                    console.warn('Chat preview o botó de tancar no trobats');
-                }
-
-                // Formulario de suscripción
-                const subscriptionSubmit = document.getElementById('subscription-submit');
-                const subscriptionEmail = document.getElementById('subscription-email');
-                const feedback = document.getElementById('subscription-feedback');
-                if (subscriptionSubmit && subscriptionEmail && feedback) {
-                    subscriptionSubmit.addEventListener('click', async () => {
-                        try {
-                            const email = subscriptionEmail.value;
-                            if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-                                feedback.style.display = 'block';
-                                feedback.textContent = 'Introdueix un correu electrònic vàlid';
-                                feedback.style.color = '#ff00ff';
-                                console.log('Correu electrònic invàlid');
-                                return;
-                            }
-                            const response = await fetch('/subscribe', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ email })
-                            });
-                            const data = await response.json();
-                            feedback.style.display = 'block';
-                            feedback.textContent = data.success ? 'Subscripció exitosa!' : 'Error: ' + data.error;
-                            feedback.style.color = data.success ? '#00f7ff' : '#ff00ff';
-                            if (data.success) {
-                                subscriptionEmail.value = '';
-                                if (typeof particlesJS !== 'undefined') {
-                                    particlesJS('subscription-feedback', {
-                                        particles: {
-                                            number: { value: 50 },
-                                            color: { value: '#00f7ff' },
-                                            size: { value: 3 },
-                                            move: { speed: 10, direction: 'top' }
-                                        }
-                                    });
-                                }
-                            }
-                            console.log('Subscripció processada:', data);
-                        } catch (error) {
-                            feedback.style.display = 'block';
-                            feedback.textContent = 'Error: No s’ha pogut connectar al servidor';
-                            feedback.style.color = '#ff00ff';
-                            console.error('Error en la subscripció:', error);
-                            alert('Error en la subscripció');
-                        }
-                    });
-                    console.log('Formulari de subscripció configurat');
-                } else {
-                    console.warn('Elements del formulari de subscripció no trobats');
-                }
-
-                // Contadores animados
-                if (typeof gsap !== 'undefined') {
-                    gsap.to('#users-count', {
-                        innerHTML: 10000,
-                        duration: 3,
-                        snap: { innerHTML: 1 },
-                        scrollTrigger: { trigger: '.stats-section', start: 'top 80%' }
-                    });
-                    gsap.to('#messages-count', {
-                        innerHTML: 500000,
-                        duration: 3,
-                        snap: { innerHTML: 1 },
-                        scrollTrigger: { trigger: '.stats-section', start: 'top 80%' }
-                    });
-                    gsap.to('#models-count', {
-                        innerHTML: 5,
-                        duration: 3,
-                        snap: { innerHTML: 1 },
-                        scrollTrigger: { trigger: '.stats-section', start: 'top 80%' }
-                    });
-                    console.log('Contadores animados configurats');
-                } else {
-                    console.warn('GSAP no disponible per contadores');
-                }
-
-                // Animaciones en scroll
-                const animateOnScroll = () => {
-                    const elements = document.querySelectorAll('.animate__animated:not(.animate__fadeIn)');
-                    elements.forEach(el => {
-                        const rect = el.getBoundingClientRect();
-                        if (rect.top < window.innerHeight * 0.85) {
-                            if (typeof gsap !== 'undefined') {
-                                gsap.to(el, { opacity: 1, y: 0, duration: 0.8 });
-                            }
-                            el.classList.add('animate__fadeIn');
-                        }
-                    });
-                };
-                window.addEventListener('scroll', animateOnScroll);
-                animateOnScroll();
-                console.log('Animacions en scroll configurades');
-
-                // Verificar enlaces de navegación
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        try {
-                            const href = link.getAttribute('href');
-                            console.log('Navegant a:', href);
-                            // Descomenta la siguiente línea si usas Flask con rutas reales
-                            // window.location.href = href;
-                        } catch (error) {
-                            console.error('Error en navegació:', error);
-                            alert('Error al navegar');
-                        }
-                    });
-                });
-                console.log('Enllaços de navegació configurats');
-            } catch (error) {
-                console.error('Error en l’inicialització general:', error);
-                alert('Error en la càrrega de la pàgina. Revisa la consola per més detalls.');
-            }
-        });
-    </script>
+</main>
 </body>
-</html>
+{% endblock %}
