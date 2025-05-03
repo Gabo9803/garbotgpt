@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Welcome to GarBotGPT{% endblock %}
+{% block content %}
+<div class="hero-section text-center py-5 animate__animated animate__zoomIn">
+    <h1 class="display-3 fw-bold">GarBotGPT</h1>
+    <p class="lead">Your intelligent companion powered by xAI & OpenAI.</p>
+    <div class="mt-4">
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('chat') }}" class="btn btn-primary btn-lg btn-gradient animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Go to Chat">Start Chatting</a>
+        {% else %}
+            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg btn-gradient" data-bs-toggle="tooltip" title="Login to your account">Login</a>
+            <a href="{{ url_for('register') }}" class="btn btn-outline-primary btn-lg ms-2" data-bs-toggle="tooltip" title="Create a new account">Register</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
