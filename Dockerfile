@@ -17,4 +17,4 @@ ENV FLASK_ENV=production
 EXPOSE 8080
 
 # Ejecutar la aplicación con gunicorn y usar el puerto proporcionado por Heroku
-CMD ["gunicorn", "--bind", "0.0.0.0:$PORT", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0", "app:app"]
