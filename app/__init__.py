@@ -5,7 +5,7 @@ from app.config import Config
 import logging
 import time
 from sqlalchemy.exc import OperationalError
-from sqlalchemy import inspect
+from sqlalchemy import inspect, text
 import os
 
 # Configurar logging
@@ -19,8 +19,15 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     
+    # Validar DATABASE_URL
+    if not app.config.get('DATABASE_URL'):
+        logger.error("DATABASE_URL no está configurado en las variables de entorno.")
+        raise ValueError("DATABASE_URL no está configurado.")
+    
     # Crear directorio de uploads
-    os.makedirs(app.config.get('UPLOAD_FOLDER', 'uploads'), exist_ok=True)
+    upload_folder = app.config.get('UPLOAD_FOLDER', 'uploads')
+    os.makedirs(upload_folder, exist_ok=True)
+    logger.info(f"Directorio de uploads creado en: {upload_folder}")
     
     db.init_app(app)
     cache.init_app(app)
@@ -37,7 +44,7 @@ def create_app():
         while retry_count < max_retries:
             try:
                 logger.info("Intentando conectar y crear tablas...")
-                db.session.execute("SELECT 1")
+                db.session.execute(text('SELECT 1'))  # Consulta de prueba corregida
                 logger.info("Conexión a la base de datos exitosa.")
                 
                 db.create_all()
@@ -62,6 +69,7 @@ def create_app():
                     raise
                 time.sleep(5)
         
+        # Importar rutas después de crear tablas
         from app import routes
     
     return app
