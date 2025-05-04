@@ -8,4 +8,4 @@ PyPDF2==3.0.1
 Pillow==10.4.0
 latex==0.7.0
 flask-caching==2.1.0
-flask-limiter==4.0.1
+flask-limiter==3.11.0
