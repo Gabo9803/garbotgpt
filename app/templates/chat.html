@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Chatea con GarBotGPT, tu compañero de IA avanzado impulsado por xAI.">
+    <meta name="description" content="Chatea con GarBotGPT, tu compañero de IA impulsado por xAI.">
     <title>Chat con GarBotGPT</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
-            --primary-color: {% if chat_settings %}{{ chat_settings.theme_color }}{% else %}#007bff{% endif %};
+            --primary-color: #007bff;
             --secondary-color: #00d4ff;
-            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --gradient: linear-gradient(135deg, #007bff, #00d4ff);
             --glass-bg: rgba(255, 255, 255, 0.15);
             --glass-border: rgba(255, 255, 255, 0.2);
             --text-color: #212529;
@@ -24,9 +23,9 @@
         }
 
         [data-theme="dark"] {
-            --primary-color: {% if chat_settings %}{{ chat_settings.theme_color }}{% else %}#00d4ff{% endif %};
+            --primary-color: #00d4ff;
             --secondary-color: #007bff;
-            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --gradient: linear-gradient(135deg, #00d4ff, #007bff);
             --glass-bg: rgba(0, 0, 0, 0.3);
             --glass-border: rgba(255, 255, 255, 0.1);
             --text-color: #e9ecef;
@@ -34,19 +33,6 @@
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             --message-user-bg: #1e3a8a;
             --message-ai-bg: #2d2d2d;
-        }
-
-        [data-theme="high-contrast"] {
-            --primary-color: #ffffff;
-            --secondary-color: #000000;
-            --gradient: none;
-            --glass-bg: #000000;
-            --glass-border: #ffffff;
-            --text-color: #ffffff;
-            --bg-color: #000000;
-            --shadow: none;
-            --message-user-bg: #0000ff;
-            --message-ai-bg: #333333;
         }
 
         * {
@@ -97,7 +83,7 @@
         }
 
         .sidebar {
-            width: 320px;
+            width: 300px;
             background: var(--glass-bg);
             backdrop-filter: blur(12px);
             border-right: 1px solid var(--glass-border);
@@ -138,17 +124,6 @@
         .sidebar-nav a:hover, .sidebar-nav button:hover {
             background: var(--primary-color);
             color: #fff;
-        }
-
-        .sidebar-section {
-            margin-bottom: 1.5rem;
-        }
-
-        .sidebar-section h6 {
-            font-size: 0.9rem;
-            color: var(--text-color);
-            opacity: 0.7;
-            margin-bottom: 0.75rem;
         }
 
         .chat-container {
@@ -223,7 +198,6 @@
             margin-top: 0.5rem;
             display: flex;
             justify-content: space-between;
-            align-items: center;
         }
 
         .message-actions {
@@ -233,39 +207,6 @@
 
         .message:hover .message-actions {
             display: flex;
-        }
-
-        .reaction-menu {
-            position: absolute;
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            padding: 0.5rem;
-            z-index: 100;
-            display: none;
-        }
-
-        .reaction-menu.show {
-            display: block;
-        }
-
-        .reaction-btn {
-            font-size: 1.2rem;
-            cursor: pointer;
-            margin: 0 0.3rem;
-        }
-
-        .reaction-count {
-            font-size: 0.8rem;
-            margin-left: 0.3rem;
-            color: var(--text-color);
-        }
-
-        .file-preview {
-            max-width: 200px;
-            margin-top: 0.5rem;
-            border-radius: 8px;
         }
 
         .typing-effect .message-content::after {
@@ -292,7 +233,6 @@
             position: relative;
             display: flex;
             gap: 0.5rem;
-            align-items: center;
         }
 
         #message {
@@ -369,38 +309,6 @@
             border-color: var(--primary-color);
         }
 
-        .search-bar {
-            margin-bottom: 1.5rem;
-        }
-
-        #search-input {
-            border-radius: 50px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--glass-border);
-            color: var(--text-color);
-            padding: 0.75rem 1.5rem;
-        }
-
-        #search-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
-        }
-
-        .edit-message-form {
-            display: none;
-            margin-top: 0.5rem;
-        }
-
-        .edit-message-form textarea {
-            width: 100%;
-            border-radius: 8px;
-            padding: 0.75rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--glass-border);
-            color: var(--text-color);
-        }
-
         footer {
             background: var(--glass-bg);
             backdrop-filter: blur(12px);
@@ -437,7 +345,7 @@
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for('index') }}">GarBotGPT v3.0</a>
+            <a class="navbar-brand" href="{{ url_for('index') }}">GarBotGPT v2.0</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -446,7 +354,7 @@
                     {% if current_user.is_authenticated %}
                         <li class="nav-item">
                             <span class="nav-link user-welcome animate__animated animate__fadeIn">
-                                <i class="fas fa-user-circle me-2"></i>Hola, {{ current_user.username }}
+                                <i class="bi bi-person-circle me-2"></i>Hola, {{ current_user.username }}
                             </span>
                         </li>
                         <li class="nav-item">
@@ -478,44 +386,25 @@
             <div class="sidebar-header">
                 <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT Logo" class="sidebar-logo">
                 <button class="btn btn-gradient btn-sm" id="sidebar-toggle" aria-label="Cerrar sidebar">
-                    <i class="fas fa-times"></i>
+                    <i class="bi bi-x-lg"></i>
                 </button>
             </div>
             <nav class="sidebar-nav">
-                <div class="sidebar-section">
-                    <h6>Acciones de Chat</h6>
-                    <a href="{{ url_for('chat') }}"><i class="fas fa-comment-alt me-2"></i>Nuevo Chat</a>
-                    <button id="clear-history"><i class="fas fa-trash me-2"></i>Borrar Historial</button>
-                    <button id="summarize-conversation"><i class="fas fa-file-alt me-2"></i>Resumir Conversación</button>
-                </div>
-                <div class="sidebar-section">
-                    <h6>Exportar</h6>
-                    <a href="{{ url_for('export_history', format='txt') }}"><i class="fas fa-download me-2"></i>Exportar como TXT</a>
-                    <a href="{{ url_for('export_history', format='json') }}"><i class="fas fa-download me-2"></i>Exportar como JSON</a>
-                    <a href="{{ url_for('export_history', format='pdf') }}"><i class="fas fa-download me-2"></i>Exportar como PDF</a>
-                </div>
-                <div class="sidebar-section">
-                    <h6>Configuración</h6>
-                    <select id="language-select" class="form-select" aria-label="Seleccionar idioma">
-                        <option value="es" {% if current_user.language == 'es' %}selected{% endif %}>Español</option>
-                        <option value="en" {% if current_user.language == 'en' %}selected{% endif %}>English</option>
-                        <option value="ca" {% if current_user.language == 'ca' %}selected{% endif %}>Català</option>
-                    </select>
-                    <select id="tone-select" class="form-select mt-2" aria-label="Seleccionar tono de respuesta">
-                        <option value="neutral" {% if chat_settings.response_tone == 'neutral' %}selected{% endif %}>Neutral</option>
-                        <option value="formal" {% if chat_settings.response_tone == 'formal' %}selected{% endif %}>Formal</option>
-                        <option value="informal" {% if chat_settings.response_tone == 'informal' %}selected{% endif %}>Informal</option>
-                        <option value="creativo" {% if chat_settings.response_tone == 'creativo' %}selected{% endif %}>Creativo</option>
-                        <option value="tecnico" {% if chat_settings.response_tone == 'tecnico' %}selected{% endif %}>Técnico</option>
-                    </select>
-                    <input type="color" id="accent-color" value="{% if chat_settings %}{{ chat_settings.theme_color }}{% else %}#007bff{% endif %}" class="mt-2 form-control" aria-label="Seleccionar color de acento">
-                    <select id="context-messages" class="form-select mt-2" aria-label="Mensajes de contexto">
-                        <option value="5" {% if chat_settings.max_context_messages == 5 %}selected{% endif %}>5 Mensajes</option>
-                        <option value="10" {% if chat_settings.max_context_messages == 10 %}selected{% endif %}>10 Mensajes</option>
-                        <option value="15" {% if chat_settings.max_context_messages == 15 %}selected{% endif %}>15 Mensajes</option>
-                    </select>
-                </div>
+                <a href="{{ url_for('chat') }}"><i class="bi bi-chat-left-text me-2"></i>Nuevo Chat</a>
+                <button id="clear-history"><i class="bi bi-trash me-2"></i>Borrar Historial</button>
+                <a href="{{ url_for('export_history') }}"><i class="bi bi-download me-2"></i>Exportar Historial</a>
+                <a href="{{ url_for('settings') }}"><i class="bi bi-gear me-2"></i>Configuración</a>
+                <button id="summarize-conversation"><i class="bi bi-file-text me-2"></i>Resumir Conversación</button>
+                <select id="language-select" class="form-select mt-3" aria-label="Seleccionar idioma">
+                    <option value="es" {% if current_user.language == 'es' %}selected{% endif %}>Español</option>
+                    <option value="en" {% if current_user.language == 'en' %}selected{% endif %}>English</option>
+                    <option value="ca" {% if current_user.language == 'ca' %}selected{% endif %}>Català</option>
+                </select>
             </nav>
+            <div class="theme-customizer mt-4">
+                <h6>Personalizar Tema</h6>
+                <input type="color" id="accent-color" value="#007bff" aria-label="Seleccionar color de acento">
+            </div>
         </div>
 
         <!-- Chat Container -->
@@ -523,32 +412,26 @@
             <div class="chat-header">
                 <div class="d-flex align-items-center">
                     <button class="btn btn-gradient btn-sm me-3" id="open-sidebar" aria-label="Abrir sidebar">
-                        <i class="fas fa-bars"></i>
+                        <i class="bi bi-list"></i>
                     </button>
                     <h2>Chat con GarBotGPT</h2>
                 </div>
                 <div>
                     <span id="server-status" class="badge bg-success me-2" role="status" aria-live="polite">Conectado</span>
                     <button id="theme-toggle" class="btn btn-gradient btn-sm me-2" aria-label="Alternar tema">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                    <button id="high-contrast-toggle" class="btn btn-gradient btn-sm me-2" aria-label="Modo alto contraste">
-                        <i class="fas fa-adjust"></i>
+                        <i class="bi bi-moon-stars-fill"></i>
                     </button>
                     <button id="fullscreen-toggle" class="btn btn-gradient btn-sm" aria-label="Pantalla completa">
-                        <i class="fas fa-expand"></i>
+                        <i class="bi bi-arrows-fullscreen"></i>
                     </button>
                 </div>
             </div>
 
             <div id="chat-messages" class="chat-body">
-                <div class="search-bar">
-                    <input type="text" id="search-input" class="form-control" placeholder="Buscar en el historial..." aria-label="Buscar en el historial">
-                </div>
                 {% if history|length == 0 %}
                     <div class="suggestions text-center animate__animated animate__fadeIn" role="region" aria-label="Sugerencias iniciales">
                         <p class="mb-4">¡Empieza a chatear! Prueba con estas ideas:</p>
-                        <div class="suggestions" id="initial-suggestions">
+                        <div class="suggestions">
                             <button class="suggestion-btn" data-message="Explica un concepto de programación">Concepto de Programación</button>
                             <button class="suggestion-btn" data-message="Cuéntame sobre inteligencia artificial">Inteligencia Artificial</button>
                             <button class="suggestion-btn" data-message="Escribe un poema corto">Escribir Poema</button>
@@ -557,59 +440,28 @@
                     </div>
                 {% endif %}
                 {% for entry in history %}
-                    <div class="message user-message animate__animated animate__fadeIn" role="article" data-message-id="{{ entry.id }}">
-                        <div class="message-content" data-message-id="{{ entry.id }}">
+                    <div class="message user-message animate__animated animate__fadeIn" role="article">
+                        <div class="message-content" data-message-id="{{ loop.index }}">
                             {{ entry.message | safe }}
-                            {% if entry.file_attachment and entry.file_attachment.endswith(('.png', '.jpg', '.jpeg', '.gif')) %}
-                                <img src="{{ url_for('static', filename=entry.file_attachment | replace('uploads/', '')) }}" alt="Archivo subido" class="file-preview">
-                            {% endif %}
-                        </div>
-                        <div class="edit-message-form" id="edit-form-{{ entry.id }}">
-                            <textarea class="edit-message-text" rows="3">{{ entry.message }}</textarea>
-                            <button class="btn btn-primary btn-sm mt-1" onclick="saveEditedMessage({{ entry.id }})">Guardar</button>
-                            <button class="btn btn-secondary btn-sm mt-1" onclick="cancelEdit({{ entry.id }})">Cancelar</button>
                         </div>
                         <div class="message-meta">
                             <span>Tú • {{ entry.timestamp | datetimeformat }}</span>
                             <div class="message-actions">
-                                <button class="btn btn-sm btn-link" data-action="edit" title="Editar mensaje"><i class="fas fa-pencil-alt"></i></button>
-                                <button class="btn btn-sm btn-link" data-action="react" title="Reaccionar"><i class="fas fa-smile"></i></button>
-                                <div class="reaction-menu" id="reaction-menu-{{ entry.id }}">
-                                    <span class="reaction-btn" data-reaction="😊" onclick="addReaction({{ entry.id }}, '😊')">😊</span>
-                                    <span class="reaction-btn" data-reaction="👍" onclick="addReaction({{ entry.id }}, '👍')">👍</span>
-                                    <span class="reaction-btn" data-reaction="❤️" onclick="addReaction({{ entry.id }}, '❤️')">❤️</span>
-                                </div>
+                                <button class="btn btn-sm btn-link" data-action="edit" title="Editar mensaje"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-sm btn-link" data-action="react" title="Reaccionar"><i class="bi bi-emoji-smile"></i></button>
                             </div>
-                        </div>
-                        <div class="reactions">
-                            {% for reaction in entry.reactions %}
-                                <span class="reaction-count">{{ reaction.reaction }} x{{ reaction.count }}</span>
-                            {% endfor %}
                         </div>
                     </div>
-                    <div class="message ai-message animate__animated animate__fadeIn" role="article" data-message-id="{{ entry.id }}-ai">
-                        <div class="message-content markdown-body">
+                    <div class="message ai-message animate__animated animate__fadeIn" role="article">
+                        <div class="message-content markdown-body" data-message-id="{{ loop.index }}-ai">
                             {{ entry.response | safe }}
-                            {% if entry.file_attachment and not entry.file_attachment.endswith(('.png', '.jpg', '.jpeg', '.gif')) %}
-                                <a href="{{ url_for('static', filename=entry.file_attachment | replace('uploads/', '')) }}" target="_blank">Ver archivo: {{ entry.file_attachment | split('/') | last }}</a>
-                            {% endif %}
                         </div>
                         <div class="message-meta">
-                            <span>GarBotGPT • {{ entry.timestamp | datetimeformat }} • Tono: {{ entry.response_tone }}</span>
+                            <span>GarBotGPT • {{ entry.timestamp | datetimeformat }}</span>
                             <div class="message-actions">
-                                <button class="btn btn-sm btn-link" data-action="copy" title="Copiar mensaje"><i class="fas fa-copy"></i></button>
-                                <button class="btn btn-sm btn-link" data-action="react" title="Reaccionar"><i class="fas fa-smile"></i></button>
-                                <div class="reaction-menu" id="reaction-menu-{{ entry.id }}-ai">
-                                    <span class="reaction-btn" data-reaction="😊" onclick="addReaction({{ entry.id }}, '😊')">😊</span>
-                                    <span class="reaction-btn" data-reaction="👍" onclick="addReaction({{ entry.id }}, '👍')">👍</span>
-                                    <span class="reaction-btn" data-reaction="❤️" onclick="addReaction({{ entry.id }}, '❤️')">❤️</span>
-                                </div>
+                                <button class="btn btn-sm btn-link" data-action="copy" title="Copiar mensaje"><i class="bi bi-clipboard"></i></button>
+                                <button class="btn btn-sm btn-link" data-action="react" title="Reaccionar"><i class="bi bi-emoji-smile"></i></button>
                             </div>
-                        </div>
-                        <div class="reactions">
-                            {% for reaction in entry.reactions %}
-                                <span class="reaction-count">{{ reaction.reaction }} x{{ reaction.count }}</span>
-                            {% endfor %}
                         </div>
                     </div>
                 {% endfor %}
@@ -623,19 +475,16 @@
                 <div class="input-group">
                     <input type="text" id="message" class="form-control" placeholder="Escribe tu mensaje..." autocomplete="off" aria-label="Mensaje">
                     <button class="btn btn-gradient" onclick="sendMessage()" aria-label="Enviar mensaje">
-                        <i class="fas fa-paper-plane"></i>
+                        <i class="bi bi-send-fill"></i>
                     </button>
                     <button id="voice-btn" class="btn btn-gradient" aria-label="Entrada por voz">
-                        <i class="fas fa-microphone"></i>
+                        <i class="bi bi-mic-fill"></i>
                     </button>
                 </div>
                 <div class="quick-reply-toolbar">
                     <button class="quick-reply-btn" data-reply="Gracias">Gracias</button>
                     <button class="quick-reply-btn" data-reply="Explícamelo más">Explícamelo más</button>
                     <button class="quick-reply-btn" data-reply="Otra opción">Otra opción</button>
-                </div>
-                <div class="suggestions mt-2" id="contextual-suggestions" style="display: none;">
-                    <p>Sugerencias:</p>
                 </div>
             </div>
         </div>
@@ -671,67 +520,13 @@
             const themeToggle = document.getElementById('theme-toggle');
             themeToggle.addEventListener('click', () => {
                 const html = document.getElementById('html-root');
-                const newTheme = html.dataset.theme === 'light' ? 'dark' : 'light';
-                html.dataset.theme = newTheme;
-                fetch('/update_theme', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ theme: newTheme })
-                });
-            });
-
-            // High contrast toggle
-            const highContrastToggle = document.getElementById('high-contrast-toggle');
-            highContrastToggle.addEventListener('click', () => {
-                const html = document.getElementById('html-root');
-                const newTheme = html.dataset.theme === 'high-contrast' ? 'light' : 'high-contrast';
-                html.dataset.theme = newTheme;
-                fetch('/update_theme', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ theme: newTheme })
-                });
+                html.dataset.theme = html.dataset.theme === 'light' ? 'dark' : 'light';
             });
 
             // Accent color picker
             const accentColor = document.getElementById('accent-color');
             accentColor.addEventListener('change', (e) => {
                 document.documentElement.style.setProperty('--primary-color', e.target.value);
-                fetch('/update_chat_settings', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ theme_color: e.target.value })
-                });
-            });
-
-            // Language select
-            const languageSelect = document.getElementById('language-select');
-            languageSelect.addEventListener('change', (e) => {
-                fetch('/update_language', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ language: e.target.value })
-                }).then(() => location.reload());
-            });
-
-            // Tone select
-            const toneSelect = document.getElementById('tone-select');
-            toneSelect.addEventListener('change', (e) => {
-                fetch('/update_chat_settings', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ response_tone: e.target.value })
-                });
-            });
-
-            // Context messages select
-            const contextMessagesSelect = document.getElementById('context-messages');
-            contextMessagesSelect.addEventListener('change', (e) => {
-                fetch('/update_chat_settings', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ max_context_messages: parseInt(e.target.value) })
-                });
             });
 
             // Fullscreen toggle
@@ -779,10 +574,7 @@
                         body: formData
                     }).then(response => response.json()).then(data => {
                         if (data.success) {
-                            addMessage('user', `[Archivo subido: ${data.filename}]`, new Date().toLocaleString());
-                            addMessage('ai', data.response, new Date().toLocaleString());
-                        } else {
-                            alert('Error al subir el archivo: ' + data.error);
+                            messageInput.value += `[Archivo subido: ${data.filename}]`;
                         }
                     });
                 }
@@ -796,106 +588,40 @@
                 });
             });
 
-            // Initial suggestion buttons
-            document.querySelectorAll('#initial-suggestions .suggestion-btn').forEach(btn => {
+            // Suggestion buttons
+            document.querySelectorAll('.suggestion-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     messageInput.value = btn.dataset.message;
                     sendMessage();
                 });
             });
-
-            // Clear history
-            document.getElementById('clear-history').addEventListener('click', () => {
-                if (confirm('¿Estás seguro de que quieres borrar todo el historial?')) {
-                    fetch('/clear_history', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' }
-                    }).then(response => response.json()).then(data => {
-                        if (data.success) {
-                            chatMessages.innerHTML = '<div class="suggestions text-center animate__animated animate__fadeIn" role="region" aria-label="Sugerencias iniciales"><p class="mb-4">¡Empieza a chatear! Prueba con estas ideas:</p><div class="suggestions" id="initial-suggestions"><button class="suggestion-btn" data-message="Explica un concepto de programación">Concepto de Programación</button><button class="suggestion-btn" data-message="Cuéntame sobre inteligencia artificial">Inteligencia Artificial</button><button class="suggestion-btn" data-message="Escribe un poema corto">Escribir Poema</button><button class="suggestion-btn" data-message="Ayúdame con una ecuación matemática">Ayuda Matemática</button></div></div>';
-                        } else {
-                            alert('Error al borrar el historial: ' + data.error);
-                        }
-                    });
-                }
-            });
-
-            // Summarize conversation
-            document.getElementById('summarize-conversation').addEventListener('click', () => {
-                fetch('/summarize', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                }).then(response => response.json()).then(data => {
-                    if (data.summary) {
-                        addMessage('ai', `**Resumen de la conversación:** ${data.summary}`, new Date().toLocaleString());
-                    } else {
-                        alert('Error al resumir la conversación: ' + data.error);
-                    }
-                });
-            });
-
-            // Search history
-            const searchInput = document.getElementById('search-input');
-            searchInput.addEventListener('input', debounce(() => {
-                const query = searchInput.value.trim();
-                if (query) {
-                    fetch('/search_history', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ query })
-                    }).then(response => response.json()).then(data => {
-                        if (data.results) {
-                            chatMessages.innerHTML = '';
-                            data.results.forEach(entry => {
-                                addMessage('user', entry.message, entry.timestamp, entry.id);
-                                addMessage('ai', entry.response, entry.timestamp, `${entry.id}-ai`);
-                            });
-                        } else {
-                            alert('Error al buscar en el historial: ' + data.error);
-                        }
-                    });
-                } else {
-                    location.reload();
-                }
-            }, 500));
         });
-
-        function addMessage(type, content, timestamp, messageId = null) {
-            const chatMessages = document.getElementById('chat-messages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}-message animate__animated animate__fadeIn`;
-            if (messageId) messageDiv.dataset.messageId = messageId;
-            messageDiv.innerHTML = `
-                <div class="message-content markdown-body">${marked.parse(content)}</div>
-                <div class="message-meta">
-                    <span>${type === 'user' ? 'Tú' : 'GarBotGPT'} • ${new Date(timestamp).toLocaleString()}</span>
-                    <div class="message-actions">
-                        ${type === 'user' ? '<button class="btn btn-sm btn-link" data-action="edit" title="Editar mensaje"><i class="fas fa-pencil-alt"></i></button>' : '<button class="btn btn-sm btn-link" data-action="copy" title="Copiar mensaje"><i class="fas fa-copy"></i></button>'}
-                        <button class="btn btn-sm btn-link" data-action="react" title="Reaccionar"><i class="fas fa-smile"></i></button>
-                        <div class="reaction-menu" id="reaction-menu-${messageId || Date.now()}">
-                            <span class="reaction-btn" data-reaction="😊" onclick="addReaction('${messageId || Date.now()}', '😊')">😊</span>
-                            <span class="reaction-btn" data-reaction="👍" onclick="addReaction('${messageId || Date.now()}', '👍')">👍</span>
-                            <span class="reaction-btn" data-reaction="❤️" onclick="addReaction('${messageId || Date.now()}', '❤️')">❤️</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="reactions"></div>`;
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            hljs.highlightAll();
-        }
 
         async function sendMessage() {
             const messageInput = document.getElementById('message');
             const chatMessages = document.getElementById('chat-messages');
             const respondingIndicator = document.getElementById('responding-indicator');
-            const contextualSuggestions = document.getElementById('contextual-suggestions');
             const message = messageInput.value.trim();
 
             if (!message) return;
 
-            addMessage('user', message, new Date().toLocaleString());
+            // Add user message
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user-message animate__animated animate__fadeIn';
+            userMessage.innerHTML = `
+                <div class="message-content">${message}</div>
+                <div class="message-meta">
+                    <span>Tú • ${new Date().toLocaleString()}</span>
+                    <div class="message-actions">
+                        <button class="btn btn-sm btn-link" data-action="edit" title="Editar mensaje"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-link" data-action="react" title="Reaccionar"><i class="bi bi-emoji-smile"></i></button>
+                    </div>
+                </div>`;
+            chatMessages.appendChild(userMessage);
             messageInput.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Show typing indicator
             respondingIndicator.classList.remove('d-none');
 
             try {
@@ -907,126 +633,25 @@
                 const data = await response.json();
                 respondingIndicator.classList.add('d-none');
 
-                if (data.response) {
-                    addMessage('ai', data.response, new Date().toLocaleString());
-                    if (data.suggestions && data.suggestions.length) {
-                        contextualSuggestions.style.display = 'flex';
-                        contextualSuggestions.innerHTML = '<p>Sugerencias:</p>';
-                        data.suggestions.forEach(suggestion => {
-                            const btn = document.createElement('button');
-                            btn.className = 'suggestion-btn';
-                            btn.dataset.message = suggestion;
-                            btn.textContent = suggestion;
-                            btn.addEventListener('click', () => {
-                                messageInput.value = suggestion;
-                                sendMessage();
-                            });
-                            contextualSuggestions.appendChild(btn);
-                        });
-                    }
-                } else {
-                    alert('Error al enviar el mensaje: ' + data.error);
-                }
+                // Add AI response
+                const aiMessage = document.createElement('div');
+                aiMessage.className = 'message ai-message animate__animated animate__fadeIn';
+                aiMessage.innerHTML = `
+                    <div class="message-content markdown-body">${marked.parse(data.response)}</div>
+                    <div class="message-meta">
+                        <span>GarBotGPT • ${new Date().toLocaleString()}</span>
+                        <div class="message-actions">
+                            <button class="btn btn-sm btn-link" data-action="copy" title="Copiar mensaje"><i class="bi bi-clipboard"></i></button>
+                            <button class="btn btn-sm btn-link" data-action="react" title="Reaccionar"><i class="bi bi-emoji-smile"></i></button>
+                        </div>
+                    </div>`;
+                chatMessages.appendChild(aiMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                hljs.highlightAll();
             } catch (error) {
                 respondingIndicator.classList.add('d-none');
                 alert('Error al enviar el mensaje. Inténtalo de nuevo.');
             }
-        }
-
-        function addReaction(messageId, reaction) {
-            fetch('/react', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message_id: messageId.replace('-ai', ''), reaction })
-            }).then(response => response.json()).then(data => {
-                if (data.success) {
-                    const messageDiv = document.querySelector(`[data-message-id="${messageId}"]`) || document.querySelector(`[data-message-id="${messageId}-ai"]`);
-                    const reactionsDiv = messageDiv.querySelector('.reactions');
-                    const existingReaction = reactionsDiv.querySelector(`[data-reaction="${reaction}"]`);
-                    if (existingReaction) {
-                        const count = parseInt(existingReaction.dataset.count) + 1;
-                        existingReaction.dataset.count = count;
-                        existingReaction.textContent = `${reaction} x${count}`;
-                    } else {
-                        const reactionSpan = document.createElement('span');
-                        reactionSpan.className = 'reaction-count';
-                        reactionSpan.dataset.reaction = reaction;
-                        reactionSpan.dataset.count = 1;
-                        reactionSpan.textContent = `${reaction} x1`;
-                        reactionsDiv.appendChild(reactionSpan);
-                    }
-                } else {
-                    alert('Error al añadir reacción: ' + data.error);
-                }
-            });
-        }
-
-        function toggleReactionMenu(messageId) {
-            const menu = document.getElementById(`reaction-menu-${messageId}`);
-            menu.classList.toggle('show');
-        }
-
-        function editMessage(messageId) {
-            const form = document.getElementById(`edit-form-${messageId}`);
-            form.style.display = 'block';
-            document.querySelector(`[data-message-id="${messageId}"] .message-content`).style.display = 'none';
-        }
-
-        function saveEditedMessage(messageId) {
-            const textarea = document.querySelector(`#edit-form-${messageId} textarea`);
-            const newMessage = textarea.value.trim();
-            if (!newMessage) {
-                alert('El mensaje no puede estar vacío.');
-                return;
-            }
-            fetch('/edit_message', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message_id: messageId, message: newMessage })
-            }).then(response => response.json()).then(data => {
-                if (data.success) {
-                    const messageDiv = document.querySelector(`[data-message-id="${messageId}"]`);
-                    messageDiv.querySelector('.message-content').innerHTML = marked.parse(newMessage);
-                    messageDiv.querySelector('.message-content').style.display = 'block';
-                    document.getElementById(`edit-form-${messageId}`).style.display = 'none';
-                    const aiMessageDiv = document.querySelector(`[data-message-id="${messageId}-ai"]`);
-                    aiMessageDiv.querySelector('.message-content').innerHTML = marked.parse(data.response);
-                } else {
-                    alert('Error al editar el mensaje: ' + data.error);
-                }
-            });
-        }
-
-        function cancelEdit(messageId) {
-            document.getElementById(`edit-form-${messageId}`).style.display = 'none';
-            document.querySelector(`[data-message-id="${messageId}"] .message-content`).style.display = 'block';
-        }
-
-        document.addEventListener('click', (e) => {
-            if (e.target.dataset.action === 'react') {
-                const messageId = e.target.closest('.message').dataset.messageId;
-                toggleReactionMenu(messageId);
-            } else if (e.target.dataset.action === 'edit') {
-                const messageId = e.target.closest('.message').dataset.messageId;
-                editMessage(messageId);
-            } else if (e.target.dataset.action === 'copy') {
-                const content = e.target.closest('.message').querySelector('.message-content').textContent;
-                navigator.clipboard.writeText(content).then(() => {
-                    alert('Mensaje copiado al portapapeles.');
-                });
-            }
-        });
-
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
         }
     </script>
 </body>
