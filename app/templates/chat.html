@@ -1,251 +1,487 @@
-{% extends "base.html" %}
-{% block title %}Chatear con GarBotGPT{% endblock %}
-{% block content %}
-<!-- Contenedor Principal del Chat -->
-<div class="chat-page container-fluid d-flex justify-content-center">
-    <div class="chat-container flex-grow-1" id="chat-container-main" role="main" aria-label="Interfaz de chat">
-        <!-- Encabezado del Chat -->
-        <div class="chat-header d-flex justify-content-between align-items-center p-3 border-bottom">
-            <div class="d-flex align-items-center">
-                <button id="sidebar-toggle" class="btn btn-gradient btn-sm me-2" data-bs-toggle="modal" data-bs-target="#sidebarModal" data-bs-toggle="tooltip" title="Abrir Menú" aria-label="Abrir menú lateral">
-                    <i class="bi bi-list me-1"></i><span>Menú</span>
-                </button>
-                <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT Logo" class="me-2" style="height: 30px;" aria-hidden="true">
-                <h2 class="mb-0 flex-grow-1">Chatear con GarBotGPT</h2>
-            </div>
-            <div class="d-flex align-items-center">
-                <span id="server-status" class="badge bg-success me-2" role="status" aria-live="polite">Conectado</span>
-                <button id="theme-toggle" class="btn btn-gradient btn-sm me-2" data-bs-toggle="tooltip" title="Alternar tema claro/oscuro" aria-label="Alternar tema">
-                    <i class="bi bi-moon-stars-fill"></i>
-                </button>
-                <button id="fullscreen-toggle" class="btn btn-gradient btn-sm" data-bs-toggle="tooltip" title="Alternar pantalla completa" aria-label="Alternar pantalla completa">
-                    <i class="bi bi-arrows-fullscreen"></i>
-                </button>
+<!DOCTYPE html>
+<html lang="{% if current_user.is_authenticated %}{{ current_user.language }}{% else %}es{% endif %}" id="html-root" data-theme="{% if current_user.is_authenticated %}{{ current_user.theme }}{% else %}light{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat con GarBotGPT</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #00d4ff;
+            --gradient: linear-gradient(135deg, #007bff, #00d4ff);
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-color: #212529;
+            --bg-color: #f4f7fa;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --message-user-bg: #e3f2fd;
+            --message-ai-bg: #f5f5f5;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #00d4ff;
+            --secondary-color: #007bff;
+            --gradient: linear-gradient(135deg, #00d4ff, #007bff);
+            --glass-bg: rgba(0, 0, 0, 0.3);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-color: #e9ecef;
+            --bg-color: #121212;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --message-user-bg: #1e3a8a;
+            --message-ai-bg: #2d2d2d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow);
+            padding: 0.75rem 1.5rem;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: #fff !important;
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            color: #fff !important;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        .main-content {
+            display: flex;
+            min-height: calc(100vh - 70px);
+            padding: 0;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-logo {
+            height: 30px;
+        }
+
+        .sidebar-nav a, .sidebar-nav button {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: background 0.2s;
+        }
+
+        .sidebar-nav a:hover, .sidebar-nav button:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            margin: 1.5rem auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .chat-header {
+            background: var(--gradient);
+            color: #fff;
+            padding: 1rem 1.5rem;
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .message {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+            max-width: 80%;
+        }
+
+        .user-message {
+            align-self: flex-end;
+        }
+
+        .ai-message {
+            align-self: flex-start;
+        }
+
+        .message-content {
+            padding: 1rem;
+            border-radius: 12px;
+            position: relative;
+            transition: transform 0.2s;
+        }
+
+        .user-message .message-content {
+            background: var(--message-user-bg);
+            color: var(--text-color);
+        }
+
+        .ai-message .message-content {
+            background: var(--message-ai-bg);
+            color: var(--text-color);
+        }
+
+        .message-content:hover {
+            transform: translateY(-2px);
+        }
+
+        .message-meta {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+
+        .typing-effect .message-content::after {
+            content: '...';
+            display: inline-block;
+            width: 1.5rem;
+            text-align: center;
+            animation: typing 1.2s infinite;
+        }
+
+        @keyframes typing {
+            0% { content: '.'; }
+            33% { content: '..'; }
+            66% { content: '...'; }
+        }
+
+        .chat-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        #message {
+            border-radius: 50px;
+            padding: 0.75rem 4rem 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            color: var(--text-color);
+        }
+
+        #message:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+        }
+
+        .input-group .btn {
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            margin-left: 0.5rem;
+        }
+
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .suggestion-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            transition: all 0.2s;
+        }
+
+        .suggestion-btn:hover {
+            background: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+        .context-menu {
+            position: absolute;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+        }
+
+        .context-menu button {
+            display: block;
+            width: 100%;
+            padding: 0.5rem 1rem;
+            text-align: left;
+            background: none;
+            border: none;
+            color: var(--text-color);
+        }
+
+        .context-menu button:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        footer {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                z-index: 1000;
+            }
+
+            .chat-container {
+                margin: 0.5rem;
+                border-radius: 8px;
+            }
+
+            .chat-header h2 {
+                font-size: 1.25rem;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body data-authenticated="{{ authenticated | lower }}">
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">GarBotGPT v2.0</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <span class="nav-link user-welcome animate__animated animate__fadeIn">
+                                <i class="bi bi-person-circle me-2"></i>Hola, {{ current_user.username }}
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('chat') }}">Chat</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('settings') }}">Configuración</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">Cerrar Sesión</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">Iniciar Sesión</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('register') }}">Registrarse</a>
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
+    </nav>
 
-        <!-- Cuerpo del Chat -->
-        <div id="chat-messages" class="chat-body p-3" role="log" aria-live="polite">
-            {% if history|length == 0 %}
-                <!-- Carrusel de Sugerencias Iniciales -->
-                <div class="suggestions glass text-center animate__animated animate__fadeIn" role="region" aria-label="Sugerencias iniciales">
-                    <p class="mb-3">¡Empieza a chatear! Aquí tienes algunas sugerencias:</p>
-                    <div id="suggestions-carousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Explica un concepto de programación">
-                                    <i class="bi bi-code-slash me-1"></i>Concepto de Programación
-                                </button>
-                            </div>
-                            <div class="carousel-item">
-                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Cuéntame sobre inteligencia artificial">
-                                    <i class="bi bi-robot me-1"></i>Inteligencia Artificial
-                                </button>
-                            </div>
-                            <div class="carousel-item">
-                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Escribe un poema corto">
-                                    <i class="bi bi-pen me-1"></i>Escribir Poema
-                                </button>
-                            </div>
-                            <div class="carousel-item">
-                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Ayúdame con una ecuación matemática">
-                                    <i class="bi bi-calculator me-1"></i>Ayuda Matemática
-                                </button>
-                            </div>
-                            <div class="carousel-item">
-                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Cuéntame sobre la historia de Roma">
-                                    <i class="bi bi-book me-1"></i>Historia de Roma
-                                </button>
-                            </div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT Logo" class="sidebar-logo">
+                <button class="btn btn-sm btn-gradient" id="sidebar-toggle" aria-label="Cerrar sidebar">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('chat') }}"><i class="bi bi-chat-left-text me-2"></i>Nuevo Chat</a>
+                <button id="clear-history" class="animate__animated animate__pulse animate__infinite"><i class="bi bi-trash me-2"></i>Borrar Historial</button>
+                <a href="{{ url_for('export_history') }}"><i class="bi bi-download me-2"></i>Exportar Historial</a>
+                <a href="{{ url_for('settings') }}"><i class="bi bi-gear me-2"></i>Configuración</a>
+                <select id="language-select" class="form-select mt-3" aria-label="Seleccionar idioma">
+                    <option value="es" {% if current_user.language == 'es' %}selected{% endif %}>Español</option>
+                    <option value="en" {% if current_user.language == 'en' %}selected{% endif %}>English</option>
+                    <option value="ca" {% if current_user.language == 'ca' %}selected{% endif %}>Català</option>
+                </select>
+            </nav>
+        </div>
+
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-gradient btn-sm me-2" id="open-sidebar" aria-label="Abrir sidebar">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <h2>Chat con GarBotGPT</h2>
+                </div>
+                <div>
+                    <span id="server-status" class="badge bg-success me-2" role="status" aria-live="polite">Conectado</span>
+                    <button id="theme-toggle" class="btn btn-gradient btn-sm me-2" aria-label="Alternar tema">
+                        <i class="bi bi-moon-stars-fill"></i>
+                    </button>
+                    <button id="fullscreen-toggle" class="btn btn-gradient btn-sm" aria-label="Pantalla completa">
+                        <i class="bi bi-arrows-fullscreen"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="chat-messages" class="chat-body">
+                {% if history|length == 0 %}
+                    <div class="suggestions text-center animate__animated animate__fadeIn" role="region" aria-label="Sugerencias iniciales">
+                        <p class="mb-3">¡Empieza a chatear! Prueba con estas ideas:</p>
+                        <div class="suggestions">
+                            <button class="suggestion-btn" data-message="Explica un concepto de programación">Concepto de Programación</button>
+                            <button class="suggestion-btn" data-message="Cuéntame sobre inteligencia artificial">Inteligencia Artificial</button>
+                            <button class="suggestion-btn" data-message="Escribe un poema corto">Escribir Poema</button>
+                            <button class="suggestion-btn" data-message="Ayúdame con una ecuación matemática">Ayuda Matemática</button>
+                            <button class="suggestion-btn" data-message="Cuéntame sobre la historia de Roma">Historia de Roma</button>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#suggestions-carousel" data-bs-slide="prev" aria-label="Anterior sugerencia">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#suggestions-carousel" data-bs-slide="next" aria-label="Siguiente sugerencia">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        </button>
                     </div>
+                {% endif %}
+                {% for entry in history %}
+                    <div class="message user-message animate__animated animate__fadeIn" role="article">
+                        <div class="message-content" data-message-id="{{ loop.index }}">
+                            {{ entry.message | safe }}
+                        </div>
+                        <div class="message-meta">Tú • {{ entry.timestamp | datetimeformat }}</div>
+                    </div>
+                    <div class="message ai-message animate__animated animate__fadeIn" role="article">
+                        <div class="message-content markdown-body" data-message-id="{{ loop.index }}-ai">
+                            {{ entry.response | safe }}
+                        </div>
+                        <div class="message-meta">GarBotGPT • {{ entry.timestamp | datetimeformat }}</div>
+                    </div>
+                {% endfor %}
+                <div id="responding-indicator" class="message ai-message animate__animated animate__fadeIn d-none" role="status">
+                    <div class="message-content typing-effect">Respondiendo...</div>
                 </div>
-            {% endif %}
-            <!-- Historial de Mensajes -->
-            {% for entry in history %}
-                <div class="message user-message animate__animated animate__fadeIn mb-3" role="article">
-                    <strong>Tú:</strong>
-                    <div class="message-content p-2 rounded shadow-sm">{{ entry.message | safe }}</div>
-                </div>
-                <div class="message ai-message animate__animated animate__fadeIn mb-3" role="article">
-                    <strong>GarBotGPT:</strong>
-                    <div class="message-content p-2 rounded shadow-sm markdown-body">{{ entry.response | safe }}</div>
-                    <button class="copy-btn btn btn-sm btn-outline-secondary mt-1" data-bs-toggle="tooltip" title="Copiar respuesta" data-text="{{ entry.response }}" aria-label="Copiar respuesta">Copiar</button>
-                </div>
-            {% endfor %}
-            <!-- Indicador de Respondiendo -->
-            <div id="responding-indicator" class="message ai-message animate__animated animate__fadeIn glass d-none mb-3" role="status">
-                <strong>GarBotGPT:</strong>
-                <div class="message-content typing-effect p-2 rounded shadow-sm">Respondiendo<span class="typing-dots"></span></div>
             </div>
-        </div>
 
-        <!-- Pie del Chat -->
-        <div class="chat-footer p-3 border-top">
-            <div class="input-group mb-2 position-relative">
-                <input type="text" id="message" class="form-control rounded-pill" placeholder="Escribe tu mensaje..." autocomplete="off" aria-label="Campo de mensaje">
-                <button class="btn btn-primary btn-gradient btn-lg" onclick="sendMessage()" data-bs-toggle="tooltip" title="Enviar mensaje" aria-label="Enviar mensaje">
-                    <i class="bi bi-send-fill"></i>
-                </button>
-                <button id="voice-btn" class="btn btn-gradient btn-lg" data-bs-toggle="tooltip" title="Entrada por voz" aria-label="Entrada por voz">
-                    <i class="bi bi-mic-fill"></i>
-                </button>
-                <div id="suggestions-dropdown" class="suggestions-dropdown glass d-none" role="listbox" aria-label="Sugerencias de prompts"></div>
-            </div>
-            <div class="chat-options d-flex justify-content-between align-items-center">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="send-on-enter" checked aria-label="Enviar con Enter">
-                    <label class="form-check-label" for="send-on-enter">Enviar con Enter</label>
+            <div class="chat-footer">
+                <div class="input-group">
+                    <input type="text" id="message" class="form-control" placeholder="Escribe tu mensaje..." autocomplete="off" aria-label="Mensaje">
+                    <button class="btn btn-gradient" onclick="sendMessage()" aria-label="Enviar mensaje">
+                        <i class="bi bi-send-fill"></i>
+                    </button>
+                    <button id="voice-btn" class="btn btn-gradient" aria-label="Entrada por voz">
+                        <i class="bi bi-mic-fill"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Contenedor de Notificaciones -->
-<div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055;" role="alert" aria-live="assertive"></div>
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 GarBotGPT. Desarrollado por GarolaCorp & xAI.</p>
+    </footer>
 
-<!-- Modal para el Menú -->
-<div class="modal fade" id="sidebarModal" tabindex="-1" aria-labelledby="sidebarModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content glass animate__animated animate__bounceIn">
-            <div class="modal-header">
-                <h5 class="modal-title" id="sidebarModalLabel"><i class="bi bi-list me-2"></i>Menú</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar menú" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body">
-                <div class="accordion" id="sidebarAccordion" role="navigation">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="settingsHeading">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#settingsCollapse" aria-expanded="false" aria-controls="settingsCollapse">
-                                <i class="bi bi-gear-fill me-2"></i>Configuración
-                            </button>
-                        </h2>
-                        <div id="settingsCollapse" class="accordion-collapse collapse" aria-labelledby="settingsHeading" data-bs-parent="#sidebarAccordion">
-                            <div class="accordion-body">
-                                <button class="btn btn-primary btn-gradient btn-sm w-100 animate__animated animate__pulse animate__infinite" data-bs-toggle="modal" data-bs-target="#settingsModal" data-bs-toggle="tooltip" title="Configurar ajustes del chat" aria-label="Abrir configuración">
-                                    Abrir Configuración
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="infoHeading">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#infoCollapse" aria-expanded="false" aria-controls="infoCollapse">
-                                <i class="bi bi-info-circle-fill me-2"></i>Información
-                            </button>
-                        </h2>
-                        <div id="infoCollapse" class="accordion-collapse collapse" aria-labelledby="infoHeading" data-bs-parent="#sidebarAccordion">
-                            <div class="accordion-body">
-                                <button class="btn btn-primary btn-gradient btn-sm w-100 animate__animated animate__pulse animate__infinite" data-bs-toggle="modal" data-bs-target="#infoModal" data-bs-toggle="tooltip" title="Ver información de GarBotGPT" aria-label="Ver información">
-                                    Ver Información
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="actionsHeading">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#actionsCollapse" aria-expanded="false" aria-controls="actionsCollapse">
-                                <i class="bi bi-tools me-2"></i>Acciones
-                            </button>
-                        </h2>
-                        <div id="actionsCollapse" class="accordion-collapse collapse" aria-labelledby="actionsHeading" data-bs-parent="#sidebarAccordion">
-                            <div class="accordion-body">
-                                <button id="clear-history" class="btn btn-outline-danger btn-sm w-100 mb-2 animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Borrar el historial de chat" aria-label="Borrar historial">Borrar Historial</button>
-                                <a href="{{ url_for('export_history') }}" class="btn btn-outline-secondary btn-sm w-100 mb-2 animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Descargar historial" aria-label="Exportar historial">Exportar Historial</a>
-                                <a href="{{ url_for('export_settings') }}" class="btn btn-outline-secondary btn-sm w-100 mb-2 animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Descargar configuración" aria-label="Exportar configuración">Exportar Configuración</a>
-                                <button id="regenerate-response" class="btn btn-outline-secondary btn-sm w-100 mb-2 animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Regenerar última respuesta" aria-label="Regenerar respuesta">Regenerar Respuesta</button>
-                                <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary btn-sm w-100 animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Cerrar sesión" aria-label="Cerrar sesión">Cerrar Sesión</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="languageHeading">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#languageCollapse" aria-expanded="false" aria-controls="languageCollapse">
-                                <i class="bi bi-translate me-2"></i>Idioma
-                            </button>
-                        </h2>
-                        <div id="languageCollapse" class="accordion-collapse collapse" aria-labelledby="languageHeading" data-bs-parent="#sidebarAccordion">
-                            <div class="accordion-body">
-                                <select id="language-select" class="form-select" data-bs-toggle="tooltip" title="Cambiar idioma" aria-label="Seleccionar idioma">
-                                    <option value="es" {% if current_user.language == 'es' %}selected{% endif %}>Español</option>
-                                    <option value="en" {% if current_user.language == 'en' %}selected{% endif %}>English</option>
-                                    <option value="ca" {% if current_user.language == 'ca' %}selected{% endif %}>Català</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize tooltips
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
-<!-- Modal para Configuración -->
-<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content glass animate__animated animate__bounceIn">
-            <div class="modal-header">
-                <h5 class="modal-title" id="settingsModalLabel"><i class="bi bi-gear-fill me-2"></i>Configuración del Chat</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar configuración" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body">
-                <form id="chat-settings-form">
-                    <div class="mb-3">
-                        <label for="model" class="form-label"><i class="bi bi-robot me-2"></i>Modelo de IA</label>
-                        <select class="form-select" id="model" name="model" aria-label="Seleccionar modelo de IA">
-                            <option value="gpt-3.5-turbo" {% if chat_settings.model == 'gpt-3.5-turbo' %}selected{% endif %}>GPT-3.5 Turbo</option>
-                            <option value="gpt-4" {% if chat_settings.model == 'gpt-4' %}selected{% endif %}>GPT-4</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="temperature" class="form-label"><i class="bi bi-thermometer-half me-2"></i>Temperatura</label>
-                        <input type="number" class="form-control" id="temperature" name="temperature" step="0.1" min="0" max="1" value="{{ chat_settings.temperature }}" aria-label="Ajustar temperatura">
-                    </div>
-                    <div class="mb-3">
-                        <label for="max_tokens" class="form-label"><i class="bi bi-text-paragraph me-2"></i>Máximo de Tokens</label>
-                        <input type="number" class="form-control" id="max_tokens" name="max_tokens" min="100" max="2000" value="{{ chat_settings.max_tokens }}" aria-label="Ajustar máximo de tokens">
-                    </div>
-                    <div class="mb-3">
-                        <label for="theme_color" class="form-label"><i class="bi bi-palette-fill me-2"></i>Color del Tema</label>
-                        <input type="color" class="form-control form-control-color" id="theme_color" name="theme_color" value="{{ chat_settings.theme_color }}" aria-label="Seleccionar color del tema">
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-gradient btn-sm w-100 animate__animated animate__pulse" data-bs-toggle="tooltip" title="Guardar ajustes" aria-label="Guardar configuración">Guardar</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+            // Sidebar toggle
+            const sidebar = document.getElementById('sidebar');
+            const openSidebarBtn = document.getElementById('open-sidebar');
+            const closeSidebarBtn = document.getElementById('sidebar-toggle');
 
-<!-- Modal para Información -->
-<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content glass animate__animated animate__bounceIn">
-            <div class="modal-header">
-                <h5 class="modal-title" id="infoModalLabel"><i class="bi bi-info-circle-fill me-2"></i>Información</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar información" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body">
-                <p><strong>GarBotGPT</strong> es un chatbot avanzado diseñado para proporcionar respuestas útiles y precisas a una amplia gama de preguntas y tareas.</p>
-                <p><strong>Versión:</strong> 1.5</p>
-                <p><strong>Propósito:</strong> Asistir a usuarios en tareas diarias, responder preguntas complejas, y ofrecer soporte educativo y creativo.</p>
-                <p><strong>Tecnologías:</strong> Flask, Bootstrap 5, PostgreSQL, OpenAI API, JavaScript, HTML5, CSS3</p>
-                <p><strong>Creador:</strong> GarolaCorp, una empresa innovadora dedicada a desarrollar soluciones de inteligencia artificial para el futuro.</p>
-                <p><strong>Contacto:</strong> support@garolacorp.com</p>
-                <p><strong>Lanzamiento:</strong> Abril 2025</p>
-            </div>
-        </div>
-    </div>
-</div>
+            openSidebarBtn.addEventListener('click', () => sidebar.classList.remove('hidden'));
+            closeSidebarBtn.addEventListener('click', () => sidebar.classList.add('hidden'));
 
-<!-- Script para Scroll Automático -->
-<script>
-    document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
-</script>
-{% endblock %}
+            // Scroll to bottom of chat
+            const chatMessages = document.getElementById('chat-messages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Theme toggle
+            const themeToggle = document.getElementById('theme-toggle');
+            themeToggle.addEventListener('click', () => {
+                const html = document.getElementById('html-root');
+                html.dataset.theme = html.dataset.theme === 'light' ? 'dark' : 'light';
+            });
+
+            // Fullscreen toggle
+            const fullscreenToggle = document.getElementById('fullscreen-toggle');
+            fullscreenToggle.addEventListener('click', () => {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
