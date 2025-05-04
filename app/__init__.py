@@ -7,6 +7,7 @@ import time
 from sqlalchemy.exc import OperationalError
 from sqlalchemy import inspect, text
 import os
+import urllib.parse
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
@@ -20,9 +21,18 @@ def create_app():
     app.config.from_object(Config)
     
     # Validar DATABASE_URL
-    if not app.config.get('DATABASE_URL'):
+    database_url = app.config.get('DATABASE_URL')
+    if not database_url:
         logger.error("DATABASE_URL no está configurado en las variables de entorno.")
-        raise ValueError("DATABASE_URL no está configurado.")
+        raise ValueError("DATABASE_URL no está configurado. Configúralo en Render.com o en el archivo .env con el formato postgresql://usuario:contraseña@host:puerto/db.")
+    
+    # Extraer host y puerto de DATABASE_URL para logging (sin exponer credenciales)
+    try:
+        parsed_url = urllib.parse.urlparse(database_url)
+        safe_db_info = f"host={parsed_url.hostname}, port={parsed_url.port}, db={parsed_url.path[1:]}"
+        logger.info(f"Conectando a la base de datos: {safe_db_info}")
+    except Exception as e:
+        logger.warning(f"No se pudo parsear DATABASE_URL: {str(e)}")
     
     # Crear directorio de uploads
     upload_folder = app.config.get('UPLOAD_FOLDER', 'uploads')
@@ -44,7 +54,7 @@ def create_app():
         while retry_count < max_retries:
             try:
                 logger.info("Intentando conectar y crear tablas...")
-                db.session.execute(text('SELECT 1'))  # Consulta de prueba corregida
+                db.session.execute(text('SELECT 1'))  # Consulta de prueba
                 logger.info("Conexión a la base de datos exitosa.")
                 
                 db.create_all()
@@ -67,7 +77,7 @@ def create_app():
                 if retry_count == max_retries:
                     logger.error("No se pudo conectar con la base de datos o crear tablas después de varios intentos.")
                     raise
-                time.sleep(5)
+                time.sleep(10)  # Aumentar el tiempo de espera para conexiones lentas
         
         # Importar rutas después de crear tablas
         from app import routes
