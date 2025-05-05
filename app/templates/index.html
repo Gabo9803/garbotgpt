@@ -86,6 +86,14 @@
             background: var(--card-bg);
         }
 
+        .navbar.scrolled .nav-link {
+            color: #000 !important; /* Black text in light theme when scrolled */
+        }
+
+        [data-theme="dark"] .navbar.scrolled .nav-link {
+            color: #fff !important; /* White text in dark theme when scrolled */
+        }
+
         .navbar-brand {
             font-weight: 700;
             color: #fff !important;
@@ -120,6 +128,11 @@
             transition: color 0.3s ease, transform 0.3s ease;
         }
 
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            transform: translateY(-2px);
+        }
+
         .nav-link::after {
             content: '';
             position: absolute;
@@ -134,11 +147,6 @@
         .nav-link:hover::after {
             width: 100%;
             left: 0;
-        }
-
-        .nav-link:hover {
-            color: var(--primary-color) !important;
-            transform: translateY(-2px);
         }
 
         /* Simplified Mega Menu */
@@ -159,7 +167,8 @@
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        .nav-item:hover .mega-menu {
+        .nav-item:hover .mega-menu,
+        .mega-menu:hover {
             display: block;
             opacity: 1;
             transform: translateX(-50%) translateY(0);
@@ -405,7 +414,7 @@
             background: #2d2d2d;
         }
 
-        .features-section, .pricing-section, .blog-section, .success-stories-section, .resources-section {
+        .features-section, .pricing-section, .blog-section, .success-stories-section, .resources-section, .integrations-section, .case-studies-section {
             padding: 6rem 1.5rem;
             background: var(--bg-color);
             position: relative;
@@ -417,7 +426,7 @@
             margin: 0 auto;
         }
 
-        .feature-card, .pricing-card, .blog-card, .success-story-card, .resource-card {
+        .feature-card, .pricing-card, .blog-card, .success-story-card, .resource-card, .integration-card, .case-study-card {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
@@ -431,30 +440,30 @@
             z-index: 1;
         }
 
-        .feature-card:hover, .pricing-card:hover, .blog-card:hover, .success-story-card:hover, .resource-card:hover {
+        .feature-card:hover, .pricing-card:hover, .blog-card:hover, .success-story-card:hover, .resource-card:hover, .integration-card:hover, .case-study-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
-        .feature-card i, .pricing-card i, .success-story-card i, .resource-card i {
+        .feature-card i, .pricing-card i, .success-story-card i, .resource-card i, .integration-card i, .case-study-card i {
             font-size: 3rem;
             color: var(--primary-color);
             margin-bottom: 1.5rem;
             transition: color 0.3s ease;
         }
 
-        .feature-card:hover i, .pricing-card:hover i, .success-story-card:hover i, .resource-card:hover i {
+        .feature-card:hover i, .pricing-card:hover i, .success-story-card:hover i, .resource-card:hover i, .integration-card:hover i, .case-study-card:hover i {
             color: var(--secondary-color);
         }
 
-        .feature-card h3, .pricing-card h3, .blog-card h3, .success-story-card h3, .resource-card h3 {
+        .feature-card h3, .pricing-card h3, .blog-card h3, .success-story-card h3, .resource-card h3, .integration-card h3, .case-study-card h3 {
             font-size: 1.8rem;
             font-weight: 600;
             margin-bottom: 1rem;
             transition: color 0.3s ease;
         }
 
-        .feature-card:hover h3, .pricing-card:hover h3, .blog-card:hover h3, .success-story-card:hover h3, .resource-card:hover h3 {
+        .feature-card:hover h3, .pricing-card:hover h3, .blog-card:hover h3, .success-story-card:hover h3, .resource-card:hover h3, .integration-card:hover h3, .case-study-card:hover h3 {
             color: var(--primary-color);
         }
 
@@ -816,7 +825,7 @@
                 display: none !important;
             }
 
-            .feature-card, .use-case-card, .testimonial-card, .pricing-card, .blog-card, .success-story-card, .resource-card {
+            .feature-card, .use-case-card, .testimonial-card, .pricing-card, .blog-card, .success-story-card, .resource-card, .integration-card, .case-study-card {
                 margin-bottom: 2rem;
             }
 
@@ -866,11 +875,11 @@
                 font-size: 0.9rem;
             }
 
-            .features-section, .pricing-section, .blog-section, .use-cases-section, .stats-section, .testimonials-section, .timeline-section, .faq-section, .community-section, .newsletter-section, .success-stories-section, .resources-section {
+            .features-section, .pricing-section, .blog-section, .use-cases-section, .stats-section, .testimonials-section, .timeline-section, .faq-section, .community-section, .newsletter-section, .success-stories-section, .resources-section, .integrations-section, .case-studies-section {
                 padding: 4rem 1rem;
             }
 
-            .feature-card h3, .pricing-card h3, .blog-card h3, .success-story-card h3, .resource-card h3 {
+            .feature-card h3, .pricing-card h3, .blog-card h3, .success-story-card h3, .resource-card h3, .integration-card h3, .case-study-card h3 {
                 font-size: 1.5rem;
             }
         }
@@ -895,6 +904,8 @@
                             <a href="#features">IA Avanzada</a>
                             <a href="#features">Personalización</a>
                             <a href="#features">Seguridad</a>
+                            <a href="#features">Interacción por Voz</a>
+                            <a href="#features">Análisis en Tiempo Real</a>
                         </div>
                     </li>
                     <li class="nav-item">
@@ -1076,6 +1087,56 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="carousel-item">
+                            <div class="row g-4">
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-mic-fill"></i>
+                                        <h3>Interacción por Voz</h3>
+                                        <p>Controla GarBotGPT con comandos de voz para una experiencia manos libres.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-graph-up"></i>
+                                        <h3>Análisis en Tiempo Real</h3>
+                                        <p>Obtén estadísticas y métricas instantáneas sobre tus interacciones.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-cloud-arrow-up"></i>
+                                        <h3>Sincronización Multiplataforma</h3>
+                                        <p>Accede a tus datos desde cualquier dispositivo con sincronización en la nube.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="row g-4">
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-kanban"></i>
+                                        <h3>Flujos de Trabajo Personalizados</h3>
+                                        <p>Automatiza tareas complejas con flujos de trabajo diseñados a medida.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-lightbulb"></i>
+                                        <h3>Insights Impulsados por IA</h3>
+                                        <p>Recibe recomendaciones inteligentes basadas en tus patrones de uso.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-hdd-stack"></i>
+                                        <h3>Infraestructura Escalable</h3>
+                                        <p>Soporta cargas de trabajo masivas con un rendimiento consistente.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#feature-carousel" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -1085,6 +1146,39 @@
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Siguiente</span>
                     </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Integrations Section -->
+        <section class="integrations-section" id="integrations">
+            <div class="container">
+                <h2 class="text-center mb-4">Integraciones Potentes</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="integration-card">
+                            <i class="bi bi-slack"></i>
+                            <h3>Slack</h3>
+                            <p>Integra GarBotGPT en Slack para respuestas instantáneas en tus canales de equipo.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Configurar Integración</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="integration-card">
+                            <i class="bi bi-journal-text"></i>
+                            <h3>Notion</h3>
+                            <p>Usa GarBotGPT para generar contenido directamente en tus páginas de Notion.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Configurar Integración</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="integration-card">
+                            <i class="bi bi-plug"></i>
+                            <h3>Zapier</h3>
+                            <p>Conecta GarBotGPT con miles de aplicaciones a través de Zapier para automatización sin límites.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Configurar Integración</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1243,6 +1337,31 @@
             </div>
         </section>
 
+        <!-- Case Studies Section -->
+        <section class="case-studies-section" id="case-studies">
+            <div class="container">
+                <h2 class="text-center mb-4">Estudios de Caso</h2>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="case-study-card">
+                            <i class="bi bi-heart-pulse"></i>
+                            <h3>Transformando la Atención Médica</h3>
+                            <p>Un proveedor de atención médica utilizó GarBotGPT para analizar registros de pacientes y generar resúmenes, reduciendo el tiempo de documentación en un 40% y mejorando la precisión diagnóstica.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Leer Estudio Completo</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="case-study-card">
+                            <i class="bi bi-megaphone"></i>
+                            <h3>Impulsando Campañas de Marketing</h3>
+                            <p>Una agencia de marketing integró GarBotGPT para generar contenido publicitario, aumentando las tasas de conversión en un 25% con textos personalizados generados por IA.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Leer Estudio Completo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Blog Highlights Section -->
         <section class="blog-section" id="blog">
             <div class="container">
@@ -1269,6 +1388,22 @@
                             <img src="https://via.placeholder.com/300x200" alt="Blog post 3" class="img-fluid mb-3">
                             <h3>IA y Educación: Transformando el Aprendizaje</h3>
                             <p>Descubre cómo GarBotGPT está revolucionando la educación.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="blog-card">
+                            <img src="https://via.placeholder.com/300x200" alt="Blog post 4" class="img-fluid mb-3">
+                            <h3>IA Ética: Construyendo un Futuro Responsable</h3>
+                            <p>Explora cómo GarolaCorp asegura que GarBotGPT sea ético y confiable.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="blog-card">
+                            <img src="https://via.placeholder.com/300x200" alt="Blog post 5" class="img-fluid mb-3">
+                            <h3>GarBotGPT para Desarrolladores</h3>
+                            <p>Consejos y trucos para integrar GarBotGPT en tus aplicaciones.</p>
                             <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
                         </div>
                     </div>
