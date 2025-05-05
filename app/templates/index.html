@@ -873,20 +873,10 @@
         <!-- Chat Demo Section -->
         <section class="chat-demo" id="chat-demo">
             <h3 class="text-center mb-5">Prueba GarBotGPT en Tiempo Real</h3>
-            <div id="chat-demo-messages">
-                <div class="message user-message">Hola, ¿puedes ayudarme con una pregunta sobre física?</div>
-                <div class="message ai-message">¡Por supuesto! Pregúntame cualquier cosa sobre física, desde mecánica clásica hasta cuántica. 😊</div>
-                <div class="message user-message">Explica la teoría de la relatividad.</div>
-                <div class="message ai-message">La teoría de la relatividad de Einstein incluye la relatividad especial y general. La especial aborda cómo el espacio y el tiempo se entrelazan, mientras que la general explica la gravedad como la curvatura del espacio-tiempo. ¿Quieres un ejemplo práctico?</div>
-                <div class="message user-message">Sí, dame un ejemplo.</div>
-                <div class="message ai-message">Imagina un reloj en una nave espacial viajando cerca de la velocidad de la luz. Para un observador en la Tierra, el reloj parecerá moverse más lento debido a la dilatación del tiempo. ¡Esto es relatividad especial en acción!</div>
-            </div>
+            <div id="chat-demo-messages"></div>
             <div class="chat-input">
                 <input type="text" id="chat-input" placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje">
                 <button class="btn btn-gradient" onclick="sendDemoMessage()">Enviar</button>
-            </div>
-            <div class="text-center mt-5">
-                <a href="{{ url_for('chat') }}" class="btn btn-gradient btn-lg">Explorar Chat Completo</a>
             </div>
         </section>
 
@@ -1189,50 +1179,50 @@
         <section class="faq-section" id="faq">
             <div class="container">
                 <h2 class="text-center mb-5">Preguntas Frecuentes</h2>
-                <div class="accordion" id="faq-accordion">
+                <div class="accordion" id="faqAccordion">
                     <div class="accordion-item">
-                        <h2 class="accordion-header" id="faq1">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                 ¿Qué es GarBotGPT?
                             </button>
                         </h2>
-                        <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="faq1" data-bs-parent="#faq-accordion">
+                        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
                             <div class="accordion-body">
                                 GarBotGPT es un chatbot de IA avanzado impulsado por xAI, diseñado para asistir en tareas educativas, creativas y profesionales con respuestas precisas y personalizadas.
                             </div>
                         </div>
                     </div>
                     <div class="accordion-item">
-                        <h2 class="accordion-header" id="faq2">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                 ¿Es gratuito?
                             </button>
                         </h2>
-                        <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faq-accordion">
+                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                             <div class="accordion-body">
                                 Ofrecemos un plan gratuito con cuotas limitadas. Visita <a href="https://x.ai/grok">x.ai/grok</a> para más detalles sobre planes premium como SuperGrok.
                             </div>
                         </div>
                     </div>
                     <div class="accordion-item">
-                        <h2 class="accordion-header" id="faq3">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                 ¿Cómo protege mis datos?
                             </button>
                         </h2>
-                        <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#faq-accordion">
+                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                             <div class="accordion-body">
                                 Usamos cifrado de punta a punta y seguimos estrictas políticas de privacidad para garantizar la seguridad de tus datos.
                             </div>
                         </div>
                     </div>
                     <div class="accordion-item">
-                        <h2 class="accordion-header" id="faq4">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                                 ¿Puedo usar GarBotGPT en mi móvil?
                             </button>
                         </h2>
-                        <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="faq4" data-bs-parent="#faq-accordion">
+                        <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                             <div class="accordion-body">
                                 Sí, GarBotGPT está disponible en iOS y Android. El modo de voz está actualmente disponible solo en iOS.
                             </div>
@@ -1357,16 +1347,33 @@
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
             // Theme and Contrast Toggle
-            const html = document.getElementById('html-root');
+            const html = document.documentElement;
             const themeToggle = document.getElementById('theme-toggle');
             const contrastToggle = document.getElementById('contrast-toggle');
+
+            // Initialize theme based on current setting
+            updateThemeIcon();
+
             themeToggle.addEventListener('click', () => {
-                html.dataset.theme = html.dataset.theme === 'light' ? 'dark' : 'light';
-                themeToggle.innerHTML = html.dataset.theme === 'light' ? '<i class="fas fa-moon"></i> Tema' : '<i class="fas fa-sun"></i> Tema';
+                const currentTheme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+                html.dataset.theme = currentTheme;
+                updateThemeIcon();
+                // Save theme preference (you might want to send this to your backend)
+                localStorage.setItem('theme', currentTheme);
             });
+
             contrastToggle.addEventListener('click', () => {
-                html.dataset.contrast = html.dataset.contrast === 'high' ? 'normal' : 'high';
+                const currentContrast = html.dataset.contrast === 'high' ? '' : 'high';
+                html.dataset.contrast = currentContrast;
+                // Save contrast preference
+                localStorage.setItem('contrast', currentContrast);
             });
+
+            function updateThemeIcon() {
+                themeToggle.innerHTML = html.dataset.theme === 'light' 
+                    ? '<i class="fas fa-moon"></i> Tema' 
+                    : '<i class="fas fa-sun"></i> Tema';
+            }
 
             // Navbar Scroll Effect
             window.addEventListener('scroll', () => {
@@ -1376,19 +1383,6 @@
                 } else {
                     navbar.classList.remove('scrolled');
                 }
-            });
-
-            // Chat Demo Animation
-            const messages = document.querySelectorAll('#chat-demo-messages .message');
-            messages.forEach((msg, index) => {
-                gsap.fromTo(msg, { opacity: 0, y: 50, x: msg.classList.contains('user-message') ? 20 : -20 }, {
-                    opacity: 1,
-                    y: 0,
-                    x: 0,
-                    duration: 1,
-                    delay: index * 0.5,
-                    ease: 'power2.out'
-                });
             });
 
             // Stats Counter Animation
