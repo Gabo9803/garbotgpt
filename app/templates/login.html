@@ -1,26 +1,132 @@
 {% extends "base.html" %}
 {% block title %}Login to GarBotGPT{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-        <div class="card shadow-lg border-0 animate__animated animate__fadeInUp">
-            <div class="card-body">
-                <h2 class="card-title text-center mb-4">Login to GarBotGPT</h2>
-                <form method="POST">
-                    <div class="mb-3">
-                        <label for="username" class="form-label"><i class="bi bi-person-fill me-2"></i>Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
+<style>
+    body {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Inter', sans-serif;
+    }
+    .login-container {
+        max-width: 400px;
+        width: 100%;
+        padding: 20px;
+    }
+    .login-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+    .login-card:hover {
+        transform: translateY(-5px);
+    }
+    .card-header {
+        background: #2a5298;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        border-radius: 15px 15px 0 0;
+    }
+    .card-body {
+        padding: 30px;
+    }
+    .form-label {
+        font-weight: 500;
+        color: #333;
+    }
+    .form-control {
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 10px;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .form-control:focus {
+        border-color: #2a5298;
+        box-shadow: 0 0 8px rgba(42, 82, 152, 0.3);
+        outline: none;
+    }
+    .btn-primary {
+        background: linear-gradient(90deg, #2a5298, #1e3c72);
+        border: none;
+        border-radius: 8px;
+        padding: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-primary:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(42, 82, 152, 0.4);
+    }
+    .register-link {
+        color: #2a5298;
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    .register-link:hover {
+        color: #1e3c72;
+        text-decoration: underline;
+    }
+    .animate__animated {
+        animation-duration: 0.8s;
+    }
+    .input-group-text {
+        background: #f8f9fa;
+        border: 2px solid #e0e0e0;
+        border-right: none;
+        border-radius: 8px 0 0 8px;
+    }
+    .form-control-with-icon {
+        border-left: none;
+        border-radius: 0 8px 8px 0;
+    }
+    @media (max-width: 576px) {
+        .login-container {
+            padding: 15px;
+        }
+        .card-body {
+            padding: 20px;
+        }
+    }
+</style>
+<div class="login-container">
+    <div class="login-card animate__animated animate__fadeInUp">
+        <div class="card-header">
+            <h2 class="mb-0">Welcome to GarBotGPT</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" aria-label="Login Form">
+                <div class="mb-4">
+                    <label for="username" class="form-label">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="text" class="form-control form-control-with-icon" id="username" name="username" required aria-describedby="usernameHelp" placeholder="Enter your username">
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label"><i class="bi bi-lock-fill me-2"></i>Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
+                    <div id="usernameHelp" class="form-text">Enter your registered username.</div>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" class="form-control form-control-with-icon" id="password" name="password" required aria-describedby="passwordHelp" placeholder="Enter your password">
                     </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-gradient animate__animated animate__pulse" data-bs-toggle="tooltip" title="Login to your account">Login</button>
-                    </div>
-                </form>
-            </div>
+                    <div id="passwordHelp" class="form-text">Keep your password secure.</div>
+                </div>
+                <div class="d-grid mb-3">
+                    <button type="submit" class="btn btn-primary animate__animated animate__pulse" data-bs-toggle="tooltip" title="Login to your account">Login</button>
+                </div>
+                <div class="text-center">
+                    <p class="mb-0">Don't have an account? <a href="/register" class="register-link">Register here</a></p>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 {% endblock %}
