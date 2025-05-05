@@ -33,7 +33,7 @@
         position: relative;
     }
 
-    /* Full-Screen Background Effect */
+    /* Full-Screen Particle Background */
     #particles-js {
         position: fixed;
         top: 0;
@@ -62,8 +62,8 @@
 
     .login-container {
         max-width: 600px;
-        width: 95%;
-        padding: 30px;
+        width: 90%;
+        padding: 20px;
         z-index: 2;
     }
 
@@ -90,7 +90,7 @@
 
     .card-header {
         background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-        padding: 40px;
+        padding: 30px;
         text-align: center;
         border-radius: 30px 30px 0 0;
         position: relative;
@@ -118,22 +118,22 @@
         color: var(--text-color);
         font-family: 'Orbitron', sans-serif;
         font-weight: 700;
-        font-size: 2.5rem;
+        font-size: 2.2rem;
         margin: 0;
         text-transform: uppercase;
-        letter-spacing: 3px;
+        letter-spacing: 2px;
         text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
         position: relative;
         z-index: 1;
     }
 
     .card-body {
-        padding: 60px;
+        padding: 40px;
     }
 
     .form-group {
         position: relative;
-        margin-bottom: 2.8rem;
+        margin-bottom: 2.5rem;
         opacity: 0;
         transform: translateY(30px);
         animation: slideUp 0.8s ease forwards;
@@ -146,9 +146,9 @@
 
     .form-label {
         position: absolute;
-        top: 16px;
-        left: 70px;
-        font-size: 1.1rem;
+        top: 14px;
+        left: 60px;
+        font-size: 1rem;
         color: rgba(255, 255, 255, 0.6);
         transition: all 0.5s ease;
         pointer-events: none;
@@ -157,10 +157,10 @@
     .form-control {
         background: rgba(255, 255, 255, 0.03);
         border: 2px solid rgba(255, 255, 255, 0.15);
-        border-radius: 15px;
-        padding: 16px 16px 16px 70px;
+        border-radius: 12px;
+        padding: 14px 14px 14px 60px;
         color: var(--text-color);
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         width: 100%;
         transition: all 0.5s ease;
     }
@@ -174,9 +174,9 @@
 
     .form-control:focus + .form-label,
     .form-control:not(:placeholder-shown) + .form-label {
-        top: -30px;
-        left: 20px;
-        font-size: 0.85rem;
+        top: -25px;
+        left: 15px;
+        font-size: 0.8rem;
         color: var(--primary-color);
         background: none;
         padding: 0;
@@ -185,10 +185,10 @@
     .input-group-text {
         position: absolute;
         top: 50%;
-        left: 20px;
+        left: 15px;
         transform: translateY(-50%);
         color: rgba(255, 255, 255, 0.6);
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         background: none;
         border: none;
         transition: color 0.5s ease;
@@ -201,13 +201,13 @@
     .password-toggle {
         position: absolute;
         top: 50%;
-        right: 20px;
+        right: 15px;
         transform: translateY(-50%);
         background: none;
         border: none;
         color: rgba(255, 255, 255, 0.6);
         cursor: pointer;
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         transition: color 0.5s ease;
     }
 
@@ -216,8 +216,8 @@
     }
 
     .password-strength {
-        margin-top: 10px;
-        font-size: 0.9rem;
+        margin-top: 8px;
+        font-size: 0.85rem;
         color: rgba(255, 255, 255, 0.6);
         display: none;
     }
@@ -229,9 +229,9 @@
     .btn-primary {
         background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
         border: none;
-        border-radius: 15px;
-        padding: 18px;
-        font-size: 1.2rem;
+        border-radius: 12px;
+        padding: 16px;
+        font-size: 1.1rem;
         font-weight: 600;
         text-transform: uppercase;
         color: var(--text-color);
@@ -240,6 +240,7 @@
         overflow: hidden;
         transform: perspective(600px) rotateX(0deg);
         transition: all 0.5s ease;
+        touch-action: manipulation;
     }
 
     .btn-primary:hover {
@@ -259,10 +260,10 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        width: 28px;
-        height: 28px;
-        border: 5px solid var(--text-color);
-        border-top: 5px solid transparent;
+        width: 24px;
+        height: 24px;
+        border: 4px solid var(--text-color);
+        border-top: 4px solid transparent;
         border-radius: 50%;
         animation: spin 0.7s linear infinite;
     }
@@ -280,40 +281,10 @@
         100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
-    .btn-social {
-        background: rgba(255, 255, 255, 0.05);
-        border: 2px solid rgba(255, 255, 255, 0.15);
-        border-radius: 15px;
-        padding: 12px;
-        color: var(--text-color);
-        font-size: 1rem;
-        width: 100%;
-        transition: all 0.4s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 15px;
-    }
-
-    .btn-social i {
-        margin-right: 10px;
-        font-size: 1.3rem;
-    }
-
-    .btn-social.google:hover {
-        background: #db4437;
-        border-color: #db4437;
-    }
-
-    .btn-social.github:hover {
-        background: #333;
-        border-color: #333;
-    }
-
     .form-check {
         display: flex;
         align-items: center;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
 
     .form-check-input {
@@ -322,10 +293,10 @@
 
     .form-check-label {
         position: relative;
-        padding-left: 40px;
+        padding-left: 35px;
         color: rgba(255, 255, 255, 0.8);
         cursor: pointer;
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .form-check-label::before {
@@ -334,11 +305,11 @@
         left: 0;
         top: 50%;
         transform: translateY(-50%);
-        width: 24px;
-        height: 24px;
+        width: 20px;
+        height: 20px;
         background: rgba(255, 255, 255, 0.05);
         border: 2px solid rgba(255, 255, 255, 0.15);
-        border-radius: 8px;
+        border-radius: 6px;
         transition: all 0.3s ease;
     }
 
@@ -347,11 +318,11 @@
         font-family: 'Font Awesome 5 Free';
         font-weight: 900;
         position: absolute;
-        left: 8px;
+        left: 6px;
         top: 50%;
         transform: translateY(-50%) scale(0);
         color: var(--primary-color);
-        font-size: 14px;
+        font-size: 12px;
         transition: all 0.3s ease;
     }
 
@@ -393,8 +364,8 @@
 
     .error-message {
         color: #ff4d4d;
-        font-size: 0.95rem;
-        margin-top: 10px;
+        font-size: 0.9rem;
+        margin-top: 8px;
         display: none;
         animation: shake 0.4s ease;
     }
@@ -407,27 +378,75 @@
 
     .form-text {
         color: rgba(255, 255, 255, 0.5);
-        font-size: 0.95rem;
-        margin-top: 10px;
+        font-size: 0.9rem;
+        margin-top: 8px;
     }
 
+    /* Mobile Optimization */
     @media (max-width: 576px) {
         .login-container {
-            padding: 15px;
+            padding: 10px;
+            width: 95%;
         }
-        .card-body {
-            padding: 40px;
+        .login-card {
+            border-radius: 20px;
+        }
+        .card-header {
+            padding: 20px;
         }
         .card-header h2 {
-            font-size: 2rem;
+            font-size: 1.8rem;
+            letter-spacing: 1.5px;
+        }
+        .card-body {
+            padding: 30px 20px;
+        }
+        .form-group {
+            margin-bottom: 2rem;
         }
         .form-control {
-            padding: 14px 14px 14px 60px;
-            font-size: 1.1rem;
+            padding: 12px 12px 12px 50px;
+            font-size: 1rem;
+            border-radius: 10px;
+        }
+        .form-label {
+            top: 12px;
+            left: 50px;
+            font-size: 0.9rem;
+        }
+        .form-control:focus + .form-label,
+        .form-control:not(:placeholder-shown) + .form-label {
+            top: -20px;
+            left: 10px;
+            font-size: 0.7rem;
         }
         .input-group-text {
-            left: 15px;
-            font-size: 1.3rem;
+            left: 10px;
+            font-size: 1.2rem;
+        }
+        .password-toggle {
+            right: 10px;
+            font-size: 1.1rem;
+        }
+        .btn-primary {
+            padding: 14px;
+            font-size: 1rem;
+            border-radius: 10px;
+        }
+        .form-check-label {
+            padding-left: 30px;
+            font-size: 0.9rem;
+        }
+        .form-check-label::before {
+            width: 18px;
+            height: 18px;
+        }
+        .form-check-label::after {
+            left: 5px;
+            font-size: 10px;
+        }
+        .error-message, .form-text, .password-strength {
+            font-size: 0.8rem;
         }
     }
 </style>
@@ -439,7 +458,8 @@
             <h2>Accede a GarBotGPT</h2>
         </div>
         <div class="card-body">
-            <form method="POST" aria-label="Formulario de Inicio de Sesión" id="loginForm">
+            <form method="POST" action="{% url 'login' %}" aria-label="Formulario de Inicio de Sesión" id="loginForm">
+                {% csrf_token %}
                 <div class="form-group" style="--i: 1;">
                     <span class="input-group-text"><i class="fas fa-user-astronaut"></i></span>
                     <input type="text" class="form-control" id="username" name="username" placeholder=" " required aria-describedby="usernameHelp" oninput="validateInput(this)">
@@ -459,26 +479,18 @@
                     <div class="error-message" id="passwordError">Por favor, ingresa una contraseña válida.</div>
                 </div>
                 <div class="form-check" style="--i: 3;">
-                    <input type="checkbox" class="form-check-input" id="rememberMe">
+                    <input type="checkbox" class="form-check-input" id="rememberMe" name="remember_me">
                     <label class="form-check-label" for="rememberMe">Recordarme</label>
                 </div>
-                <div class="d-grid mb-4" style="--i: 40">
+                <div class="d-grid mb-4" style="--i: 4;">
                     <button type="submit" class="btn btn-primary" id="loginButton" aria-label="Iniciar Sesión">
                         <span>Iniciar Sesión</span>
                         <div class="spinner"></div>
                     </button>
                 </div>
-                <div class="d-grid mb-4" style="--i: 5;">
-                    <button type="button" class="btn btn-social google">
-                        <i class="fab fa-google"></i> Iniciar con Google
-                    </button>
-                    <button type="button" class="btn btn-social github">
-                        <i class="fab fa-github"></i> Iniciar con GitHub
-                    </button>
-                </div>
                 <div class="text-center">
-                    <p class="mb-2"><a href="/forgot-password" class="forgot-password">¿Olvidaste tu contraseña?</a></p>
-                    <p class="mb-0">¿No tienes cuenta? <a href="/register" class="register-link">Regístrate ahora</a></p>
+                    <p class="mb-2"><a href="{% url 'password_reset' %}" class="forgot-password">¿Olvidaste tu contraseña?</a></p>
+                    <p class="mb-0">¿No tienes cuenta? <a href="{% url 'register' %}" class="register-link">Regístrate ahora</a></p>
                 </div>
             </form>
         </div>
@@ -490,18 +502,18 @@
     // Particle.js Configuration
     particlesJS('particles-js', {
         particles: {
-            number: { value: 100, density: { enable: true, value_area: 1000 } },
+            number: { value: 80, density: { enable: true, value_area: 800 } },
             color: { value: ['#ff007a', '#00d4ff', '#ffd700'] },
             shape: { type: 'circle' },
             opacity: { value: 0.4, random: true },
-            size: { value: 4, random: true },
-            line_linked: { enable: true, distance: 200, color: '#ffffff', opacity: 0.3, width: 1.5 },
-            move: { enable: true, speed: 3, direction: 'none', random: true }
+            size: { value: 3, random: true },
+            line_linked: { enable: true, distance: 150, color: '#ffffff', opacity: 0.3, width: 1 },
+            move: { enable: true, speed: 2, direction: 'none', random: true }
         },
         interactivity: {
             detect_on: 'canvas',
             events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' }, resize: true },
-            modes: { grab: { distance: 250, line_linked: { opacity: 0.6 } }, push: { particles_nb: 5 } }
+            modes: { grab: { distance: 200, line_linked: { opacity: 0.6 } }, push: { particles_nb: 4 } }
         },
         retina_detect: true
     });
@@ -545,16 +557,17 @@
     }
 
     document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
         const button = document.getElementById('loginButton');
         button.classList.add('loading');
         button.disabled = true;
 
-        // Simulate form submission
-        setTimeout(() => {
-            button.classList.remove('loading');
-            button.disabled = false;
-        }, 2000);
+        // Trigger vibration on mobile devices (if supported)
+        if (navigator.vibrate) {
+            navigator.vibrate(50);
+        }
+
+        // Allow form to submit to Django backend
+        // No setTimeout; submission proceeds immediately
     });
 </script>
 {% endblock %}
