@@ -2,16 +2,18 @@
 {% block title %}Iniciar Sesión en GarBotGPT{% endblock %}
 {% block content %}
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;700&family=Roboto:wght@300;400;700&display=swap');
 
     :root {
         --primary-color: #ff007a;
         --secondary-color: #00d4ff;
-        --background-dark: #0a1a2b;
-        --background-light: #1e3a5f;
+        --accent-color: #ffd700;
+        --background-dark: #080d2a;
+        --background-light: #162a6f;
         --text-color: #ffffff;
-        --card-bg: rgba(255, 255, 255, 0.1);
-        --glow: 0 0 15px rgba(255, 0, 122, 0.5);
+        --card-bg: rgba(255, 255, 255, 0.05);
+        --glow: 0 0 30px rgba(255, 0, 122, 0.8);
+        --holo-glow: 0 0 50px rgba(0, 212, 255, 0.7);
     }
 
     * {
@@ -21,57 +23,59 @@
     }
 
     body {
-        background: linear-gradient(45deg, var(--background-dark), var(--background-light));
+        background: linear-gradient(135deg, var(--background-dark), var(--background-light));
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Roboto', sans-serif;
         overflow: hidden;
         position: relative;
     }
 
-    /* Particle Canvas */
-    #particles-js {
-        position: absolute;
+    /* Full-Screen 3D Background */
+    #three-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
         z-index: -1;
     }
 
     .login-container {
-        max-width: 480px;
-        width: 90%;
-        padding: 20px;
-        z-index: 2;
+        max-width: 800px;
+        width: 95%;
+        padding: 50px;
+        z-index: 4;
     }
 
     .login-card {
         background: var(--card-bg);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 25px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(35px);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 40px;
+        box-shadow: var(--holo-glow), 0 35px 80px rgba(0, 0, 0, 0.7);
         overflow: hidden;
-        transition: transform 0.5s ease, box-shadow 0.5s ease;
-        animation: float 6s ease-in-out infinite;
+        transition: transform 0.8s ease, box-shadow 0.8s ease;
+        animation: holoPulse 12s ease-in-out infinite;
     }
 
     .login-card:hover {
-        transform: translateY(-15px);
-        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+        transform: translateY(-30px);
+        box-shadow: var(--holo-glow), 0 45px 100px rgba(0, 0, 0, 0.8);
     }
 
-    @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
+    @keyframes holoPulse {
+        0%, 100% { transform: translateY(0); filter: brightness(1); }
+        50% { transform: translateY(-25px); filter: brightness(1.3); }
     }
 
     .card-header {
         background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-        padding: 30px;
+        padding: 60px;
         text-align: center;
-        border-radius: 25px 25px 0 0;
+        border-radius: 40px 40px 0 0;
         position: relative;
         overflow: hidden;
     }
@@ -80,80 +84,96 @@
         content: '';
         position: absolute;
         top: 0;
-        left: -100%;
-        width: 100%;
+        left: -250%;
+        width: 250%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        transition: 0.5s;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+        transition: 0.9s;
     }
 
     .card-header:hover::before {
-        left: 100%;
+        left: 250%;
     }
 
     .card-header h2 {
         color: var(--text-color);
-        font-family: 'Orbitron', sans-serif;
+        font-family: 'Exo 2', sans-serif;
         font-weight: 700;
-        font-size: 2rem;
+        font-size: 3.5rem;
         margin: 0;
         text-transform: uppercase;
-        letter-spacing: 2px;
-        text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+        letter-spacing: 5px;
+        text-shadow: 0 6px 18px rgba(0, 0, 0, 0.8);
         position: relative;
         z-index: 1;
+        overflow: hidden;
+    }
+
+    .card-header h2 span {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: glitchType 0.15s ease forwards;
+    }
+
+    @keyframes glitchType {
+        0% { opacity: 0; transform: translateY(30px); filter: blur(2px); }
+        50% { opacity: 0.5; transform: translateY(-5px); filter: blur(0); }
+        100% { opacity: 1; transform: translateY(0); filter: blur(0); }
     }
 
     .card-body {
-        padding: 50px;
+        padding: 100px;
     }
 
     .form-group {
         position: relative;
-        margin-bottom: 2.5rem;
+        margin-bottom: 4rem;
         opacity: 0;
-        transform: translateY(20px);
-        animation: slideUp 0.6s ease forwards;
-        animation-delay: calc(0.2s * var(--i));
+        transform: translateY(50px);
+        animation: elasticSlide 1.2s ease forwards;
+        animation-delay: calc(0.5s * var(--i));
     }
 
-    @keyframes slideUp {
-        to { opacity: 1; transform: translateY(0); }
+    @keyframes elasticSlide {
+        0% { opacity: 0; transform: translateY(50px); }
+        60% { opacity: 1; transform: translateY(-15px); }
+        100% { opacity: 1; transform: translateY(0); }
     }
 
     .form-label {
         position: absolute;
-        top: 15px;
-        left: 60px;
-        font-size: 1rem;
-        color: rgba(255, 255, 255, 0.7);
-        transition: all 0.4s ease;
+        top: 22px;
+        left: 90px;
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.4);
+        transition: all 0.7s ease;
         pointer-events: none;
     }
 
     .form-control {
-        background: rgba(255, 255, 255, 0.05);
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        border-radius: 15px;
-        padding: 14px 14px 14px 60px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 2px solid rgba(255, 255, 255, 0.08);
+        border-radius: 25px;
+        padding: 20px 20px 20px 90px;
         color: var(--text-color);
-        font-size: 1.1rem;
+        font-size: 1.4rem;
         width: 100%;
-        transition: all 0.4s ease;
+        transition: all 0.7s ease;
     }
 
     .form-control:focus,
     .form-control:not(:placeholder-shown) {
         border-color: var(--primary-color);
         box-shadow: var(--glow);
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.3);
     }
 
     .form-control:focus + .form-label,
     .form-control:not(:placeholder-shown) + .form-label {
-        top: -25px;
-        left: 20px;
-        font-size: 0.8rem;
+        top: -40px;
+        left: 35px;
+        font-size: 1.1rem;
         color: var(--primary-color);
         background: none;
         padding: 0;
@@ -162,13 +182,13 @@
     .input-group-text {
         position: absolute;
         top: 50%;
-        left: 20px;
+        left: 35px;
         transform: translateY(-50%);
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 1.8rem;
         background: none;
         border: none;
-        transition: color 0.4s ease;
+        transition: color 0.7s ease;
     }
 
     .form-control:focus ~ .input-group-text {
@@ -178,43 +198,64 @@
     .password-toggle {
         position: absolute;
         top: 50%;
-        right: 20px;
+        right: 35px;
         transform: translateY(-50%);
         background: none;
         border: none;
-        color: rgba(255, 255, 255, 0.7);
+        color: rgba(255, 255, 255, 0.4);
         cursor: pointer;
-        font-size: 1.2rem;
-        transition: color 0.4s ease;
+        font-size: 1.6rem;
+        transition: color 0.7s ease, transform 0.4s ease;
     }
 
     .password-toggle:hover {
         color: var(--primary-color);
+        transform: translateY(-50%) scale(1.3);
     }
 
     .btn-primary {
         background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
         border: none;
-        border-radius: 15px;
-        padding: 16px;
-        font-size: 1.1rem;
-        font-weight: 600;
+        border-radius: 25px;
+        padding: 22px;
+        font-size: 1.4rem;
+        font-weight: 700;
         text-transform: uppercase;
         color: var(--text-color);
         width: 100%;
         position: relative;
         overflow: hidden;
-        transform: perspective(500px) rotateX(0deg);
-        transition: all 0.4s ease;
+        transform: perspective(800px) rotateX(0deg);
+        transition: all 0.7s ease;
+        z-index: 1;
+    }
+
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.7s ease, height 0.7s ease;
+        z-index: -1;
+    }
+
+    .btn-primary:hover::before {
+        width: 400px;
+        height: 400px;
     }
 
     .btn-primary:hover {
-        transform: perspective(500px) rotateX(10deg);
-        box-shadow: var(--glow), 0 10px 30px rgba(0, 0, 0, 0.3);
+        transform: perspective(800px) rotateX(25deg);
+        box-shadow: var(--glow), 0 25px 60px rgba(0, 0, 0, 0.6);
     }
 
     .btn-primary:disabled {
-        background: #555;
+        background: #333;
         cursor: not-allowed;
         transform: none;
     }
@@ -225,12 +266,12 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        width: 24px;
-        height: 24px;
-        border: 4px solid var(--text-color);
-        border-top: 4px solid transparent;
+        width: 36px;
+        height: 36px;
+        border: 7px solid var(--text-color);
+        border-top: 7px solid transparent;
         border-radius: 50%;
-        animation: spin 0.8s linear infinite;
+        animation: spin 0.5s linear infinite;
     }
 
     .btn-primary.loading .spinner {
@@ -246,144 +287,347 @@
         100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
-    .register-link {
+    .remember-me {
+        display: flex;
+        align-items: center;
+        margin-bottom: 3rem;
+        opacity: 0;
+        transform: translateY(50px);
+        animation: elasticSlide 1.2s ease forwards;
+        animation-delay: calc(0.5s * var(--i));
+    }
+
+    .remember-me input {
+        display: none;
+    }
+
+    .remember-me label {
+        position: relative;
+        padding-left: 45px;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 1.2rem;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .remember-me label::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 28px;
+        height: 28px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        transition: all 0.5s ease;
+    }
+
+    .remember-me input:checked + label::before {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .remember-me input:checked + label::after {
+        content: '';
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%) rotate(45deg);
+        width: 12px;
+        height: 6px;
+        border: 3px solid var(--text-color);
+        border-top: none;
+        border-right: none;
+        transition: all 0.5s ease;
+    }
+
+    .register-link, .forgot-password {
         color: var(--secondary-color);
         font-weight: 600;
         text-decoration: none;
         position: relative;
-        transition: color 0.4s ease;
+        transition: color 0.6s ease;
     }
 
-    .register-link::after {
+    .register-link::after, .forgot-password::after {
         content: '';
         position: absolute;
         width: 0;
-        height: 2px;
-        bottom: -2px;
+        height: 4px;
+        bottom: -5px;
         left: 0;
         background: var(--secondary-color);
-        transition: width 0.3s ease;
+        transition: width 0.6s ease;
     }
 
-    .register-link:hover {
+    .register-link:hover, .forgot-password:hover {
         color: var(--primary-color);
     }
 
-    .register-link:hover::after {
+    .register-link:hover::after, .forgot-password:hover::after {
         width: 100%;
+    }
+
+    .contrast-toggle {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.5s ease;
+    }
+
+    .contrast-toggle:hover {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .contrast-toggle svg {
+        width: 24px;
+        height: 24px;
+        fill: var(--text-color);
+    }
+
+    .high-contrast {
+        --card-bg: rgba(0, 0, 0, 0.95);
+        --text-color: #ffffff;
+        --background-dark: #000000;
+        --background-light: #0a0a0a;
+        filter: contrast(160%) brightness(130%);
     }
 
     .error-message {
         color: #ff4d4d;
-        font-size: 0.9rem;
-        margin-top: 8px;
+        font-size: 1.2rem;
+        margin-top: 15px;
         display: none;
-        animation: shake 0.3s ease;
+        animation: shake 0.6s ease;
     }
 
     @keyframes shake {
         0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-5px); }
-        75% { transform: translateX(5px); }
+        25% { transform: translateX(-12px); }
+        75% { transform: translateX(12px); }
     }
 
     .form-text {
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 0.9rem;
-        margin-top: 8px;
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 1.2rem;
+        margin-top: 15px;
+    }
+
+    @media (max-width: 768px) {
+        .login-container {
+            padding: 30px;
+        }
+        .card-body {
+            padding: 60px;
+        }
+        .card-header h2 {
+            font-size: 3rem;
+        }
+        .form-control {
+            padding: 18px 18px 18px 80px;
+            font-size: 1.3rem;
+        }
+        .input-group-text {
+            left: 30px;
+            font-size: 1.6rem;
+        }
     }
 
     @media (max-width: 576px) {
-        .login-container {
-            padding: 10px;
-        }
         .card-body {
-            padding: 30px;
+            padding: 50px;
         }
         .card-header h2 {
-            font-size: 1.6rem;
+            font-size: 2.5rem;
         }
         .form-control {
-            padding: 12px 12px 12px 50px;
-            font-size: 1rem;
+            padding: 16px 16px 16px 70px;
+            font-size: 1.2rem;
         }
         .input-group-text {
-            left: 15px;
-            font-size: 1.1rem;
+            left: 25px;
+            font-size: 1.4rem;
         }
     }
 </style>
-<div id="particles-js"></div>
+<canvas id="three-canvas"></canvas>
+<div class="contrast-toggle" aria-label="Alternar modo de alto contraste" onclick="toggleContrast()">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6V6z"/></svg>
+</div>
 <div class="login-container">
     <div class="login-card">
         <div class="card-header">
-            <h2>Bienvenido a GarBotGPT</h2>
+            <h2>
+                <span>A</span><span>c</span><span>c</span><span>e</span><span>d</span><span>e</span>
+                <span> </span>
+                <span>a</span>
+                <span> </span>
+                <span>G</span><span>a</span><span>r</span><span>B</span><span>o</span><span>t</span><span>G</span><span>P</span><span>T</span>
+            </h2>
         </div>
         <div class="card-body">
-            <form method="POST" aria-label="Formulario de Inicio de Sesión" id="loginForm">
+            <form method="POST" action="/chat" aria-label="Formulario de Inicio de Sesión" id="loginForm">
+                {% csrf_token %}
                 <div class="form-group" style="--i: 1;">
-                    <span class="input-group-text"><i class="fas fa-user-astronaut"></i></span>
+                    <span class="input-group-text">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </span>
                     <input type="text" class="form-control" id="username" name="username" placeholder=" " required aria-describedby="usernameHelp" oninput="validateInput(this)">
                     <label for="username" class="form-label">Nombre de Usuario</label>
                     <div id="usernameHelp" class="form-text">Ingresa tu nombre de usuario registrado.</div>
-                    <div class="error-message" id="usernameError">Nombre de usuario inválido.</div>
+                    <div class="error-message" id="usernameError">Por favor, ingresa un nombre de usuario válido.</div>
                 </div>
                 <div class="form-group" style="--i: 2;">
-                    <span class="input-group-text"><i class="fas fa-shield-alt"></i></span>
+                    <span class="input-group-text">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                        </svg>
+                    </span>
                     <input type="password" class="form-control" id="password" name="password" placeholder=" " required aria-describedby="passwordHelp" oninput="validateInput(this)">
                     <label for="password" class="form-label">Contraseña</label>
                     <button type="button" class="password-toggle" aria-label="Alternar visibilidad de contraseña" onclick="togglePassword()">
-                        <i class="fas fa-eye"></i>
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" class="eye-icon">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                        </svg>
                     </button>
                     <div id="passwordHelp" class="form-text">Mantén tu contraseña segura.</div>
-                    <div class="error-message" id="passwordError">Contraseña inválida.</div>
+                    <div class="error-message" id="passwordError">Por favor, ingresa una contraseña válida.</div>
                 </div>
-                <div class="d-grid mb-4">
+                <div class="remember-me" style="--i: 3;">
+                    <input type="checkbox" id="rememberMe" name="rememberMe">
+                    <label for="rememberMe">Recordarme</label>
+                </div>
+                <div class="d-grid mb-4" style="--i: 4;">
                     <button type="submit" class="btn btn-primary" id="loginButton" aria-label="Iniciar Sesión">
                         <span>Iniciar Sesión</span>
                         <div class="spinner"></div>
                     </button>
                 </div>
-                <div class="text-center">
+                <div class="text-center mb-4" style="--i: 5;">
+                    <a href="/forgot-password" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                </div>
+                <div class="text-center" style="--i: 6;">
                     <p class="mb-0">¿No tienes cuenta? <a href="/register" class="register-link">Regístrate aquí</a></p>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
 <script>
-    // Particle.js Configuration
-    particlesJS('particles-js', {
-        particles: {
-            number: { value: 80, density: { enable: true, value_area: 800 } },
-            color: { value: '#ffffff' },
-            shape: { type: 'circle' },
-            opacity: { value: 0.3, random: true },
-            size: { value: 3, random: true },
-            line_linked: { enable: true, distance: 150, color: '#ffffff', opacity: 0.2, width: 1 },
-            move: { enable: true, speed: 2, direction: 'none', random: true }
-        },
-        interactivity: {
-            detect_on: 'canvas',
-            events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' }, resize: true },
-            modes: { grab: { distance: 200, line_linked: { opacity: 0.5 } }, push: { particles_nb: 4 } }
-        },
-        retina_detect: true
+    // Three.js Starfield Background
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2500);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const particleCount = 10000;
+    const particles = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    const sizes = new Float32Array(particleCount);
+
+    for (let i = 0; i < particleCount * 3; i += 3) {
+        positions[i] = (Math.random() - 0.5) * 4000;
+        positions[i + 1] = (Math.random() - 0.5) * 4000;
+        positions[i + 2] = (Math.random() - 0.5) * 4000;
+        colors[i] = Math.random() * 0.5 + 0.5;
+        colors[i + 1] = Math.random() * 0.7 + 0.3;
+        colors[i + 2] = 1;
+        sizes[i / 3] = Math.random() * 4 + 2;
+    }
+
+    particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    particles.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+    const material = new THREE.PointsMaterial({
+        size: 5,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.9,
+        sizeAttenuation: true
+    });
+
+    const particleSystem = new THREE.Points(particles, material);
+    scene.add(particleSystem);
+
+    // Add Nebula
+    const nebulaGeometry = new THREE.SphereGeometry(600, 64, 64);
+    const nebulaMaterial = new THREE.MeshBasicMaterial({
+        color: 0x162a6f,
+        transparent: true,
+        opacity: 0.4,
+        side: THREE.BackSide
+    });
+    const nebula = new THREE.Mesh(nebulaGeometry, nebulaMaterial);
+    scene.add(nebula);
+
+    // Add Lens Flare
+    const flareGeometry = new THREE.BufferGeometry();
+    const flareCount = 50;
+    const flarePositions = new Float32Array(flareCount * 3);
+    for (let i = 0; i < flareCount * 3; i += 3) {
+        flarePositions[i] = (Math.random() - 0.5) * 2000;
+        flarePositions[i + 1] = (Math.random() - 0.5) * 2000;
+        flarePositions[i + 2] = (Math.random() - 0.5) * 2000;
+    }
+    flareGeometry.setAttribute('position', new THREE.BufferAttribute(flarePositions, 3));
+    const flareMaterial = new THREE.PointsMaterial({
+        size: 10,
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.5
+    });
+    const flares = new THREE.Points(flareGeometry, flareMaterial);
+    scene.add(flares);
+
+    camera.position.z = 1800;
+
+    function animate() {
+        requestAnimationFrame(animate);
+        particleSystem.rotation.y += 0.0004;
+        nebula.rotation.y += 0.0003;
+        flares.rotation.y += 0.0002;
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // GSAP Animations for Header Text
+    document.querySelectorAll('.card-header h2 span').forEach((span, index) => {
+        span.style.animationDelay = `${index * 0.06}s`;
     });
 
     function togglePassword() {
         const passwordInput = document.getElementById('password');
-        const toggleIcon = document.querySelector('.password-toggle i');
+        const toggleIcon = document.querySelector('.password-toggle .eye-icon');
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
-            toggleIcon.classList.remove('fa-eye');
-            toggleIcon.classList.add('fa-eye-slash');
+            toggleIcon.innerHTML = '<path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4-4zM12 4.5c-5 0-9.27 3.11-11 7.5 1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z"/>';
         } else {
             passwordInput.type = 'password';
-            toggleIcon.classList.remove('fa-eye-slash');
-            toggleIcon.classList.add('fa-eye');
+            toggleIcon.innerHTML = '<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>';
         }
     }
 
@@ -391,24 +635,34 @@
         const errorElement = document.getElementById(input.id + 'Error');
         if (input.value.trim() === '') {
             errorElement.style.display = 'block';
+            gsap.to(input, { x: -12, repeat: 3, yoyo: true, duration: 0.12 });
         } else {
             errorElement.style.display = 'none';
         }
     }
 
+    function toggleContrast() {
+        document.body.classList.toggle('high-contrast');
+    }
+
     document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
         const button = document.getElementById('loginButton');
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        if (username === '' || password === '') {
+            e.preventDefault();
+            validateInput(document.getElementById('username'));
+            validateInput(document.getElementById('password'));
+            return;
+        }
+
         button.classList.add('loading');
         button.disabled = true;
 
-        // Simulate form submission
-        setTimeout(() => {
-            button.classList.remove('loading');
-            button.disabled = false;
-            // Example error handling
-            // document.getElementById('usernameError').style.display = 'block';
-        }, 2000);
+        gsap.to(button, { scale: 0.92, duration: 0.25, yoyo: true, repeat: 1 });
+
+        // Form will submit to /chat naturally
     });
 </script>
 {% endblock %}
