@@ -2,17 +2,7 @@
 {% block title %}Iniciar Sesión en GarBotGPT{% endblock %}
 {% block content %}
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
-
-    :root {
-        --primary-color: #ff007a;
-        --secondary-color: #00d4ff;
-        --background-dark: #0a1a2b;
-        --background-light: #1e3a5f;
-        --text-color: #ffffff;
-        --card-bg: rgba(255, 255, 255, 0.1);
-        --glow: 0 0 15px rgba(255, 0, 122, 0.5);
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
 
     * {
         margin: 0;
@@ -21,19 +11,21 @@
     }
 
     body {
-        background: linear-gradient(45deg, var(--background-dark), var(--background-light));
+        background: #0a0a23;
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Roboto', sans-serif;
         overflow: hidden;
         position: relative;
     }
 
-    /* Particle Canvas */
-    #particles-js {
+    /* Particle Background */
+    #particles {
         position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
         z-index: -1;
@@ -41,67 +33,43 @@
 
     .login-container {
         max-width: 480px;
-        width: 90%;
+        width: 95%;
         padding: 20px;
-        z-index: 2;
+        z-index: 1;
     }
 
     .login-card {
-        background: var(--card-bg);
+        background: rgba(20, 20, 40, 0.85);
         backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.15);
         border-radius: 25px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         overflow: hidden;
-        transition: transform 0.5s ease, box-shadow 0.5s ease;
-        animation: float 6s ease-in-out infinite;
-    }
-
-    .login-card:hover {
-        transform: translateY(-15px);
-        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
-    }
-
-    @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
+        transition: transform 0.5s ease;
     }
 
     .card-header {
-        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        background: linear-gradient(90deg, #00f260, #0575e6);
         padding: 30px;
         text-align: center;
         border-radius: 25px 25px 0 0;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .card-header::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        transition: 0.5s;
-    }
-
-    .card-header:hover::before {
-        left: 100%;
     }
 
     .card-header h2 {
-        color: var(--text-color);
+        color: #fff;
         font-family: 'Orbitron', sans-serif;
         font-weight: 700;
         font-size: 2rem;
         margin: 0;
         text-transform: uppercase;
         letter-spacing: 2px;
-        text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
-        position: relative;
-        z-index: 1;
+        text-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+        animation: neonGlow 2s infinite alternate;
+    }
+
+    @keyframes neonGlow {
+        0% { text-shadow: 0 0 5px #00f260, 0 0 10px #00f260, 0 0 15px #0575e6; }
+        100% { text-shadow: 0 0 10px #00f260, 0 0 20px #00f260, 0 0 30px #0575e6; }
     }
 
     .card-body {
@@ -111,23 +79,15 @@
     .form-group {
         position: relative;
         margin-bottom: 2.5rem;
-        opacity: 0;
-        transform: translateY(20px);
-        animation: slideUp 0.6s ease forwards;
-        animation-delay: calc(0.2s * var(--i));
-    }
-
-    @keyframes slideUp {
-        to { opacity: 1; transform: translateY(0); }
     }
 
     .form-label {
         position: absolute;
-        top: 15px;
+        top: 14px;
         left: 60px;
         font-size: 1rem;
-        color: rgba(255, 255, 255, 0.7);
-        transition: all 0.4s ease;
+        color: #aaa;
+        transition: all 0.3s ease;
         pointer-events: none;
     }
 
@@ -136,7 +96,7 @@
         border: 2px solid rgba(255, 255, 255, 0.2);
         border-radius: 15px;
         padding: 14px 14px 14px 60px;
-        color: var(--text-color);
+        color: #fff;
         font-size: 1.1rem;
         width: 100%;
         transition: all 0.4s ease;
@@ -144,19 +104,17 @@
 
     .form-control:focus,
     .form-control:not(:placeholder-shown) {
-        border-color: var(--primary-color);
-        box-shadow: var(--glow);
-        background: rgba(255, 255, 255, 0.15);
+        border-color: #00f260;
+        box-shadow: 0 0 12px rgba(0, 242, 96, 0.6);
+        background: rgba(255, 255, 255, 0.1);
     }
 
     .form-control:focus + .form-label,
     .form-control:not(:placeholder-shown) + .form-label {
         top: -25px;
-        left: 20px;
+        left: 15px;
         font-size: 0.8rem;
-        color: var(--primary-color);
-        background: none;
-        padding: 0;
+        color: #00f260;
     }
 
     .input-group-text {
@@ -164,15 +122,10 @@
         top: 50%;
         left: 20px;
         transform: translateY(-50%);
-        color: rgba(255, 255, 255, 0.7);
+        color: #aaa;
         font-size: 1.3rem;
         background: none;
         border: none;
-        transition: color 0.4s ease;
-    }
-
-    .form-control:focus ~ .input-group-text {
-        color: var(--primary-color);
     }
 
     .password-toggle {
@@ -182,41 +135,66 @@
         transform: translateY(-50%);
         background: none;
         border: none;
-        color: rgba(255, 255, 255, 0.7);
+        color: #aaa;
         cursor: pointer;
         font-size: 1.2rem;
-        transition: color 0.4s ease;
+        transition: color 0.3s ease;
     }
 
     .password-toggle:hover {
-        color: var(--primary-color);
+        color: #00f260;
+    }
+
+    .password-strength {
+        height: 4px;
+        background: #444;
+        border-radius: 2px;
+        margin-top: 8px;
+        overflow: hidden;
+    }
+
+    .password-strength div {
+        height: 100%;
+        width: 0;
+        transition: width 0.5s ease, background 0.5s ease;
     }
 
     .btn-primary {
-        background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+        background: linear-gradient(90deg, #00f260, #0575e6);
         border: none;
         border-radius: 15px;
         padding: 16px;
         font-size: 1.1rem;
-        font-weight: 600;
+        font-weight: 700;
         text-transform: uppercase;
-        color: var(--text-color);
+        color: #fff;
         width: 100%;
         position: relative;
         overflow: hidden;
-        transform: perspective(500px) rotateX(0deg);
         transition: all 0.4s ease;
     }
 
     .btn-primary:hover {
-        transform: perspective(500px) rotateX(10deg);
-        box-shadow: var(--glow), 0 10px 30px rgba(0, 0, 0, 0.3);
+        transform: scale(1.05);
+        box-shadow: 0 10px 25px rgba(0, 242, 96, 0.6);
     }
 
     .btn-primary:disabled {
         background: #555;
         cursor: not-allowed;
-        transform: none;
+    }
+
+    .btn-primary .ripple {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        transform: scale(0);
+        animation: ripple 0.6s linear;
+        pointer-events: none;
+    }
+
+    @keyframes ripple {
+        to { transform: scale(4); opacity: 0; }
     }
 
     .btn-primary .spinner {
@@ -227,10 +205,10 @@
         transform: translate(-50%, -50%);
         width: 24px;
         height: 24px;
-        border: 4px solid var(--text-color);
+        border: 4px solid #fff;
         border-top: 4px solid transparent;
         border-radius: 50%;
-        animation: spin 0.8s linear infinite;
+        animation: spin 1s linear infinite;
     }
 
     .btn-primary.loading .spinner {
@@ -246,31 +224,16 @@
         100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
-    .register-link {
-        color: var(--secondary-color);
+    .register-link, .forgot-password {
+        color: #00f260;
         font-weight: 600;
         text-decoration: none;
-        position: relative;
-        transition: color 0.4s ease;
+        transition: all 0.3s ease;
     }
 
-    .register-link::after {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 2px;
-        bottom: -2px;
-        left: 0;
-        background: var(--secondary-color);
-        transition: width 0.3s ease;
-    }
-
-    .register-link:hover {
-        color: var(--primary-color);
-    }
-
-    .register-link:hover::after {
-        width: 100%;
+    .register-link:hover, .forgot-password:hover {
+        color: #0575e6;
+        text-decoration: underline;
     }
 
     .error-message {
@@ -287,10 +250,33 @@
         75% { transform: translateX(5px); }
     }
 
-    .form-text {
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 0.9rem;
-        margin-top: 8px;
+    .tooltip {
+        position: relative;
+    }
+
+    .tooltip .tooltip-text {
+        visibility: hidden;
+        background: #0575e6;
+        color: #fff;
+        text-align: center;
+        border-radius: 8px;
+        padding: 8px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .animate__animated {
+        animation-duration: 1.2s;
     }
 
     @media (max-width: 576px) {
@@ -303,76 +289,112 @@
         .card-header h2 {
             font-size: 1.6rem;
         }
-        .form-control {
-            padding: 12px 12px 12px 50px;
-            font-size: 1rem;
-        }
-        .input-group-text {
-            left: 15px;
-            font-size: 1.1rem;
-        }
     }
 </style>
-<div id="particles-js"></div>
+<canvas id="particles"></canvas>
 <div class="login-container">
-    <div class="login-card">
+    <div class="login-card animate__animated animate__fadeInUp" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-perspective="1000">
         <div class="card-header">
-            <h2>Bienvenido a GarBotGPT</h2>
+            <h2>Iniciar Sesión en GarBotGPT</h2>
         </div>
         <div class="card-body">
             <form method="POST" aria-label="Formulario de Inicio de Sesión" id="loginForm">
-                <div class="form-group" style="--i: 1;">
+                <div class="form-group">
                     <span class="input-group-text"><i class="fas fa-user-astronaut"></i></span>
-                    <input type="text" class="form-control" id="username" name="username" placeholder=" " required aria-describedby="usernameHelp" oninput="validateInput(this)">
-                    <label for="username" class="form-label">Nombre de Usuario</label>
-                    <div id="usernameHelp" class="form-text">Ingresa tu nombre de usuario registrado.</div>
-                    <div class="error-message" id="usernameError">Nombre de usuario inválido.</div>
+                    <input type="text" class="form-control" id="username" name="username" placeholder=" " required aria-describedby="usernameHelp">
+                    <label for="username" class="form-label">Usuario</label>
+                    <div id="usernameHelp" class="form-text">Introduce tu nombre de usuario registrado.</div>
+                    <div class="error-message" id="usernameError">Usuario no válido.</div>
                 </div>
-                <div class="form-group" style="--i: 2;">
+                <div class="form-group">
                     <span class="input-group-text"><i class="fas fa-shield-alt"></i></span>
-                    <input type="password" class="form-control" id="password" name="password" placeholder=" " required aria-describedby="passwordHelp" oninput="validateInput(this)">
+                    <input type="password" class="form-control" id="password" name="password" placeholder=" " required aria-describedby="passwordHelp">
                     <label for="password" class="form-label">Contraseña</label>
-                    <button type="button" class="password-toggle" aria-label="Alternar visibilidad de contraseña" onclick="togglePassword()">
+                    <button type="button" class="password-toggle tooltip" aria-label="Mostrar/Ocultar contraseña" onclick="togglePassword()">
                         <i class="fas fa-eye"></i>
+                        <span class="tooltip-text">Mostrar contraseña</span>
                     </button>
-                    <div id="passwordHelp" class="form-text">Mantén tu contraseña segura.</div>
-                    <div class="error-message" id="passwordError">Contraseña inválida.</div>
+                    <div class="password-strength"><div id="strengthBar"></div></div>
+                    <div id="passwordHelp" class="form-text">Usa una contraseña segura.</div>
+                    <div class="error-message" id="passwordError">Contraseña incorrecta.</div>
                 </div>
                 <div class="d-grid mb-4">
-                    <button type="submit" class="btn btn-primary" id="loginButton" aria-label="Iniciar Sesión">
+                    <button type="submit" class="btn btn-primary tooltip" id="loginButton">
                         <span>Iniciar Sesión</span>
                         <div class="spinner"></div>
+                        <span class="tooltip-text">Accede a tu cuenta</span>
                     </button>
                 </div>
                 <div class="text-center">
-                    <p class="mb-0">¿No tienes cuenta? <a href="/register" class="register-link">Regístrate aquí</a></p>
+                    <p class="mb-2">¿No tienes cuenta? <a href="/register" class="register-link">Regístrate aquí</a></p>
+                    <p class="mb-0"><a href="/forgot-password" class="forgot-password">¿Olvidaste tu contraseña?</a></p>
                 </div>
             </form>
         </div>
     </div>
 </div>
+<audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.0/dist/vanilla-tilt.min.js"></script>
 <script>
-    // Particle.js Configuration
-    particlesJS('particles-js', {
-        particles: {
-            number: { value: 80, density: { enable: true, value_area: 800 } },
-            color: { value: '#ffffff' },
-            shape: { type: 'circle' },
-            opacity: { value: 0.3, random: true },
-            size: { value: 3, random: true },
-            line_linked: { enable: true, distance: 150, color: '#ffffff', opacity: 0.2, width: 1 },
-            move: { enable: true, speed: 2, direction: 'none', random: true }
-        },
-        interactivity: {
-            detect_on: 'canvas',
-            events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' }, resize: true },
-            modes: { grab: { distance: 200, line_linked: { opacity: 0.5 } }, push: { particles_nb: 4 } }
-        },
-        retina_detect: true
+    // Particle Background
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const particleCount = 100;
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 1;
+            this.speedX = Math.random() * 0.5 - 0.25;
+            this.speedY = Math.random() * 0.5 - 0.25;
+        }
+
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+
+            if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+        }
+
+        draw() {
+            ctx.fillStyle = 'rgba(0, 242, 96, 0.5)';
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function initParticles() {
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(particle => {
+            particle.update();
+            particle.draw();
+        });
+        requestAnimationFrame(animateParticles);
+    }
+
+    initParticles();
+    animateParticles();
+
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
     });
 
+    // Password Toggle
     function togglePassword() {
         const passwordInput = document.getElementById('password');
         const toggleIcon = document.querySelector('.password-toggle i');
@@ -387,15 +409,23 @@
         }
     }
 
-    function validateInput(input) {
-        const errorElement = document.getElementById(input.id + 'Error');
-        if (input.value.trim() === '') {
-            errorElement.style.display = 'block';
-        } else {
-            errorElement.style.display = 'none';
-        }
-    }
+    // Password Strength Meter
+    const passwordInput = document.getElementById('password');
+    const strengthBar = document.getElementById('strengthBar');
+    passwordInput.addEventListener('input', () => {
+        const value = passwordInput.value;
+        let strength = 0;
+        if (value.length > 0) strength += 20;
+        if (value.length > 8) strength += 20;
+        if (/[A-Z]/.test(value)) strength += 20;
+        if (/[0-9]/.test(value)) strength += 20;
+        if (/[^A-Za-z0-9]/.test(value)) strength += 20;
 
+        strengthBar.style.width = strength + '%';
+        strengthBar.style.background = strength < 40 ? '#ff4d4d' : strength < 80 ? '#ffeb3b' : '#00f260';
+    });
+
+    // Form Submission
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const button = document.getElementById('loginButton');
@@ -409,6 +439,24 @@
             // Example error handling
             // document.getElementById('usernameError').style.display = 'block';
         }, 2000);
+    });
+
+    // Ripple Effect on Button
+    document.getElementById('loginButton').addEventListener('click', function(e) {
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+
+        // Play sound
+        const clickSound = document.getElementById('clickSound');
+        clickSound.currentTime = 0;
+        clickSound.play();
     });
 </script>
 {% endblock %}
