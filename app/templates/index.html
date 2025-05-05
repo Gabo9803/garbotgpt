@@ -16,6 +16,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
             --primary-color: #007bff;
@@ -76,6 +77,11 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            transition: background 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: var(--card-bg);
         }
 
         .navbar-brand {
@@ -84,23 +90,87 @@
             font-size: 1.75rem;
             display: flex;
             align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
         }
 
         .navbar-brand img {
             height: 32px;
             margin-right: 0.75rem;
+            transition: transform 0.3s ease;
         }
 
         .nav-link {
             color: #fff !important;
             font-weight: 500;
-            transition: color 0.2s, transform 0.2s;
             padding: 0.5rem 1rem;
+            position: relative;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+            left: 0;
         }
 
         .nav-link:hover {
             color: var(--primary-color) !important;
             transform: translateY(-2px);
+        }
+
+        .navbar-nav .dropdown-menu {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .dropdown-item {
+            color: #fff;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .search-bar {
+            position: relative;
+            max-width: 200px;
+        }
+
+        .search-bar input {
+            border-radius: 50px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-color);
+            padding: 0.5rem 2.5rem 0.5rem 1rem;
+        }
+
+        .search-bar button {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-color);
         }
 
         .hero-section {
@@ -160,7 +230,7 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .chat-demo {
+        .chat-demo, .interactive-demo {
             max-width: 800px;
             margin: 4rem auto;
             background: var(--glass-bg);
@@ -171,7 +241,7 @@
             box-shadow: var(--shadow);
         }
 
-        .chat-demo .message {
+        .chat-demo .message, .interactive-demo .message {
             margin-bottom: 1.5rem;
             padding: 1.25rem;
             border-radius: 12px;
@@ -179,25 +249,25 @@
             opacity: 0;
         }
 
-        .chat-demo .user-message {
+        .chat-demo .user-message, .interactive-demo .user-message {
             background: #e3f2fd;
             margin-left: 25%;
         }
 
-        .chat-demo .ai-message {
+        .chat-demo .ai-message, .interactive-demo .ai-message {
             background: #f5f5f5;
             margin-right: 25%;
         }
 
-        [data-theme="dark"] .chat-demo .user-message {
+        [data-theme="dark"] .chat-demo .user-message, [data-theme="dark"] .interactive-demo .user-message {
             background: #1e3a8a;
         }
 
-        [data-theme="dark"] .chat-demo .ai-message {
+        [data-theme="dark"] .chat-demo .ai-message, [data-theme="dark"] .interactive-demo .ai-message {
             background: #2d2d2d;
         }
 
-        .features-section {
+        .features-section, .pricing-section, .blog-section {
             padding: 8rem 2rem;
             background: var(--bg-color);
         }
@@ -207,7 +277,7 @@
             margin: 0 auto;
         }
 
-        .feature-card {
+        .feature-card, .pricing-card, .blog-card {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
@@ -220,18 +290,18 @@
             overflow: hidden;
         }
 
-        .feature-card:hover {
+        .feature-card:hover, .pricing-card:hover, .blog-card:hover {
             transform: translateY(-15px);
             box-shadow: var(--shadow);
         }
 
-        .feature-card i {
+        .feature-card i, .pricing-card i {
             font-size: 3.5rem;
             color: var(--primary-color);
             margin-bottom: 1.5rem;
         }
 
-        .feature-card h3 {
+        .feature-card h3, .pricing-card h3, .blog-card h3 {
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 1rem;
@@ -470,6 +540,10 @@
             .sticky-sidebar {
                 display: none;
             }
+
+            .search-bar {
+                max-width: 150px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -485,7 +559,7 @@
                 font-size: 1.5rem;
             }
 
-            .feature-card, .use-case-card, .testimonial-card {
+            .feature-card, .use-case-card, .testimonial-card, .pricing-card, .blog-card {
                 margin-bottom: 2rem;
             }
 
@@ -502,6 +576,10 @@
 
             .timeline-item::before {
                 left: 10px !important;
+            }
+
+            .search-bar {
+                display: none;
             }
         }
     </style>
@@ -526,10 +604,25 @@
                         <a class="nav-link" href="#use-cases">Casos de Uso</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#timeline">Historia</a>
+                        <a class="nav-link" href="#pricing">Precios</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#faq">FAQ</a>
+                        <a class="nav-link" href="#timeline">Historia</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Más
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="moreDropdown">
+                            <li><a class="dropdown-item" href="#faq">FAQ</a></li>
+                            <li><a class="dropdown-item" href="#blog">Blog</a></li>
+                            <li><a class="dropdown-item" href="#community">Comunidad</a></li>
+                            <li><a class="dropdown-item" href="https://x.ai/api">API</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item search-bar">
+                        <input type="text" class="form-control" placeholder="Buscar..." aria-label="Buscar">
+                        <button type="submit"><i class="fas fa-search"></i></button>
                     </li>
                     <li class="nav-item">
                         <select id="language-select" class="form-select form-select-sm" aria-label="Seleccionar idioma">
@@ -571,6 +664,7 @@
         <button id="theme-toggle" aria-label="Alternar tema"><i class="bi bi-moon-stars-fill"></i> Tema</button>
         <button id="contrast-toggle" aria-label="Alternar alto contraste"><i class="bi bi-eye-fill"></i> Contraste</button>
         <a href="{{ url_for('chat') }}" aria-label="Ir al chat"><i class="bi bi-chat-left-text"></i> Chat</a>
+        <a href="#pricing" aria-label="Precios"><i class="bi bi-wallet2"></i> Precios</a>
         <a href="#faq" aria-label="Preguntas frecuentes"><i class="bi bi-question-circle"></i> FAQ</a>
     </div>
 
@@ -622,6 +716,20 @@
             </div>
             <div class="text-center mt-5">
                 <a href="{{ url_for('chat') }}" class="btn btn-gradient btn-lg">Probar Chat Ahora</a>
+            </div>
+        </section>
+
+        <!-- Interactive Demo Section -->
+        <section class="interactive-demo">
+            <h3 class="text-center mb-5">Prueba GarBotGPT Interactivamente</h3>
+            <div id="interactive-demo-messages">
+                <div class="message ai-message">¡Hola! Escribe una pregunta o tarea, y te responderé al instante.</div>
+            </div>
+            <div class="mt-4">
+                <div class="input-group">
+                    <input type="text" id="demo-input" class="form-control" placeholder="Escribe tu mensaje..." aria-label="Mensaje del usuario">
+                    <button id="demo-submit" class="btn btn-gradient">Enviar</button>
+                </div>
             </div>
         </section>
 
@@ -690,6 +798,54 @@
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Siguiente</span>
                     </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="pricing-section" id="pricing">
+            <div class="container">
+                <h2 class="text-center mb-5">Elige tu Plan</h2>
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="pricing-card">
+                            <i class="bi bi-rocket"></i>
+                            <h3>Gratuito</h3>
+                            <p>Perfecto para probar GarBotGPT con funciones básicas.</p>
+                            <ul class="list-unstyled">
+                                <li>Acceso limitado a GPT-4</li>
+                                <li>100 mensajes/día</li>
+                                <li>Soporte básico</li>
+                            </ul>
+                            <a href="{{ url_for('register') }}" class="btn btn-gradient mt-3">Comenzar Gratis</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="pricing-card">
+                            <i class="bi bi-star-fill"></i>
+                            <h3>SuperGrok</h3>
+                            <p>Ideal para usuarios frecuentes con mayores cuotas.</p>
+                            <ul class="list-unstyled">
+                                <li>Acceso completo a GPT-4</li>
+                                <li>1000 mensajes/día</li>
+                                <li>Soporte prioritario</li>
+                            </ul>
+                            <a href="https://x.ai/grok" class="btn btn-gradient mt-3">Ver Detalles</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="pricing-card">
+                            <i class="bi bi-briefcase-fill"></i>
+                            <h3>Empresarial</h3>
+                            <p>Diseñado para equipos con necesidades avanzadas.</p>
+                            <ul class="list-unstyled">
+                                <li>API personalizada</li>
+                                <li>Mensajes ilimitados</li>
+                                <li>Soporte dedicado</li>
+                            </ul>
+                            <a href="https://x.ai/api" class="btn btn-gradient mt-3">Contactar</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -769,6 +925,39 @@
                             <p>"Escribir contenido nunca fue tan fácil. GarBotGPT es mi musa."</p>
                             <h4>Sofía R.</h4>
                             <p>Escritora</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Highlights Section -->
+        <section class="blog-section" id="blog">
+            <div class="container">
+                <h2 class="text-center mb-5">Últimas Publicaciones del Blog</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="blog-card">
+                            <img src="https://via.placeholder.com/300x200" alt="Blog post 1" class="img-fluid mb-3">
+                            <h3>El Futuro de la IA Conversacional</h3>
+                            <p>Explora cómo GarBotGPT está liderando la próxima generación de chatbots de IA.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="blog-card">
+                            <img src="https://via.placeholder.com/300x200" alt="Blog post 2" class="img-fluid mb-3">
+                            <h3>5 Consejos para Maximizar tu Productividad con IA</h3>
+                            <p>Aprende a usar GarBotGPT para optimizar tu flujo de trabajo diario.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="blog-card">
+                            <img src="https://via.placeholder.com/300x200" alt="Blog post 3" class="img-fluid mb-3">
+                            <h3>IA y Educación: Transformando el Aprendizaje</h3>
+                            <p>Descubre cómo GarBotGPT está revolucionando la educación.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
                         </div>
                     </div>
                 </div>
@@ -876,10 +1065,10 @@
             <div class="container">
                 <h2>Recibe las Últimas Novedades</h2>
                 <p class="lead mb-4">Suscríbete para actualizaciones exclusivas, consejos y noticias de GarBotGPT.</p>
-                <form class="newsletter-form d-flex">
+                <div class="newsletter-form d-flex">
                     <input type="email" class="form-control" placeholder="Tu correo electrónico" aria-label="Correo electrónico">
                     <button type="submit" class="btn btn-gradient">Suscribirse</button>
-                </form>
+                </div>
             </div>
         </section>
     </main>
@@ -900,6 +1089,7 @@
                         <a href="{{ url_for('settings') }}">Configuración</a>
                         <a href="https://x.ai/api">API</a>
                         <a href="#faq">FAQ</a>
+                        <a href="#pricing">Precios</a>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
@@ -938,6 +1128,16 @@
                 html.dataset.contrast = html.dataset.contrast === 'high' ? 'normal' : 'high';
             });
 
+            // Navbar scroll effect
+            window.addEventListener('scroll', () => {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
             // Chat demo animation
             const messages = document.querySelectorAll('#chat-demo-messages .message');
             messages.forEach((msg, index) => {
@@ -948,6 +1148,33 @@
                     delay: index * 2,
                     ease: 'power2.out'
                 });
+            });
+
+            // Interactive demo
+            const demoInput = document.getElementById('demo-input');
+            const demoSubmit = document.getElementById('demo-submit');
+            const demoMessages = document.getElementById('interactive-demo-messages');
+            demoSubmit.addEventListener('click', () => {
+                const userText = demoInput.value.trim();
+                if (userText) {
+                    const userMessage = document.createElement('div');
+                    userMessage.className = 'message user-message';
+                    userMessage.textContent = userText;
+                    demoMessages.appendChild(userMessage);
+                    gsap.fromTo(userMessage, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 });
+
+                    const aiMessage = document.createElement('div');
+                    aiMessage.className = 'message ai-message';
+                    aiMessage.textContent = `¡Entendido! Tu mensaje fue: "${userText}". Estoy simulando una respuesta de IA para esta demo.`;
+                    demoMessages.appendChild(aiMessage);
+                    gsap.fromTo(aiMessage, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1, delay: 0.5 });
+
+                    demoInput.value = '';
+                    demoMessages.scrollTop = demoMessages.scrollHeight;
+                }
+            });
+            demoInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') demoSubmit.click();
             });
 
             // Stats counter
@@ -982,14 +1209,13 @@
                 });
             });
 
-            // Placeholder for WebGL background (requires Three.js)
+            // Placeholder for WebGL background
             const canvas = document.getElementById('webgl-bg');
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             const ctx = canvas.getContext('2d');
             ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            // Note: Actual WebGL implementation requires Three.js and a proper scene setup
         });
     </script>
 </body>
