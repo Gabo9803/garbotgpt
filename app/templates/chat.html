@@ -1,6 +1,183 @@
 {% extends "base.html" %}
 {% block title %}Chatear con GarBotGPT{% endblock %}
 {% block content %}
+<style>
+    .chat-page {
+        min-height: 100vh;
+        background: var(--bg-color);
+        padding: 1rem;
+    }
+
+    .chat-container {
+        max-width: 1200px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(15px);
+        border: 1px solid var(--glass-border);
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 2rem);
+    }
+
+    .chat-header {
+        background: var(--card-bg);
+        border-radius: 15px 15px 0 0;
+        padding: 1rem 1.5rem;
+    }
+
+    .chat-body {
+        flex: 1;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+        padding: 1.5rem;
+    }
+
+    .chat-footer {
+        background: var(--card-bg);
+        border-radius: 0 0 15px 15px;
+        padding: 1rem 1.5rem;
+    }
+
+    .message {
+        max-width: 80%;
+        margin-bottom: 1.5rem;
+    }
+
+    .user-message {
+        margin-left: auto;
+        text-align: right;
+    }
+
+    .user-message .message-content {
+        background: #e3f2fd;
+        color: #212529;
+    }
+
+    .ai-message .message-content {
+        background: #f5f5f5;
+        color: #212529;
+    }
+
+    [data-theme="dark"] .user-message .message-content {
+        background: #1e3a8a;
+        color: #e9ecef;
+    }
+
+    [data-theme="dark"] .ai-message .message-content {
+        background: #2d2d2d;
+        color: #e9ecef;
+    }
+
+    .message-content {
+        display: inline-block;
+        padding: 0.75rem 1.25rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        word-wrap: break-word;
+    }
+
+    .suggestions {
+        max-width: 500px;
+        margin: 2rem auto;
+        padding: 1.5rem;
+        border-radius: 10px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+    }
+
+    .suggestions .carousel-item {
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .suggestion-btn {
+        transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .suggestion-btn:hover {
+        transform: scale(1.05);
+        background: var(--primary-color);
+        color: #fff;
+    }
+
+    .typing-effect .typing-dots::after {
+        content: '...';
+        animation: dots 1.5s infinite;
+    }
+
+    @keyframes dots {
+        0%, 20% { content: '.'; }
+        40% { content: '..'; }
+        60% { content: '...'; }
+    }
+
+    .suggestions-dropdown {
+        position: absolute;
+        top: -150px;
+        left: 0;
+        right: 0;
+        background: var(--card-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 10px;
+        max-height: 150px;
+        overflow-y: auto;
+        z-index: 1000;
+    }
+
+    .suggestions-dropdown button {
+        display: block;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        text-align: left;
+        background: transparent;
+        border: none;
+        color: var(--text-color);
+        transition: background 0.3s ease;
+    }
+
+    .suggestions-dropdown button:hover {
+        background: var(--primary-color);
+        color: #fff;
+    }
+
+    .modal-content {
+        background: var(--glass-bg);
+        backdrop-filter: blur(15px);
+        border: 1px solid var(--glass-border);
+    }
+
+    .character-counter {
+        font-size: 0.85rem;
+        color: var(--text-color);
+        opacity: 0.7;
+        margin-left: 1rem;
+    }
+
+    .btn-gradient:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+        .chat-container {
+            height: calc(100vh - 4rem);
+            border-radius: 10px;
+        }
+
+        .message {
+            max-width: 90%;
+        }
+
+        .chat-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .suggestions {
+            padding: 1rem;
+        }
+    }
+</style>
+
 <!-- Contenedor Principal del Chat -->
 <div class="chat-page container-fluid d-flex justify-content-center">
     <div class="chat-container flex-grow-1" id="chat-container-main" role="main" aria-label="Interfaz de chat">
@@ -8,9 +185,9 @@
         <div class="chat-header d-flex justify-content-between align-items-center p-3 border-bottom">
             <div class="d-flex align-items-center">
                 <button id="sidebar-toggle" class="btn btn-gradient btn-sm me-2" data-bs-toggle="modal" data-bs-target="#sidebarModal" data-bs-toggle="tooltip" title="Abrir Menú" aria-label="Abrir menú lateral">
-                    <i class="bi bi-list me-1"></i><span>Menú</span>
+                    <i class="bi bi-list me-1"></i><span class="d-none d-sm-inline">Menú</span>
                 </button>
-                <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT Logo" class="me-2" style="height: 30px;" aria-hidden="true">
+                <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT Logo" class="me-2" style="height: 30px;" loading="lazy" aria-hidden="true">
                 <h2 class="mb-0 flex-grow-1">Chatear con GarBotGPT</h2>
             </div>
             <div class="d-flex align-items-center">
@@ -30,30 +207,30 @@
                 <!-- Carrusel de Sugerencias Iniciales -->
                 <div class="suggestions glass text-center animate__animated animate__fadeIn" role="region" aria-label="Sugerencias iniciales">
                     <p class="mb-3">¡Empieza a chatear! Aquí tienes algunas sugerencias:</p>
-                    <div id="suggestions-carousel" class="carousel slide" data-bs-ride="carousel">
+                    <div id="suggestions-carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000" data-bs-touch="true">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Explica un concepto de programación">
+                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Explica un concepto de programación" aria-label="Sugerir: Explica un concepto de programación">
                                     <i class="bi bi-code-slash me-1"></i>Concepto de Programación
                                 </button>
                             </div>
                             <div class="carousel-item">
-                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Cuéntame sobre inteligencia artificial">
+                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Cuéntame sobre inteligencia artificial" aria-label="Sugerir: Cuéntame sobre inteligencia artificial">
                                     <i class="bi bi-robot me-1"></i>Inteligencia Artificial
                                 </button>
                             </div>
                             <div class="carousel-item">
-                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Escribe un poema corto">
+                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Escribe un poema corto" aria-label="Sugerir: Escribe un poema corto">
                                     <i class="bi bi-pen me-1"></i>Escribir Poema
                                 </button>
                             </div>
                             <div class="carousel-item">
-                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Ayúdame con una ecuación matemática">
+                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Ayúdame con una ecuación matemática" aria-label="Sugerir: Ayúdame con una ecuación matemática">
                                     <i class="bi bi-calculator me-1"></i>Ayuda Matemática
                                 </button>
                             </div>
                             <div class="carousel-item">
-                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Cuéntame sobre la historia de Roma">
+                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Cuéntame sobre la historia de Roma" aria-label="Sugerir: Cuéntame sobre la historia de Roma">
                                     <i class="bi bi-book me-1"></i>Historia de Roma
                                 </button>
                             </div>
@@ -76,7 +253,7 @@
                 <div class="message ai-message animate__animated animate__fadeIn mb-3" role="article">
                     <strong>GarBotGPT:</strong>
                     <div class="message-content p-2 rounded shadow-sm markdown-body">{{ entry.response | safe }}</div>
-                    <button class="copy-btn btn btn-sm btn-outline-secondary mt-1" data-bs-toggle="tooltip" title="Copiar respuesta" data-text="{{ entry.response }}" aria-label="Copiar respuesta">Copiar</button>
+                    <button class="copy-btn btn btn-sm btn-outline-secondary mt-1" data-bs-toggle="tooltip" title="Copiar respuesta" data-text="{{ entry.response | e }}" aria-label="Copiar respuesta">Copiar</button>
                 </div>
             {% endfor %}
             <!-- Indicador de Respondiendo -->
@@ -89,14 +266,16 @@
         <!-- Pie del Chat -->
         <div class="chat-footer p-3 border-top">
             <div class="input-group mb-2 position-relative">
-                <input type="text" id="message" class="form-control rounded-pill" placeholder="Escribe tu mensaje..." autocomplete="off" aria-label="Campo de mensaje">
-                <button class="btn btn-primary btn-gradient btn-lg" onclick="sendMessage()" data-bs-toggle="tooltip" title="Enviar mensaje" aria-label="Enviar mensaje">
+                <input type="text" id="message" class="form-control rounded-pill" placeholder="Escribe tu mensaje..." autocomplete="off" maxlength="1000" aria-label="Campo de mensaje" aria-describedby="character-counter">
+                <button class="btn btn-primary btn-gradient btn-lg" id="send-btn" onclick="sendMessage()" data-bs-toggle="tooltip" title="Enviar mensaje" aria-label="Enviar mensaje">
                     <i class="bi bi-send-fill"></i>
+                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                 </button>
                 <button id="voice-btn" class="btn btn-gradient btn-lg" data-bs-toggle="tooltip" title="Entrada por voz" aria-label="Entrada por voz">
                     <i class="bi bi-mic-fill"></i>
                 </button>
                 <div id="suggestions-dropdown" class="suggestions-dropdown glass d-none" role="listbox" aria-label="Sugerencias de prompts"></div>
+                <span id="character-counter" class="character-counter">0/1000</span>
             </div>
             <div class="chat-options d-flex justify-content-between align-items-center">
                 <div class="form-check form-switch">
@@ -117,7 +296,7 @@
         <div class="modal-content glass animate__animated animate__bounceIn">
             <div class="modal-header">
                 <h5 class="modal-title" id="sidebarModalLabel"><i class="bi bi-list me-2"></i>Menú</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar menú" aria-hidden="true"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar menú"></button>
             </div>
             <div class="modal-body">
                 <div class="accordion" id="sidebarAccordion" role="navigation">
@@ -129,7 +308,7 @@
                         </h2>
                         <div id="settingsCollapse" class="accordion-collapse collapse" aria-labelledby="settingsHeading" data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
-                                <button class="btn btn-primary btn-gradient btn-sm w-100 animate__animated animate__pulse animate__infinite" data-bs-toggle="modal" data-bs-target="#settingsModal" data-bs-toggle="tooltip" title="Configurar ajustes del chat" aria-label="Abrir configuración">
+                                <button class="btn btn-primary btn-gradient btn-sm w-100" data-bs-toggle="modal" data-bs-target="#settingsModal" data-bs-toggle="tooltip" title="Configurar ajustes del chat" aria-label="Abrir configuración">
                                     Abrir Configuración
                                 </button>
                             </div>
@@ -143,7 +322,7 @@
                         </h2>
                         <div id="infoCollapse" class="accordion-collapse collapse" aria-labelledby="infoHeading" data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
-                                <button class="btn btn-primary btn-gradient btn-sm w-100 animate__animated animate__pulse animate__infinite" data-bs-toggle="modal" data-bs-target="#infoModal" data-bs-toggle="tooltip" title="Ver información de GarBotGPT" aria-label="Ver información">
+                                <button class="btn btn-primary btn-gradient btn-sm w-100" data-bs-toggle="modal" data-bs-target="#infoModal" data-bs-toggle="tooltip" title="Ver información de GarBotGPT" aria-label="Ver información">
                                     Ver Información
                                 </button>
                             </div>
@@ -157,11 +336,11 @@
                         </h2>
                         <div id="actionsCollapse" class="accordion-collapse collapse" aria-labelledby="actionsHeading" data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
-                                <button id="clear-history" class="btn btn-outline-danger btn-sm w-100 mb-2 animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Borrar el historial de chat" aria-label="Borrar historial">Borrar Historial</button>
-                                <a href="{{ url_for('export_history') }}" class="btn btn-outline-secondary btn-sm w-100 mb-2 animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Descargar historial" aria-label="Exportar historial">Exportar Historial</a>
-                                <a href="{{ url_for('export_settings') }}" class="btn btn-outline-secondary btn-sm w-100 mb-2 animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Descargar configuración" aria-label="Exportar configuración">Exportar Configuración</a>
-                                <button id="regenerate-response" class="btn btn-outline-secondary btn-sm w-100 mb-2 animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Regenerar última respuesta" aria-label="Regenerar respuesta">Regenerar Respuesta</button>
-                                <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary btn-sm w-100 animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Cerrar sesión" aria-label="Cerrar sesión">Cerrar Sesión</a>
+                                <button id="clear-history" class="btn btn-outline-danger btn-sm w-100 mb-2" data-bs-toggle="tooltip" title="Borrar el historial de chat" aria-label="Borrar historial">Borrar Historial</button>
+                                <a href="{{ url_for('export_history') }}" class="btn btn-outline-secondary btn-sm w-100 mb-2" data-bs-toggle="tooltip" title="Descargar historial" aria-label="Exportar historial">Exportar Historial</a>
+                                <a href="{{ url_for('export_settings') }}" class="btn btn-outline-secondary btn-sm w-100 mb-2" data-bs-toggle="tooltip" title="Descargar configuración" aria-label="Exportar configuración">Exportar Configuración</a>
+                                <button id="regenerate-response" class="btn btn-outline-secondary btn-sm w-100 mb-2" data-bs-toggle="tooltip" title="Regenerar última respuesta" aria-label="Regenerar respuesta">Regenerar Respuesta</button>
+                                <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary btn-sm w-100" data-bs-toggle="tooltip" title="Cerrar sesión" aria-label="Cerrar sesión">Cerrar Sesión</a>
                             </div>
                         </div>
                     </div>
@@ -193,7 +372,7 @@
         <div class="modal-content glass animate__animated animate__bounceIn">
             <div class="modal-header">
                 <h5 class="modal-title" id="settingsModalLabel"><i class="bi bi-gear-fill me-2"></i>Configuración del Chat</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar configuración" aria-hidden="true"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar configuración"></button>
             </div>
             <div class="modal-body">
                 <form id="chat-settings-form">
@@ -216,7 +395,7 @@
                         <label for="theme_color" class="form-label"><i class="bi bi-palette-fill me-2"></i>Color del Tema</label>
                         <input type="color" class="form-control form-control-color" id="theme_color" name="theme_color" value="{{ chat_settings.theme_color }}" aria-label="Seleccionar color del tema">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-gradient btn-sm w-100 animate__animated animate__pulse" data-bs-toggle="tooltip" title="Guardar ajustes" aria-label="Guardar configuración">Guardar</button>
+                    <button type="submit" class="btn btn-primary btn-gradient btn-sm w-100" data-bs-toggle="tooltip" title="Guardar ajustes" aria-label="Guardar configuración">Guardar</button>
                 </form>
             </div>
         </div>
@@ -229,7 +408,7 @@
         <div class="modal-content glass animate__animated animate__bounceIn">
             <div class="modal-header">
                 <h5 class="modal-title" id="infoModalLabel"><i class="bi bi-info-circle-fill me-2"></i>Información</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar información" aria-hidden="true"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar información"></button>
             </div>
             <div class="modal-body">
                 <p><strong>GarBotGPT</strong> es un chatbot avanzado diseñado para proporcionar respuestas útiles y precisas a una amplia gama de preguntas y tareas.</p>
@@ -244,8 +423,171 @@
     </div>
 </div>
 
-<!-- Script para Scroll Automático -->
+<!-- Script para Funcionalidad Mejorada -->
 <script>
-    document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+    document.addEventListener('DOMContentLoaded', () => {
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message');
+        const sendBtn = document.getElementById('send-btn');
+        const sendOnEnter = document.getElementById('send-on-enter');
+        const characterCounter = document.getElementById('character-counter');
+        const suggestionsDropdown = document.getElementById('suggestions-dropdown');
+        const respondingIndicator = document.getElementById('responding-indicator');
+
+        // Auto-scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Character counter
+        const updateCharacterCounter = () => {
+            const count = messageInput.value.length;
+            characterCounter.textContent = `${count}/1000`;
+            characterCounter.style.color = count > 900 ? 'var(--error-color)' : 'var(--text-color)';
+        };
+        messageInput.addEventListener('input', updateCharacterCounter);
+        updateCharacterCounter();
+
+        // Debounce function to optimize input events
+        const debounce = (func, wait) => {
+            let timeout;
+            return (...args) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        };
+
+        // Send message function
+        window.sendMessage = () => {
+            const message = messageInput.value.trim();
+            if (!message || sendBtn.disabled) return;
+
+            sendBtn.disabled = true;
+            sendBtn.querySelector('.spinner-border').classList.remove('d-none');
+            respondingIndicator.classList.remove('d-none');
+
+            // Simulate sending message (replace with actual API call)
+            setTimeout(() => {
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message user-message animate__animated animate__fadeIn mb-3';
+                userMessage.setAttribute('role', 'article');
+                userMessage.innerHTML = `<strong>Tú:</strong><div class="message-content p-2 rounded shadow-sm">${message}</div>`;
+                chatMessages.appendChild(userMessage);
+
+                const aiMessage = document.createElement('div');
+                aiMessage.className = 'message ai-message animate__animated animate__fadeIn mb-3';
+                aiMessage.setAttribute('role', 'article');
+                aiMessage.innerHTML = `<strong>GarBotGPT:</strong><div class="message-content p-2 rounded shadow-sm markdown-body">Respuesta simulada para: ${message}</div><button class="copy-btn btn btn-sm btn-outline-secondary mt-1" data-bs-toggle="tooltip" title="Copiar respuesta" data-text="Respuesta simulada para: ${message}" aria-label="Copiar respuesta">Copiar</button>`;
+                chatMessages.appendChild(aiMessage);
+
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                messageInput.value = '';
+                updateCharacterCounter();
+                sendBtn.disabled = false;
+                sendBtn.querySelector('.spinner-border').classList.add('d-none');
+                respondingIndicator.classList.add('d-none');
+            }, 1000);
+        };
+
+        // Handle send on Enter
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && sendOnEnter.checked && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Suggestion buttons
+        document.querySelectorAll('.suggestion-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                messageInput.value = btn.dataset.message;
+                updateCharacterCounter();
+                messageInput.focus();
+                sendMessage();
+            });
+        });
+
+        // Copy buttons
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                navigator.clipboard.writeText(btn.dataset.text).then(() => {
+                    const toast = document.createElement('div');
+                    toast.className = 'toast align-items-center text-bg-success border-0';
+                    toast.setAttribute('role', 'alert');
+                    toast.setAttribute('aria-live', 'assertive');
+                    toast.setAttribute('aria-atomic', 'true');
+                    toast.innerHTML = `
+                        <div class="d-flex">
+                            <div class="toast-body">¡Respuesta copiada!</div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+                        </div>
+                    `;
+                    document.getElementById('toast-container').appendChild(toast);
+                    new bootstrap.Toast(toast).show();
+                });
+            });
+        });
+
+        // Focus management for modals
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            modal.addEventListener('shown.bs.modal', () => {
+                modal.querySelector('.modal-body').focus();
+            });
+        });
+
+        // Suggestions dropdown (mock implementation)
+        const showSuggestions = debounce(() => {
+            const query = messageInput.value.trim().toLowerCase();
+            if (query.length < 3) {
+                suggestionsDropdown.classList.add('d-none');
+                return;
+            }
+
+            // Mock suggestions
+            const suggestions = [
+                'Explica un concepto de programación',
+                'Cuéntame sobre inteligencia artificial',
+                'Escribe un poema corto'
+            ].filter(s => s.toLowerCase().includes(query));
+
+            suggestionsDropdown.innerHTML = suggestions.length
+                ? suggestions.map(s => `<button type="button" class="suggestion-item">${s}</button>`).join('')
+                : '<button type="button" disabled>No hay sugerencias</button>';
+            suggestionsDropdown.classList.remove('d-none');
+
+            suggestionsDropdown.querySelectorAll('.suggestion-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    messageInput.value = item.textContent;
+                    updateCharacterCounter();
+                    suggestionsDropdown.classList.add('d-none');
+                    messageInput.focus();
+                    sendMessage();
+                });
+            });
+        }, 300);
+
+        messageInput.addEventListener('input', showSuggestions);
+
+        // Theme toggle (mock implementation)
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            const html = document.documentElement;
+            const newTheme = html.dataset.theme === 'light' ? 'dark' : 'light';
+            html.dataset.theme = newTheme;
+            document.getElementById('theme-toggle').innerHTML = `<i class="bi ${newTheme === 'light' ? 'bi-moon-stars-fill' : 'bi-sun-fill'}"></i>`;
+        });
+
+        // Fullscreen toggle
+        document.getElementById('fullscreen-toggle').addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => console.error(err));
+                document.getElementById('fullscreen-toggle').innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
+            } else {
+                document.exitFullscreen();
+                document.getElementById('fullscreen-toggle').innerHTML = '<i class="bi bi-arrows-fullscreen"></i>';
+            }
+        });
+
+        // Initialize tooltips
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
+    });
 </script>
 {% endblock %}
