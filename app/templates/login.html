@@ -2,18 +2,18 @@
 {% block title %}Iniciar Sesión en GarBotGPT{% endblock %}
 {% block content %}
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;700&family=Roboto:wght@300;400;700&display=swap');
 
     :root {
         --primary-color: #ff007a;
         --secondary-color: #00d4ff;
         --accent-color: #ffd700;
         --background-dark: #0a0f2b;
-        --background-light: #1c2a5e;
+        --background-light: #1a2a5f;
         --text-color: #ffffff;
-        --card-bg: rgba(255, 255, 255, 0.08);
-        --glow: 0 0 20px rgba(255, 0, 122, 0.6);
-        --shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        --card-bg: rgba(255, 255, 255, 0.06);
+        --glow: 0 0 25px rgba(255, 0, 122, 0.7);
+        --holo-glow: 0 0 40px rgba(0, 212, 255, 0.6);
     }
 
     * {
@@ -33,66 +33,49 @@
         position: relative;
     }
 
-    /* Full-Screen Particle Background */
-    #particles-js {
+    /* Full-Screen 3D Background */
+    #three-canvas {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: -2;
-    }
-
-    .background-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-        animation: pulse 12s infinite ease-in-out;
         z-index: -1;
-        pointer-events: none;
-    }
-
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); opacity: 0.2; }
-        50% { transform: scale(1.3); opacity: 0.4; }
     }
 
     .login-container {
-        max-width: 600px;
-        width: 90%;
-        padding: 20px;
-        z-index: 2;
+        max-width: 720px;
+        width: 95%;
+        padding: 40px;
+        z-index: 3;
     }
 
     .login-card {
         background: var(--card-bg);
-        backdrop-filter: blur(25px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 30px;
-        box-shadow: var(--shadow);
+        backdrop-filter: blur(30px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 35px;
+        box-shadow: var(--holo-glow), 0 30px 70px rgba(0, 0, 0, 0.6);
         overflow: hidden;
-        transition: transform 0.6s ease, box-shadow 0.6s ease;
-        animation: float 8s ease-in-out infinite;
+        transition: transform 0.7s ease, box-shadow 0.7s ease;
+        animation: holoPulse 10s ease-in-out infinite;
     }
 
     .login-card:hover {
-        transform: translateY(-20px);
-        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+        transform: translateY(-25px);
+        box-shadow: var(--holo-glow), 0 40px 90px rgba(0, 0, 0, 0.7);
     }
 
-    @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-15px); }
+    @keyframes holoPulse {
+        0%, 100% { transform: translateY(0); filter: brightness(1); }
+        50% { transform: translateY(-20px); filter: brightness(1.2); }
     }
 
     .card-header {
         background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-        padding: 30px;
+        padding: 50px;
         text-align: center;
-        border-radius: 30px 30px 0 0;
+        border-radius: 35px 35px 0 0;
         position: relative;
         overflow: hidden;
     }
@@ -100,83 +83,95 @@
     .card-header::before {
         content: '';
         position: absolute;
-        top: -50%;
-        left: -50%;
+        top: 0;
+        left: -200%;
         width: 200%;
-        height: 200%;
-        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-        transform: rotate(45deg);
-        animation: shine 4s infinite;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: 0.8s;
     }
 
-    @keyframes shine {
-        0% { transform: translateX(-100%) rotate(45deg); }
-        100% { transform: translateX(100%) rotate(45deg); }
+    .card-header:hover::before {
+        left: 200%;
     }
 
     .card-header h2 {
         color: var(--text-color);
-        font-family: 'Orbitron', sans-serif;
+        font-family: 'Exo 2', sans-serif;
         font-weight: 700;
-        font-size: 2.2rem;
+        font-size: 3rem;
         margin: 0;
         text-transform: uppercase;
-        letter-spacing: 2px;
-        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+        letter-spacing: 4px;
+        text-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
         position: relative;
         z-index: 1;
+        overflow: hidden;
+    }
+
+    .card-header h2 span {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: typeIn 0.1s ease forwards;
+    }
+
+    @keyframes typeIn {
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .card-body {
-        padding: 40px;
+        padding: 80px;
     }
 
     .form-group {
         position: relative;
-        margin-bottom: 2.5rem;
+        margin-bottom: 3.5rem;
         opacity: 0;
-        transform: translateY(30px);
-        animation: slideUp 0.8s ease forwards;
-        animation-delay: calc(0.3s * var(--i));
+        transform: translateY(40px);
+        animation: elasticSlide 1s ease forwards;
+        animation-delay: calc(0.4s * var(--i));
     }
 
-    @keyframes slideUp {
-        to { opacity: 1; transform: translateY(0); }
+    @keyframes elasticSlide {
+        0% { opacity: 0; transform: translateY(40px); }
+        60% { opacity: 1; transform: translateY(-10px); }
+        100% { opacity: 1; transform: translateY(0); }
     }
 
     .form-label {
         position: absolute;
-        top: 14px;
-        left: 60px;
-        font-size: 1rem;
-        color: rgba(255, 255, 255, 0.6);
-        transition: all 0.5s ease;
+        top: 20px;
+        left: 80px;
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.5);
+        transition: all 0.6s ease;
         pointer-events: none;
     }
 
     .form-control {
-        background: rgba(255, 255, 255, 0.03);
-        border: 2px solid rgba(255, 255, 255, 0.15);
-        border-radius: 12px;
-        padding: 14px 14px 14px 60px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 18px 18px 18px 80px;
         color: var(--text-color);
-        font-size: 1.1rem;
+        font-size: 1.3rem;
         width: 100%;
-        transition: all 0.5s ease;
+        transition: all 0.6s ease;
     }
 
     .form-control:focus,
     .form-control:not(:placeholder-shown) {
         border-color: var(--primary-color);
         box-shadow: var(--glow);
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.25);
     }
 
     .form-control:focus + .form-label,
     .form-control:not(:placeholder-shown) + .form-label {
-        top: -25px;
-        left: 15px;
-        font-size: 0.8rem;
+        top: -35px;
+        left: 30px;
+        font-size: 1rem;
         color: var(--primary-color);
         background: none;
         padding: 0;
@@ -185,13 +180,13 @@
     .input-group-text {
         position: absolute;
         top: 50%;
-        left: 15px;
+        left: 30px;
         transform: translateY(-50%);
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 1.6rem;
         background: none;
         border: none;
-        transition: color 0.5s ease;
+        transition: color 0.6s ease;
     }
 
     .form-control:focus ~ .input-group-text {
@@ -201,51 +196,60 @@
     .password-toggle {
         position: absolute;
         top: 50%;
-        right: 15px;
+        right: 30px;
         transform: translateY(-50%);
         background: none;
         border: none;
-        color: rgba(255, 255, 255, 0.6);
+        color: rgba(255, 255, 255, 0.5);
         cursor: pointer;
-        font-size: 1.2rem;
-        transition: color 0.5s ease;
+        font-size: 1.5rem;
+        transition: color 0.6s ease, transform 0.3s ease;
     }
 
     .password-toggle:hover {
         color: var(--primary-color);
+        transform: translateY(-50%) scale(1.2);
     }
-
-    .password-strength {
-        margin-top: 8px;
-        font-size: 0.85rem;
-        color: rgba(255, 255, 255, 0.6);
-        display: none;
-    }
-
-    .password-strength.strong { color: #00ff00; }
-    .password-strength.medium { color: #ffd700; }
-    .password-strength.weak { color: #ff4d4d; }
 
     .btn-primary {
         background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
         border: none;
-        border-radius: 12px;
-        padding: 16px;
-        font-size: 1.1rem;
-        font-weight: 600;
+        border-radius: 20px;
+        padding: 20px;
+        font-size: 1.3rem;
+        font-weight: 700;
         text-transform: uppercase;
         color: var(--text-color);
         width: 100%;
         position: relative;
         overflow: hidden;
-        transform: perspective(600px) rotateX(0deg);
-        transition: all 0.5s ease;
-        touch-action: manipulation;
+        transform: perspective(700px) rotateX(0deg);
+        transition: all 0.6s ease;
+        z-index: 1;
+    }
+
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.6s ease, height 0.6s ease;
+        z-index: -1;
+    }
+
+    .btn-primary:hover::before {
+        width: 300px;
+        height: 300px;
     }
 
     .btn-primary:hover {
-        transform: perspective(600px) rotateX(15deg);
-        box-shadow: var(--glow), 0 15px 40px rgba(0, 0, 0, 0.4);
+        transform: perspective(700px) rotateX(20deg);
+        box-shadow: var(--glow), 0 20px 50px rgba(0, 0, 0, 0.5);
     }
 
     .btn-primary:disabled {
@@ -260,12 +264,12 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        width: 24px;
-        height: 24px;
-        border: 4px solid var(--text-color);
-        border-top: 4px solid transparent;
+        width: 32px;
+        height: 32px;
+        border: 6px solid var(--text-color);
+        border-top: 6px solid transparent;
         border-radius: 50%;
-        animation: spin 0.7s linear infinite;
+        animation: spin 0.6s linear infinite;
     }
 
     .btn-primary.loading .spinner {
@@ -281,58 +285,92 @@
         100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
-    .form-check {
+    .social-btn {
+        background: rgba(255, 255, 255, 0.08);
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        border-radius: 15px;
+        padding: 15px;
+        color: var(--text-color);
+        font-size: 1.1rem;
+        font-weight: 600;
+        width: 100%;
+        transition: all 0.5s ease;
+        position: relative;
+        overflow: hidden;
         display: flex;
         align-items: center;
-        margin-bottom: 15px;
+        justify-content: center;
     }
 
-    .form-check-input {
+    .social-btn svg {
+        margin-right: 12px;
+        transition: transform 0.5s ease;
+    }
+
+    .social-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: var(--accent-color);
+        transform: scale(1.05);
+    }
+
+    .social-btn:hover svg {
+        transform: scale(1.2) rotate(10deg);
+    }
+
+    .remember-me {
+        display: flex;
+        align-items: center;
+        margin-bottom: 2.5rem;
+        opacity: 0;
+        transform: translateY(40px);
+        animation: elasticSlide 1s ease forwards;
+        animation-delay: calc(0.4s * var(--i));
+    }
+
+    .remember-me input {
         display: none;
     }
 
-    .form-check-label {
+    .remember-me label {
         position: relative;
-        padding-left: 35px;
-        color: rgba(255, 255, 255, 0.8);
+        padding-left: 40px;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.1rem;
         cursor: pointer;
-        font-size: 0.95rem;
+        user-select: none;
     }
 
-    .form-check-label::before {
+    .remember-me label::before {
         content: '';
         position: absolute;
         left: 0;
         top: 50%;
         transform: translateY(-50%);
-        width: 20px;
-        height: 20px;
-        background: rgba(255, 255, 255, 0.05);
+        width: 24px;
+        height: 24px;
+        background: rgba(255, 255, 255, 0.08);
         border: 2px solid rgba(255, 255, 255, 0.15);
         border-radius: 6px;
-        transition: all 0.3s ease;
+        transition: all 0.4s ease;
     }
 
-    .form-check-label::after {
-        content: '\f00c';
-        font-family: 'Font Awesome 5 Free';
-        font-weight: 900;
-        position: absolute;
-        left: 6px;
-        top: 50%;
-        transform: translateY(-50%) scale(0);
-        color: var(--primary-color);
-        font-size: 12px;
-        transition: all 0.3s ease;
-    }
-
-    .form-check-input:checked + .form-check-label::before {
-        background: rgba(255, 0, 122, 0.2);
+    .remember-me input:checked + label::before {
+        background: var(--primary-color);
         border-color: var(--primary-color);
     }
 
-    .form-check-input:checked + .form-check-label::after {
-        transform: translateY(-50%) scale(1);
+    .remember-me input:checked + label::after {
+        content: '';
+        position: absolute;
+        left: 8px;
+        top: 50%;
+        transform: translateY(-50%) rotate(45deg);
+        width: 10px;
+        height: 5px;
+        border: 2px solid var(--text-color);
+        border-top: none;
+        border-right: none;
+        transition: all 0.4s ease;
     }
 
     .register-link, .forgot-password {
@@ -340,18 +378,18 @@
         font-weight: 600;
         text-decoration: none;
         position: relative;
-        transition: color 0.4s ease;
+        transition: color 0.5s ease;
     }
 
     .register-link::after, .forgot-password::after {
         content: '';
         position: absolute;
         width: 0;
-        height: 2px;
-        bottom: -2px;
+        height: 3px;
+        bottom: -4px;
         left: 0;
         background: var(--secondary-color);
-        transition: width 0.3s ease;
+        transition: width 0.5s ease;
     }
 
     .register-link:hover, .forgot-password:hover {
@@ -362,125 +400,169 @@
         width: 100%;
     }
 
+    .contrast-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.4s ease;
+    }
+
+    .contrast-toggle:hover {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .contrast-toggle svg {
+        width: 20px;
+        height: 20px;
+        fill: var(--text-color);
+    }
+
+    .high-contrast {
+        --card-bg: rgba(0, 0, 0, 0.9);
+        --text-color: #ffffff;
+        --background-dark: #000000;
+        --background-light: #111111;
+        filter: contrast(150%) brightness(120%);
+    }
+
     .error-message {
         color: #ff4d4d;
-        font-size: 0.9rem;
-        margin-top: 8px;
+        font-size: 1.1rem;
+        margin-top: 12px;
         display: none;
-        animation: shake 0.4s ease;
+        animation: shake 0.5s ease;
     }
 
     @keyframes shake {
         0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-8px); }
-        75% { transform: translateX(8px); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
     }
 
     .form-text {
-        color: rgba(255, 255, 255, 0.5);
-        font-size: 0.9rem;
-        margin-top: 8px;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 1.1rem;
+        margin-top: 12px;
     }
 
-    /* Mobile Optimization */
-    @media (max-width: 576px) {
+    .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.4);
+        margin: 2.5rem 0;
+        opacity: 0;
+        transform: translateY(40px);
+        animation: elasticSlide 1s ease forwards;
+        animation-delay: calc(0.4s * var(--i));
+    }
+
+    .divider::before,
+    .divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .divider span {
+        padding: 0 15px;
+        font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
         .login-container {
-            padding: 10px;
-            width: 95%;
-        }
-        .login-card {
-            border-radius: 20px;
-        }
-        .card-header {
             padding: 20px;
         }
-        .card-header h2 {
-            font-size: 1.8rem;
-            letter-spacing: 1.5px;
-        }
         .card-body {
-            padding: 30px 20px;
+            padding: 50px;
         }
-        .form-group {
-            margin-bottom: 2rem;
+        .card-header h2 {
+            font-size: 2.5rem;
         }
         .form-control {
-            padding: 12px 12px 12px 50px;
-            font-size: 1rem;
-            border-radius: 10px;
-        }
-        .form-label {
-            top: 12px;
-            left: 50px;
-            font-size: 0.9rem;
-        }
-        .form-control:focus + .form-label,
-        .form-control:not(:placeholder-shown) + .form-label {
-            top: -20px;
-            left: 10px;
-            font-size: 0.7rem;
-        }
-        .input-group-text {
-            left: 10px;
+            padding: 16px 16px 16px 70px;
             font-size: 1.2rem;
         }
-        .password-toggle {
-            right: 10px;
+        .input-group-text {
+            left: 25px;
+            font-size: 1.4rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .card-body {
+            padding: 40px;
+        }
+        .card-header h2 {
+            font-size: 2rem;
+        }
+        .form-control {
+            padding: 14px 14px 14px 60px;
             font-size: 1.1rem;
         }
-        .btn-primary {
-            padding: 14px;
-            font-size: 1rem;
-            border-radius: 10px;
-        }
-        .form-check-label {
-            padding-left: 30px;
-            font-size: 0.9rem;
-        }
-        .form-check-label::before {
-            width: 18px;
-            height: 18px;
-        }
-        .form-check-label::after {
-            left: 5px;
-            font-size: 10px;
-        }
-        .error-message, .form-text, .password-strength {
-            font-size: 0.8rem;
+        .input-group-text {
+            left: 20px;
+            font-size: 1.3rem;
         }
     }
 </style>
-<div id="particles-js"></div>
-<div class="background-overlay"></div>
+<canvas id="three-canvas"></canvas>
+<div class="contrast-toggle" aria-label="Alternar modo de alto contraste" onclick="toggleContrast()">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6V6z"/></svg>
+</div>
 <div class="login-container">
     <div class="login-card">
         <div class="card-header">
-            <h2>Accede a GarBotGPT</h2>
+            <h2>
+                <span>A</span><span>c</span><span>c</span><span>e</span><span>d</span><span>e</span>
+                <span> </span>
+                <span>a</span>
+                <span> </span>
+                <span>G</span><span>a</span><span>r</span><span>B</span><span>o</span><span>t</span><span>G</span><span>P</span><span>T</span>
+            </h2>
         </div>
         <div class="card-body">
-            <form method="POST" action="{% url 'login' %}" aria-label="Formulario de Inicio de Sesión" id="loginForm">
-                {% csrf_token %}
+            <form method="POST" aria-label="Formulario de Inicio de Sesión" id="loginForm">
                 <div class="form-group" style="--i: 1;">
-                    <span class="input-group-text"><i class="fas fa-user-astronaut"></i></span>
+                    <span class="input-group-text">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </span>
                     <input type="text" class="form-control" id="username" name="username" placeholder=" " required aria-describedby="usernameHelp" oninput="validateInput(this)">
                     <label for="username" class="form-label">Nombre de Usuario</label>
                     <div id="usernameHelp" class="form-text">Ingresa tu nombre de usuario registrado.</div>
                     <div class="error-message" id="usernameError">Por favor, ingresa un nombre de usuario válido.</div>
                 </div>
                 <div class="form-group" style="--i: 2;">
-                    <span class="input-group-text"><i class="fas fa-shield-alt"></i></span>
-                    <input type="password" class="form-control" id="password" name="password" placeholder=" " required aria-describedby="passwordHelp" oninput="validatePassword(this)">
+                    <span class="input-group-text">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                        </svg>
+                    </span>
+                    <input type="password" class="form-control" id="password" name="password" placeholder=" " required aria-describedby="passwordHelp" oninput="validateInput(this)">
                     <label for="password" class="form-label">Contraseña</label>
                     <button type="button" class="password-toggle" aria-label="Alternar visibilidad de contraseña" onclick="togglePassword()">
-                        <i class="fas fa-eye"></i>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="eye-icon">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                        </svg>
                     </button>
-                    <div id="passwordHelp" class="form-text">Usa una contraseña segura.</div>
-                    <div class="password-strength" id="passwordStrength"></div>
+                    <div id="passwordHelp" class="form-text">Mantén tu contraseña segura.</div>
                     <div class="error-message" id="passwordError">Por favor, ingresa una contraseña válida.</div>
                 </div>
-                <div class="form-check" style="--i: 3;">
-                    <input type="checkbox" class="form-check-input" id="rememberMe" name="remember_me">
-                    <label class="form-check-label" for="rememberMe">Recordarme</label>
+                <div class="remember-me" style="--i: 3;">
+                    <input type="checkbox" id="rememberMe" name="rememberMe">
+                    <label for="rememberMe">Recordarme</label>
                 </div>
                 <div class="d-grid mb-4" style="--i: 4;">
                     <button type="submit" class="btn btn-primary" id="loginButton" aria-label="Iniciar Sesión">
@@ -488,47 +570,115 @@
                         <div class="spinner"></div>
                     </button>
                 </div>
-                <div class="text-center">
-                    <p class="mb-2"><a href="{% url 'password_reset' %}" class="forgot-password">¿Olvidaste tu contraseña?</a></p>
-                    <p class="mb-0">¿No tienes cuenta? <a href="{% url 'register' %}" class="register-link">Regístrate ahora</a></p>
+                <div class="text-center mb-4" style="--i: 5;">
+                    <a href="/forgot-password" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                </div>
+                <div class="divider" style="--i: 6;">
+                    <span>O</span>
+                </div>
+                <div class="d-grid gap-3 mb-4" style="--i: 7;">
+                    <button type="button" class="social-btn" onclick="socialLogin('google')">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12.24 10.67v2.66h3.84c-.16 1.02-.97 1.88-2.07 2.45v2.03h3.36c1.97-1.81 3.1-4.48 3.1-7.58 0-.68-.06-1.34-.17-1.98h-8.06z"/>
+                            <path d="M12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8c2.09 0 3.99.81 5.39 2.13l1.62-1.62C16.88 2.86 14.56 2 12 2 6.48 2 2 6.48 2 12s4.48 10 10 10c2.56 0 4.88-.86 6.75-2.31l-3.36-2.03c-.9.6-2.01.94-3.15.94z"/>
+                        </svg>
+                        Iniciar con Google
+                    </button>
+                    <button type="button" class="social-btn" onclick="socialLogin('github')">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12c0 4.41 2.87 8.14 6.84 9.49.5.09.68-.22.68-.48v-1.69c-2.78.6-3.36-1.34-3.36-1.34-.46-1.16-1.12-1.47-1.12-1.47-.91-.62.07-.61.07-.61 1.01.07 1.54 1.04 1.54 1.04.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.64-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.03A9.56 9.56 0 0112 6.8c.85 0 1.71.11 2.51.33 1.91-1.3 2.75-1.03 2.75-1.03.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.94.68 1.9v2.81c0 .27.18.58.69.48A10.01 10.01 0 0022 12c0-5.52-4.48-10-10-10z"/>
+                        </svg>
+                        Iniciar con GitHub
+                    </button>
+                </div>
+                <div class="text-center" style="--i: 8;">
+                    <p class="mb-0">¿No tienes cuenta? <a href="/register" class="register-link">Regístrate aquí</a></p>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
 <script>
-    // Particle.js Configuration
-    particlesJS('particles-js', {
-        particles: {
-            number: { value: 80, density: { enable: true, value_area: 800 } },
-            color: { value: ['#ff007a', '#00d4ff', '#ffd700'] },
-            shape: { type: 'circle' },
-            opacity: { value: 0.4, random: true },
-            size: { value: 3, random: true },
-            line_linked: { enable: true, distance: 150, color: '#ffffff', opacity: 0.3, width: 1 },
-            move: { enable: true, speed: 2, direction: 'none', random: true }
-        },
-        interactivity: {
-            detect_on: 'canvas',
-            events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' }, resize: true },
-            modes: { grab: { distance: 200, line_linked: { opacity: 0.6 } }, push: { particles_nb: 4 } }
-        },
-        retina_detect: true
+    // Three.js Starfield Background
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const particleCount = 8000;
+    const particles = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    const sizes = new Float32Array(particleCount);
+
+    for (let i = 0; i < particleCount * 3; i += 3) {
+        positions[i] = (Math.random() - 0.5) * 3000;
+        positions[i + 1] = (Math.random() - 0.5) * 3000;
+        positions[i + 2] = (Math.random() - 0.5) * 3000;
+        colors[i] = Math.random();
+        colors[i + 1] = Math.random() * 0.5 + 0.5;
+        colors[i + 2] = 1;
+        sizes[i / 3] = Math.random() * 3 + 1;
+    }
+
+    particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    particles.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+    const material = new THREE.PointsMaterial({
+        size: 4,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.8,
+        sizeAttenuation: true
+    });
+
+    const particleSystem = new THREE.Points(particles, material);
+    scene.add(particleSystem);
+
+    // Add Nebula
+    const nebulaGeometry = new THREE.SphereGeometry(500, 32, 32);
+    const nebulaMaterial = new THREE.MeshBasicMaterial({
+        color: 0x1a2a5f,
+        transparent: true,
+        opacity: 0.3,
+        side: THREE.BackSide
+    });
+    const nebula = new THREE.Mesh(nebulaGeometry, nebulaMaterial);
+    scene.add(nebula);
+
+    camera.position.z = 1500;
+
+    function animate() {
+        requestAnimationFrame(animate);
+        particleSystem.rotation.y += 0.0003;
+        nebula.rotation.y += 0.0002;
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // GSAP Animations for Header Text
+    document.querySelectorAll('.card-header h2 span').forEach((span, index) => {
+        span.style.animationDelay = `${index * 0.05}s`;
     });
 
     function togglePassword() {
         const passwordInput = document.getElementById('password');
-        const toggleIcon = document.querySelector('.password-toggle i');
+        const toggleIcon = document.querySelector('.password-toggle .eye-icon');
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
-            toggleIcon.classList.remove('fa-eye');
-            toggleIcon.classList.add('fa-eye-slash');
+            toggleIcon.innerHTML = '<path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0-2.5c-.83 0-1.5-.67-1.5-1.5S11.17 10.5 12 10.5s1.5.67 1.5 1.5S12.83 13.5 12 13.5zM12 4.5c-5 0-9.27 3.11-11 7.5 1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z"/>';
         } else {
             passwordInput.type = 'password';
-            toggleIcon.classList.remove('fa-eye-slash');
-            toggleIcon.classList.add('fa-eye');
+            toggleIcon.innerHTML = '<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>';
         }
     }
 
@@ -536,38 +686,34 @@
         const errorElement = document.getElementById(input.id + 'Error');
         if (input.value.trim() === '') {
             errorElement.style.display = 'block';
+            gsap.to(input, { x: -10, repeat: 3, yoyo: true, duration: 0.1 });
         } else {
             errorElement.style.display = 'none';
         }
     }
 
-    function validatePassword(input) {
-        const strengthElement = document.getElementById('passwordStrength');
-        const password = input.value;
-        let strength = 'weak';
-        if (password.length >= 12 && /[A-Z]/.test(password) && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password)) {
-            strength = 'strong';
-        } else if (password.length >= 8 && (/[A-Z]/.test(password) || /[0-9]/.test(password))) {
-            strength = 'medium';
-        }
+    function socialLogin(provider) {
+        // Placeholder for social login
+        console.log(`Logging in with ${provider}`);
+    }
 
-        strengthElement.style.display = 'block';
-        strengthElement.className = `password-strength ${strength}`;
-        strengthElement.textContent = `Fuerza de la contraseña: ${strength === 'strong' ? 'Fuerte' : strength === 'medium' ? 'Media' : 'Débil'}`;
+    function toggleContrast() {
+        document.body.classList.toggle('high-contrast');
     }
 
     document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
         const button = document.getElementById('loginButton');
         button.classList.add('loading');
         button.disabled = true;
 
-        // Trigger vibration on mobile devices (if supported)
-        if (navigator.vibrate) {
-            navigator.vibrate(50);
-        }
+        gsap.to(button, { scale: 0.95, duration: 0.2, yoyo: true, repeat: 1 });
 
-        // Allow form to submit to Django backend
-        // No setTimeout; submission proceeds immediately
+        // Simulate form submission
+        setTimeout(() => {
+            button.classList.remove('loading');
+            button.disabled = false;
+        }, 2000);
     });
 </script>
 {% endblock %}
