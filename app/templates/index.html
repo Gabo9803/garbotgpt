@@ -17,17 +17,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #007bff;
             --secondary-color: #00d4ff;
             --gradient: linear-gradient(135deg, #007bff, #00d4ff);
-            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.1);
             --glass-border: rgba(255, 255, 255, 0.2);
-            --text-color: #212529;
-            --bg-color: #f4f7fa;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-color: #1a1a1a;
+            --bg-color: #f8fafc;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            --card-bg: rgba(255, 255, 255, 0.95);
             --accent-color: #007bff;
             --high-contrast-bg: #000;
             --high-contrast-text: #fff;
@@ -37,12 +38,12 @@
             --primary-color: #00d4ff;
             --secondary-color: #007bff;
             --gradient: linear-gradient(135deg, #00d4ff, #007bff);
-            --glass-bg: rgba(0, 0, 0, 0.3);
+            --glass-bg: rgba(0, 0, 0, 0.4);
             --glass-border: rgba(255, 255, 255, 0.1);
             --text-color: #e9ecef;
-            --bg-color: #121212;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --card-bg: rgba(0, 0, 0, 0.5);
+            --bg-color: #0f172a;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            --card-bg: rgba(0, 0, 0, 0.6);
             --accent-color: #00d4ff;
         }
 
@@ -62,53 +63,62 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-color);
             color: var(--text-color);
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
             overflow-x: hidden;
         }
 
+        /* Enhanced Navigation Bar */
         .navbar {
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(15px);
             box-shadow: var(--shadow);
-            padding: 1rem 2rem;
+            padding: 1rem 3rem;
             position: sticky;
             top: 0;
             z-index: 1000;
-            transition: background 0.3s ease;
+            transition: background 0.5s ease, transform 0.5s ease;
         }
 
         .navbar.scrolled {
             background: var(--card-bg);
+            transform: translateY(0);
         }
 
         .navbar-brand {
             font-weight: 800;
             color: #fff !important;
-            font-size: 1.75rem;
+            font-size: 2rem;
             display: flex;
             align-items: center;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s ease, color 0.4s ease;
         }
 
         .navbar-brand:hover {
-            transform: scale(1.05);
+            transform: scale(1.1) rotate(3deg);
+            color: var(--primary-color) !important;
         }
 
         .navbar-brand img {
-            height: 32px;
-            margin-right: 0.75rem;
-            transition: transform 0.3s ease;
+            height: 40px;
+            margin-right: 1rem;
+            transition: transform 0.5s ease;
+        }
+
+        .navbar-brand:hover img {
+            transform: rotate(360deg);
         }
 
         .nav-link {
             color: #fff !important;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
             position: relative;
-            transition: color 0.2s, transform 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease, transform 0.3s ease;
         }
 
         .nav-link::after {
@@ -117,9 +127,9 @@
             bottom: 0;
             left: 50%;
             width: 0;
-            height: 2px;
+            height: 3px;
             background: var(--primary-color);
-            transition: width 0.3s ease, left 0.3s ease;
+            transition: width 0.4s ease, left 0.4s ease;
         }
 
         .nav-link:hover::after {
@@ -129,30 +139,61 @@
 
         .nav-link:hover {
             color: var(--primary-color) !important;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
         }
 
-        .navbar-nav .dropdown-menu {
+        /* Mega Menu */
+        .mega-menu {
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 1rem;
+            border-radius: 15px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            position: absolute;
+            top: 100%;
+            z-index: 1000;
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
 
-        .dropdown-item {
-            color: #fff;
-            transition: background 0.2s, color 0.2s;
+        .nav-item:hover .mega-menu {
+            display: block;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
 
-        .dropdown-item:hover {
-            background: var(--primary-color);
+        .mega-menu .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .mega-menu h4 {
             color: #fff;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .mega-menu a {
+            color: #ddd;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .mega-menu a:hover {
+            color: var(--primary-color);
+            transform: translateX(5px);
         }
 
         .search-bar {
             position: relative;
-            max-width: 200px;
+            max-width: 250px;
+            transition: all 0.4s ease;
         }
 
         .search-bar input {
@@ -160,29 +201,74 @@
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             color: var(--text-color);
-            padding: 0.5rem 2.5rem 0.5rem 1rem;
+            padding: 0.75rem 3rem 0.75rem 1.5rem;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .search-bar input:focus {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--primary-color);
         }
 
         .search-bar button {
             position: absolute;
-            right: 0.5rem;
+            right: 1rem;
             top: 50%;
             transform: translateY(-50%);
             background: none;
             border: none;
             color: var(--text-color);
+            transition: color 0.3s ease, transform 0.3s ease;
         }
 
+        .search-bar button:hover {
+            color: var(--primary-color);
+            transform: translateY(-50%) scale(1.3);
+        }
+
+        /* Disabled API Link */
+        .disabled-link {
+            color: #aaa !important;
+            cursor: not-allowed;
+            position: relative;
+            pointer-events: none;
+        }
+
+        .disabled-link::before {
+            content: '\f023';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-right: 0.5rem;
+            color: #aaa;
+        }
+
+        .disabled-link:hover::after {
+            content: 'Disponible Próximamente';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-color);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        /* Hero Section with Parallax */
         .hero-section {
             position: relative;
             background: var(--gradient);
             color: #fff;
-            padding: 12rem 2rem 10rem;
+            padding: 14rem 2rem 12rem;
             text-align: center;
             overflow: hidden;
             min-height: 100vh;
             display: flex;
             align-items: center;
+            transition: background 0.6s ease;
         }
 
         #webgl-bg {
@@ -192,71 +278,116 @@
             width: 100%;
             height: 100%;
             z-index: 0;
+            transition: opacity 0.6s ease;
         }
 
         .hero-content {
             position: relative;
             z-index: 1;
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
         .hero-content h1 {
-            font-size: 5rem;
-            font-weight: 900;
-            margin-bottom: 2rem;
-            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            font-size: 5.5rem;
+            font-weight: 800;
+            margin-bottom: 2.5rem;
+            text-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
             line-height: 1.1;
+            transition: transform 0.6s ease, text-shadow 0.6s ease;
+        }
+
+        .hero-content h1:hover {
+            transform: scale(1.05);
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
         }
 
         .hero-content p {
-            font-size: 1.75rem;
-            margin-bottom: 3rem;
+            font-size: 2rem;
+            margin-bottom: 3.5rem;
             font-weight: 300;
+            transition: transform 0.6s ease;
+        }
+
+        .hero-content p:hover {
+            transform: translateY(-5px);
         }
 
         .btn-gradient {
             background: var(--gradient);
             color: #fff;
             border: none;
-            padding: 1rem 3rem;
+            padding: 1.2rem 3.5rem;
             border-radius: 50px;
             font-weight: 700;
-            transition: transform 0.3s, box-shadow 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn-gradient:hover::before {
+            left: 100%;
         }
 
         .btn-gradient:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
         }
 
         .chat-demo, .interactive-demo {
-            max-width: 800px;
-            margin: 4rem auto;
+            max-width: 900px;
+            margin: 5rem auto;
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2.5rem;
+            border-radius: 25px;
+            padding: 3rem;
             box-shadow: var(--shadow);
+            transition: transform 0.6s ease, box-shadow 0.6s ease;
+        }
+
+        .chat-demo:hover, .interactive-demo:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
         }
 
         .chat-demo .message, .interactive-demo .message {
-            margin-bottom: 1.5rem;
-            padding: 1.25rem;
-            border-radius: 12px;
+            margin-bottom: 1.75rem;
+            padding: 1.5rem;
+            border-radius: 15px;
             position: relative;
             opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .chat-demo .message.show, .interactive-demo .message.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .chat-demo .user-message, .interactive-demo .user-message {
             background: #e3f2fd;
             margin-left: 25%;
+            transform: translateY(30px);
         }
 
         .chat-demo .ai-message, .interactive-demo .ai-message {
             background: #f5f5f5;
             margin-right: 25%;
+            transform: translateY(30px);
         }
 
         [data-theme="dark"] .chat-demo .user-message, [data-theme="dark"] .interactive-demo .user-message {
@@ -268,101 +399,156 @@
         }
 
         .features-section, .pricing-section, .blog-section {
-            padding: 8rem 2rem;
+            padding: 10rem 2rem;
             background: var(--bg-color);
+            position: relative;
+            overflow: hidden;
+            transition: background 0.6s ease;
+        }
+
+        .features-section::before, .pricing-section::before, .blog-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            opacity: 0.05;
+            z-index: 0;
         }
 
         .feature-carousel {
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
         }
 
         .feature-card, .pricing-card, .blog-card {
             background: var(--card-bg);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2.5rem;
+            border-radius: 25px;
+            padding: 3rem;
             text-align: center;
-            transition: transform 0.4s, box-shadow 0.4s;
+            transition: transform 0.5s ease, box-shadow 0.5s ease, background 0.5s ease;
             height: 100%;
             position: relative;
             overflow: hidden;
+            z-index: 1;
         }
 
         .feature-card:hover, .pricing-card:hover, .blog-card:hover {
-            transform: translateY(-15px);
-            box-shadow: var(--shadow);
+            transform: translateY(-20px) scale(1.05);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        [data-theme="dark"] .feature-card:hover, [data-theme="dark"] .pricing-card:hover, [data-theme="dark"] .blog-card:hover {
+            background: rgba(0, 0, 0, 0.7);
         }
 
         .feature-card i, .pricing-card i {
-            font-size: 3.5rem;
+            font-size: 4rem;
             color: var(--primary-color);
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            transition: transform 0.4s ease, color 0.4s ease;
+        }
+
+        .feature-card:hover i, .pricing-card:hover i {
+            transform: scale(1.3) rotate(5deg);
+            color: var(--secondary-color);
         }
 
         .feature-card h3, .pricing-card h3, .blog-card h3 {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            transition: color 0.4s ease;
+        }
+
+        .feature-card:hover h3, .pricing-card:hover h3, .blog-card:hover h3 {
+            color: var(--primary-color);
         }
 
         .use-cases-section {
-            padding: 8rem 2rem;
+            padding: 10rem 2rem;
             background: var(--gradient);
             color: #fff;
+            position: relative;
+            transition: background 0.6s ease;
         }
 
         .use-case-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2.5rem;
-            transition: transform 0.3s;
+            border-radius: 25px;
+            padding: 3rem;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            z-index: 1;
         }
 
         .use-case-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-15px) rotate(2deg);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
         }
 
         .stats-section {
-            padding: 6rem 2rem;
+            padding: 8rem 2rem;
             background: var(--bg-color);
             text-align: center;
+            position: relative;
+            transition: background 0.6s ease;
         }
 
         .stat-item {
-            font-size: 3.5rem;
+            font-size: 4rem;
             font-weight: 800;
             color: var(--primary-color);
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            transition: transform 0.6s ease, color 0.6s ease;
+        }
+
+        .stat-item:hover {
+            transform: scale(1.15);
+            color: var(--secondary-color);
         }
 
         .testimonials-section {
-            padding: 8rem 2rem;
+            padding: 10rem 2rem;
             background: var(--bg-color);
+            position: relative;
+            transition: background 0.6s ease;
         }
 
         .testimonial-card {
             background: var(--card-bg);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2.5rem;
+            border-radius: 25px;
+            padding: 3rem;
             text-align: center;
             height: 100%;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            z-index: 1;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
         }
 
         .timeline-section {
-            padding: 8rem 2rem;
+            padding: 10rem 2rem;
             background: var(--gradient);
             color: #fff;
+            position: relative;
+            transition: background 0.6s ease;
         }
 
         .timeline {
             position: relative;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
@@ -372,64 +558,89 @@
             top: 0;
             bottom: 0;
             left: 50%;
-            width: 4px;
+            width: 5px;
             background: var(--primary-color);
             transform: translateX(-50%);
+            transition: background 0.6s ease;
         }
 
         .timeline-item {
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
             position: relative;
             width: 50%;
-            padding: 1.5rem;
+            padding: 2rem;
+            transition: transform 0.6s ease, opacity 0.6s ease;
+            opacity: 0;
+        }
+
+        .timeline-item.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .timeline-item.left {
             left: 0;
             text-align: right;
+            transform: translateX(-30px);
         }
 
         .timeline-item.right {
             left: 50%;
             text-align: left;
+            transform: translateX(30px);
         }
 
         .timeline-item::before {
             content: '';
             position: absolute;
-            top: 1.5rem;
-            width: 20px;
-            height: 20px;
+            top: 2rem;
+            width: 25px;
+            height: 25px;
             background: var(--primary-color);
             border-radius: 50%;
             z-index: 1;
+            transition: transform 0.4s ease, background 0.4s ease;
+        }
+
+        .timeline-item:hover::before {
+            transform: scale(1.6);
+            background: var(--secondary-color);
         }
 
         .timeline-item.left::before {
-            right: -10px;
+            right: -12.5px;
         }
 
         .timeline-item.right::before {
-            left: -10px;
+            left: -12.5px;
         }
 
         .faq-section {
-            padding: 8rem 2rem;
+            padding: 10rem 2rem;
             background: var(--bg-color);
+            position: relative;
+            transition: background 0.6s ease;
         }
 
         .accordion-item {
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .accordion-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
         }
 
         .accordion-button {
             background: transparent;
             color: var(--text-color);
             font-weight: 600;
+            transition: background 0.4s ease, color 0.4s ease;
         }
 
         .accordion-button:not(.collapsed) {
@@ -437,15 +648,22 @@
             color: #fff;
         }
 
+        .accordion-button:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
         .newsletter-section {
-            padding: 6rem 2rem;
+            padding: 8rem 2rem;
             background: var(--gradient);
             color: #fff;
             text-align: center;
+            position: relative;
+            transition: background 0.6s ease;
         }
 
         .newsletter-form {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
         }
 
@@ -454,87 +672,120 @@
             border: 1px solid var(--glass-border);
             background: var(--glass-bg);
             color: var(--text-color);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .newsletter-form .form-control:focus {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--primary-color);
         }
 
         .newsletter-form .btn {
             border-radius: 0 50px 50px 0;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .newsletter-form .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
         }
 
         .community-section {
-            padding: 8rem 2rem;
+            padding: 10rem 2rem;
             background: var(--bg-color);
+            position: relative;
+            transition: background 0.6s ease;
         }
 
         .community-card {
             background: var(--card-bg);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2.5rem;
+            border-radius: 25px;
+            padding: 3rem;
             text-align: center;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            z-index: 1;
+        }
+
+        .community-card:hover {
+            transform: translateY(-15px) rotate(2deg);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
         }
 
         .sticky-sidebar {
             position: fixed;
             top: 50%;
-            right: 20px;
+            right: 30px;
             transform: translateY(-50%);
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 1rem;
+            border-radius: 15px;
+            padding: 1.5rem;
             z-index: 1000;
+            transition: transform 0.6s ease, opacity 0.6s ease;
+        }
+
+        .sticky-sidebar:hover {
+            transform: translateY(-50%) scale(1.05);
+            opacity: 0.95;
         }
 
         .sticky-sidebar button, .sticky-sidebar a {
             display: block;
-            margin-bottom: 0.5rem;
-            padding: 0.5rem;
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
             color: var(--text-color);
             text-decoration: none;
+            transition: color 0.3s ease, transform 0.3s ease;
         }
 
         .sticky-sidebar button:hover, .sticky-sidebar a:hover {
             color: var(--primary-color);
+            transform: translateX(8px);
         }
 
         footer {
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            padding: 4rem 2rem;
+            backdrop-filter: blur(15px);
+            padding: 5rem 2rem;
             border-top: 1px solid var(--glass-border);
+            position: relative;
+            transition: background 0.6s ease;
         }
 
         .footer-links a {
             color: var(--text-color);
             text-decoration: none;
-            margin: 0 1rem;
-            transition: color 0.2s;
+            margin: 0 1.5rem;
+            transition: color 0.3s ease, transform 0.3s ease;
         }
 
         .footer-links a:hover {
             color: var(--primary-color);
+            transform: translateY(-3px);
         }
 
         .social-icons a {
-            font-size: 1.75rem;
+            font-size: 2rem;
             color: var(--text-color);
-            margin: 0 0.75rem;
-            transition: color 0.2s;
+            margin: 0 1rem;
+            transition: color 0.3s ease, transform 0.3s ease;
         }
 
         .social-icons a:hover {
             color: var(--primary-color);
+            transform: scale(1.3) rotate(10deg);
         }
 
         @media (max-width: 1200px) {
             .hero-content h1 {
-                font-size: 3.5rem;
+                font-size: 4rem;
             }
 
             .hero-content p {
-                font-size: 1.5rem;
+                font-size: 1.75rem;
             }
 
             .sticky-sidebar {
@@ -542,50 +793,66 @@
             }
 
             .search-bar {
-                max-width: 150px;
+                max-width: 200px;
+            }
+
+            .mega-menu {
+                width: 90%;
             }
         }
 
         @media (max-width: 768px) {
             .hero-content h1 {
-                font-size: 2.5rem;
+                font-size: 3rem;
             }
 
             .hero-content p {
-                font-size: 1.25rem;
-            }
-
-            .navbar-brand {
                 font-size: 1.5rem;
             }
 
+            .navbar-brand {
+                font-size: 1.75rem;
+            }
+
+            .navbar {
+                padding: 1rem 1.5rem;
+            }
+
             .feature-card, .use-case-card, .testimonial-card, .pricing-card, .blog-card {
-                margin-bottom: 2rem;
+                margin-bottom: 3rem;
             }
 
             .timeline::before {
-                left: 20px;
+                left: 25px;
             }
 
             .timeline-item {
                 width: 100%;
                 left: 0 !important;
                 text-align: left;
-                padding-left: 40px;
+                padding-left: 50px;
             }
 
             .timeline-item::before {
-                left: 10px !important;
+                left: 12.5px !important;
             }
 
             .search-bar {
                 display: none;
             }
+
+            .mega-menu {
+                display: none !important;
+            }
+
+            .nav-link {
+                padding: 0.5rem 1rem;
+            }
         }
     </style>
 </head>
 <body data-authenticated="{{ authenticated | lower }}">
-    <!-- Navigation Bar -->
+    <!-- Professional Navigation Bar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ url_for('index') }}">
@@ -599,26 +866,103 @@
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item">
                         <a class="nav-link" href="#features">Características</a>
+                        <div class="mega-menu">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h4>Funcionalidades Clave</h4>
+                                    <a href="#features">IA Avanzada</a>
+                                    <a href="#features">Personalización</a>
+                                    <a href="#features">Diseño Moderno</a>
+                                </div>
+                                <div class="col-md-4">
+                                    <h4>Beneficios</h4>
+                                    <a href="#features">Seguridad</a>
+                                    <a href="#features">Multilingüe</a>
+                                    <a href="#features">Rápido</a>
+                                </div>
+                                <div class="col-md-4">
+                                    <h4>Explorar</h4>
+                                    <a href="#use-cases">Casos de Uso</a>
+                                    <a href="#pricing">Precios</a>
+                                    <a href="#faq">FAQ</a>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#use-cases">Casos de Uso</a>
+                        <div class="mega-menu">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h4>Industrias</h4>
+                                    <a href="#use-cases">Educación</a>
+                                    <a href="#use-cases">Productividad</a>
+                                    <a href="#use-cases">Creatividad</a>
+                                </div>
+                                <div class="col-md-4">
+                                    <h4>Aplicaciones</h4>
+                                    <a href="#use-cases">Automatización</a>
+                                    <a href="#use-cases">Aprendizaje</a>
+                                    <a href="#use-cases">Innovación</a>
+                                </div>
+                                <div class="col-md-4">
+                                    <h4>Historias</h4>
+                                    <a href="#testimonials">Testimonios</a>
+                                    <a href="#blog">Blog</a>
+                                    <a href="#community">Comunidad</a>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#pricing">Precios</a>
+                        <div class="mega-menu">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h4>Planes</h4>
+                                    <a href="#pricing">Gratuito</a>
+                                    <a href="#pricing">SuperGarBotGPT</a>
+                                    <a href="#pricing">Empresarial</a>
+                                </div>
+                                <div class="col-md-4">
+                                    <h4>Detalles</h4>
+                                    <a href="#pricing">Características</a>
+                                    <a href="#pricing">Cuotas</a>
+                                    <a href="#pricing">Soporte</a>
+                                </div>
+                                <div class="col-md-4">
+                                    <h4>Acción</h4>
+                                    <a href="{{ url_for('register') }}">Comenzar Gratis</a>
+                                    <a href="https://x.ai/garbotgpt">Ver SuperGarBotGPT</a>
+                                    <a href="https://x.ai/api" class="disabled-link">API Disponible Próximamente</a>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#timeline">Historia</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Más
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="moreDropdown">
-                            <li><a class="dropdown-item" href="#faq">FAQ</a></li>
-                            <li><a class="dropdown-item" href="#blog">Blog</a></li>
-                            <li><a class="dropdown-item" href="#community">Comunidad</a></li>
-                            <li><a class="dropdown-item" href="https://x.ai/api">API</a></li>
-                        </ul>
+                        <a class="nav-link" href="#community">Comunidad</a>
+                        <div class="mega-menu">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h4>Conectar</h4>
+                                    <a href="#community">Foros</a>
+                                    <a href="#community">Eventos</a>
+                                    <a href="#community">API Disponible Próximamente</a>
+                                </div>
+                                <div class="col-md-4">
+                                    <h4>Recursos</h4>
+                                    <a href="#blog">Blog</a>
+                                    <a href="#faq">FAQ</a>
+                                    <a href="#timeline">Historia</a>
+                                </div>
+                                <div class="col-md-4">
+                                    <h4>Síguenos</h4>
+                                    <a href="https://x.com">X</a>
+                                    <a href="https://linkedin.com">LinkedIn</a>
+                                    <a href="https://github.com">GitHub</a>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                     <li class="nav-item search-bar">
                         <input type="text" class="form-control" placeholder="Buscar..." aria-label="Buscar">
@@ -823,14 +1167,14 @@
                     <div class="col-lg-4">
                         <div class="pricing-card">
                             <i class="bi bi-star-fill"></i>
-                            <h3>SuperGrok</h3>
+                            <h3>SuperGarBotGPT</h3>
                             <p>Ideal para usuarios frecuentes con mayores cuotas.</p>
                             <ul class="list-unstyled">
                                 <li>Acceso completo a GPT-4</li>
                                 <li>1000 mensajes/día</li>
                                 <li>Soporte prioritario</li>
                             </ul>
-                            <a href="https://x.ai/grok" class="btn btn-gradient mt-3">Ver Detalles</a>
+                            <a href="https://x.ai/garbotgpt" class="btn btn-gradient mt-3">Ver Detalles</a>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -839,11 +1183,11 @@
                             <h3>Empresarial</h3>
                             <p>Diseñado para equipos con necesidades avanzadas.</p>
                             <ul class="list-unstyled">
-                                <li>API personalizada</li>
+                                <li>API Disponible Próximamente personalizada</li>
                                 <li>Mensajes ilimitados</li>
                                 <li>Soporte dedicado</li>
                             </ul>
-                            <a href="https://x.ai/api" class="btn btn-gradient mt-3">Contactar</a>
+                            <a href="https://x.ai/api" class="btn btn-gradient mt-3 disabled-link">Contactar</a>
                         </div>
                     </div>
                 </div>
@@ -954,7 +1298,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="blog-card">
-                            <img src="https://via.placeholder.com/300x200" alt="Blog post 3" class="img-fluid mb-3">
+                            <img src="https://via.placeholder.com/300/200" alt="Blog post 3" class="img-fluid mb-3">
                             <h3>IA y Educación: Transformando el Aprendizaje</h3>
                             <p>Descubre cómo GarBotGPT está revolucionando la educación.</p>
                             <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
@@ -1010,7 +1354,7 @@
                         </h2>
                         <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faq-accordion">
                             <div class="accordion-body">
-                                Ofrecemos un plan gratuito con cuotas limitadas. Visita <a href="https://x.ai/grok">x.ai/grok</a> para más detalles sobre planes premium.
+                                Ofrecemos un plan gratuito con cuotas limitadas. Visita <a href="https://x.ai/garbotgpt">x.ai/garbotgpt</a> para más detalles sobre planes premium.
                             </div>
                         </div>
                     </div>
@@ -1051,9 +1395,9 @@
                     </div>
                     <div class="col-md-4">
                         <div class="community-card">
-                            <h3>API</h3>
-                            <p>Explora nuestra API para integraciones personalizadas.</p>
-                            <a href="https://x.ai/api" class="btn btn-gradient btn-sm">Documentación API</a>
+                            <h3>API Disponible Próximamente</h3>
+                            <p>Explora nuestra API Disponible Próximamente para integraciones personalizadas.</p>
+                            <a href="https://x.ai/api" class="btn btn-gradient btn-sm disabled-link">Documentación API Disponible Próximamente</a>
                         </div>
                     </div>
                 </div>
@@ -1087,7 +1431,7 @@
                         <a href="{{ url_for('index') }}">Inicio</a>
                         <a href="{{ url_for('chat') }}">Chat</a>
                         <a href="{{ url_for('settings') }}">Configuración</a>
-                        <a href="https://x.ai/api">API</a>
+                        <a href="https://x.ai/api" class="disabled-link">API Disponible Próximamente</a>
                         <a href="#faq">FAQ</a>
                         <a href="#pricing">Precios</a>
                     </div>
@@ -1145,8 +1489,9 @@
                     opacity: 1,
                     y: 0,
                     duration: 1,
-                    delay: index * 2,
-                    ease: 'power2.out'
+                    delay: index * 0.5,
+                    ease: 'power2.out',
+                    onComplete: () => msg.classList.add('show')
                 });
             });
 
@@ -1161,13 +1506,26 @@
                     userMessage.className = 'message user-message';
                     userMessage.textContent = userText;
                     demoMessages.appendChild(userMessage);
-                    gsap.fromTo(userMessage, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 });
+                    gsap.fromTo(userMessage, { opacity: 0, y: 50 }, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1,
+                        ease: 'power2.out',
+                        onComplete: () => userMessage.classList.add('show')
+                    });
 
                     const aiMessage = document.createElement('div');
                     aiMessage.className = 'message ai-message';
                     aiMessage.textContent = `¡Entendido! Tu mensaje fue: "${userText}". Estoy simulando una respuesta de IA para esta demo.`;
                     demoMessages.appendChild(aiMessage);
-                    gsap.fromTo(aiMessage, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1, delay: 0.5 });
+                    gsap.fromTo(aiMessage, { opacity: 0, y: 50 }, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1,
+                        delay: 0.5,
+                        ease: 'power2.out',
+                        onComplete: () => aiMessage.classList.add('show')
+                    });
 
                     demoInput.value = '';
                     demoMessages.scrollTop = demoMessages.scrollHeight;
@@ -1198,8 +1556,10 @@
                 gsap.from(section.children, {
                     opacity: 0,
                     y: 100,
+                    scale: 0.95,
                     duration: 1,
                     stagger: 0.2,
+                    ease: 'power3.out',
                     scrollTrigger: {
                         trigger: section,
                         start: 'top 80%',
@@ -1207,6 +1567,35 @@
                         toggleActions: 'play none none reverse'
                     }
                 });
+            });
+
+            // Timeline animations
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            timelineItems.forEach(item => {
+                gsap.fromTo(item, { opacity: 0, x: item.classList.contains('left') ? -50 : 50 }, {
+                    opacity: 1,
+                    x: 0,
+                    duration: 1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse',
+                        onEnter: () => item.classList.add('show')
+                    }
+                });
+            });
+
+            // Parallax effect for hero section
+            gsap.to('#webgl-bg', {
+                y: 100,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.hero-section',
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true
+                }
             });
 
             // Placeholder for WebGL background
