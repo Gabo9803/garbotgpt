@@ -5,20 +5,20 @@
 <div class="chat-page container-fluid d-flex justify-content-center">
     <div class="chat-container flex-grow-1" id="chat-container-main" role="main" aria-label="Interfaz de chat">
         <!-- Encabezado del Chat -->
-        <div class="chat-header d-flex justify-content-between align-items-center p-3 border-bottom">
-            <div class="d-flex align-items-center">
-                <button id="sidebar-toggle" class="btn btn-gradient btn-sm me-2" data-bs-toggle="modal" data-bs-target="#sidebarModal" data-bs-toggle="tooltip" title="Abrir Menú" aria-label="Abrir menú lateral">
-                    <i class="bi bi-list me-1"></i><span>Menú</span>
+        <div class="chat-header d-flex justify-content-between align-items-center p-3 border-bottom bg-glass">
+            <div class="d-flex align-items-center gap-2">
+                <button id="sidebar-toggle" class="btn btn-gradient btn-sm" data-bs-toggle="modal" data-bs-target="#sidebarModal" title="Abrir Menú" aria-label="Abrir menú lateral">
+                    <i class="bi bi-list"></i>
                 </button>
-                <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT Logo" class="me-2" style="height: 30px;" aria-hidden="true">
-                <h2 class="mb-0 flex-grow-1">Chatear con GarBotGPT</h2>
+                <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT Logo" class="logo" style="height: 32px;" aria-hidden="true">
+                <h2 class="mb-0 fw-bold">GarBotGPT</h2>
             </div>
-            <div class="d-flex align-items-center">
-                <span id="server-status" class="badge bg-success me-2" role="status" aria-live="polite">Conectado</span>
-                <button id="theme-toggle" class="btn btn-gradient btn-sm me-2" data-bs-toggle="tooltip" title="Alternar tema claro/oscuro" aria-label="Alternar tema">
+            <div class="d-flex align-items-center gap-2">
+                <span id="server-status" class="badge bg-success" role="status" aria-live="polite">Conectado</span>
+                <button id="theme-toggle" class="btn btn-gradient btn-sm" title="Alternar tema claro/oscuro" aria-label="Alternar tema">
                     <i class="bi bi-moon-stars-fill"></i>
                 </button>
-                <button id="fullscreen-toggle" class="btn btn-gradient btn-sm" data-bs-toggle="tooltip" title="Alternar pantalla completa" aria-label="Alternar pantalla completa">
+                <button id="fullscreen-toggle" class="btn btn-gradient btn-sm" title="Alternar pantalla completa" aria-label="Alternar pantalla completa">
                     <i class="bi bi-arrows-fullscreen"></i>
                 </button>
             </div>
@@ -29,34 +29,23 @@
             {% if history|length == 0 %}
                 <!-- Carrusel de Sugerencias Iniciales -->
                 <div class="suggestions glass text-center animate__animated animate__fadeIn" role="region" aria-label="Sugerencias iniciales">
-                    <p class="mb-3">¡Empieza a chatear! Aquí tienes algunas sugerencias:</p>
+                    <p class="mb-3 fs-5">¡Hola! ¿En qué puedo ayudarte hoy? Prueba con estas ideas:</p>
                     <div id="suggestions-carousel" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Explica un concepto de programación">
-                                    <i class="bi bi-code-slash me-1"></i>Concepto de Programación
-                                </button>
-                            </div>
-                            <div class="carousel-item">
-                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Cuéntame sobre inteligencia artificial">
-                                    <i class="bi bi-robot me-1"></i>Inteligencia Artificial
-                                </button>
-                            </div>
-                            <div class="carousel-item">
-                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Escribe un poema corto">
-                                    <i class="bi bi-pen me-1"></i>Escribir Poema
-                                </button>
-                            </div>
-                            <div class="carousel-item">
-                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Ayúdame con una ecuación matemática">
-                                    <i class="bi bi-calculator me-1"></i>Ayuda Matemática
-                                </button>
-                            </div>
-                            <div class="carousel-item">
-                                <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="Cuéntame sobre la historia de Roma">
-                                    <i class="bi bi-book me-1"></i>Historia de Roma
-                                </button>
-                            </div>
+                            {% set suggestions = [
+                                {"icon": "bi-code-slash", "text": "Explica un concepto de programación"},
+                                {"icon": "bi-robot", "text": "Cuéntame sobre inteligencia artificial"},
+                                {"icon": "bi-pen", "text": "Escribe un poema corto"},
+                                {"icon": "bi-calculator", "text": "Ayúdame con una ecuación matemática"},
+                                {"icon": "bi-book", "text": "Cuéntame sobre la historia de Roma"}
+                            ] %}
+                            {% for suggestion in suggestions %}
+                                <div class="carousel-item{% if loop.first %} active{% endif %}">
+                                    <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="{{ suggestion.text }}">
+                                        <i class="bi {{ suggestion.icon }} me-1"></i>{{ suggestion.text }}
+                                    </button>
+                                </div>
+                            {% endfor %}
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#suggestions-carousel" data-bs-slide="prev" aria-label="Anterior sugerencia">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -70,39 +59,56 @@
             <!-- Historial de Mensajes -->
             {% for entry in history %}
                 <div class="message user-message animate__animated animate__fadeIn mb-3" role="article">
-                    <strong>Tú:</strong>
-                    <div class="message-content p-2 rounded shadow-sm">{{ entry.message | safe }}</div>
+                    <div class="d-flex align-items-start gap-2">
+                        <i class="bi bi-person-circle fs-4"></i>
+                        <div class="message-content p-3 rounded shadow-sm bg-light">
+                            <strong>Tú:</strong> {{ entry.message | safe }}
+                        </div>
+                    </div>
                 </div>
                 <div class="message ai-message animate__animated animate__fadeIn mb-3" role="article">
-                    <strong>GarBotGPT:</strong>
-                    <div class="message-content p-2 rounded shadow-sm markdown-body">{{ entry.response | safe }}</div>
-                    <button class="copy-btn btn btn-sm btn-outline-secondary mt-1" data-bs-toggle="tooltip" title="Copiar respuesta" data-text="{{ entry.response }}" aria-label="Copiar respuesta">Copiar</button>
+                    <div class="d-flex align-items-start gap-2">
+                        <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT" class="logo" style="height: 24px;">
+                        <div class="message-content p-3 rounded shadow-sm markdown-body bg-glass">
+                            <strong>GarBotGPT:</strong> {{ entry.response | safe }}
+                            <button class="copy-btn btn btn-sm btn-outline-secondary mt-2" title="Copiar respuesta" data-text="{{ entry.response }}" aria-label="Copiar respuesta">
+                                <i class="bi bi-clipboard"></i> Copiar
+                            </button>
+                        </div>
+                    </div>
                 </div>
             {% endfor %}
             <!-- Indicador de Respondiendo -->
             <div id="responding-indicator" class="message ai-message animate__animated animate__fadeIn glass d-none mb-3" role="status">
-                <strong>GarBotGPT:</strong>
-                <div class="message-content typing-effect p-2 rounded shadow-sm">Respondiendo<span class="typing-dots"></span></div>
+                <div class="d-flex align-items-center gap-2">
+                    <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT" class="logo" style="height: 24px;">
+                    <div class="message-content typing-effect p-3 rounded shadow-sm">Respondiendo<span class="typing-dots"></span></div>
+                </div>
             </div>
         </div>
 
         <!-- Pie del Chat -->
-        <div class="chat-footer p-3 border-top">
+        <div class="chat-footer p-3 border-top bg-glass">
             <div class="input-group mb-2 position-relative">
-                <input type="text" id="message" class="form-control rounded-pill" placeholder="Escribe tu mensaje..." autocomplete="off" aria-label="Campo de mensaje">
-                <button class="btn btn-primary btn-gradient btn-lg" onclick="sendMessage()" data-bs-toggle="tooltip" title="Enviar mensaje" aria-label="Enviar mensaje">
-                    <i class="bi bi-send-fill"></i>
-                </button>
-                <button id="voice-btn" class="btn btn-gradient btn-lg" data-bs-toggle="tooltip" title="Entrada por voz" aria-label="Entrada por voz">
-                    <i class="bi bi-mic-fill"></i>
-                </button>
-                <div id="suggestions-dropdown" class="suggestions-dropdown glass d-none" role="listbox" aria-label="Sugerencias de prompts"></div>
+                <input type="text" id="message" class="form-control rounded-pill pe-5" placeholder="Escribe tu mensaje..." autocomplete="off" aria-label="Campo de mensaje">
+                <div class="input-group-append position-absolute end-0 top-50 translate-middle-y pe-2 d-flex gap-1">
+                    <button id="voice-btn" class="btn btn-gradient btn-sm" title="Entrada por voz" aria-label="Entrada por voz">
+                        <i class="bi bi-mic-fill"></i>
+                    </button>
+                    <button class="btn btn-primary btn-gradient btn-sm" onclick="sendMessage()" title="Enviar mensaje" aria-label="Enviar mensaje">
+                        <i class="bi bi-send-fill"></i>
+                    </button>
+                </div>
             </div>
-            <div class="chat-options d-flex justify-content-between align-items-center">
+            <div id="suggestions-dropdown" class="suggestions-dropdown glass d-none" role="listbox" aria-label="Sugerencias de prompts"></div>
+            <div class="chat-options d-flex justify-content-between align-items-center mt-2">
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="send-on-enter" checked aria-label="Enviar con Enter">
                     <label class="form-check-label" for="send-on-enter">Enviar con Enter</label>
                 </div>
+                <button id="upload-btn" class="btn btn-outline-secondary btn-sm" title="Subir archivo" aria-label="Subir archivo">
+                    <i class="bi bi-upload"></i> Subir
+                </button>
             </div>
         </div>
     </div>
@@ -113,15 +119,15 @@
 
 <!-- Modal para el Menú -->
 <div class="modal fade" id="sidebarModal" tabindex="-1" aria-labelledby="sidebarModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content glass animate__animated animate__bounceIn">
-            <div class="modal-header">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content glass animate__animated animate__slideInLeft">
+            <div class="modal-header border-0">
                 <h5 class="modal-title" id="sidebarModalLabel"><i class="bi bi-list me-2"></i>Menú</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar menú" aria-hidden="true"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar menú"></button>
             </div>
             <div class="modal-body">
                 <div class="accordion" id="sidebarAccordion" role="navigation">
-                    <div class="accordion-item">
+                    <div class="accordion-item border-0">
                         <h2 class="accordion-header" id="settingsHeading">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#settingsCollapse" aria-expanded="false" aria-controls="settingsCollapse">
                                 <i class="bi bi-gear-fill me-2"></i>Configuración
@@ -129,43 +135,43 @@
                         </h2>
                         <div id="settingsCollapse" class="accordion-collapse collapse" aria-labelledby="settingsHeading" data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
-                                <button class="btn btn-primary btn-gradient btn-sm w-100 animate__animated animate__pulse animate__infinite" data-bs-toggle="modal" data-bs-target="#settingsModal" data-bs-toggle="tooltip" title="Configurar ajustes del chat" aria-label="Abrir configuración">
+                                <button class="btn btn-primary btn-gradient w-100" data-bs-toggle="modal" data-bs-target="#settingsModal" title="Configurar ajustes del chat" aria-label="Abrir configuración">
                                     Abrir Configuración
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="infoHeading">
+                    <div class="accordion-item border-0">
+                        <h2 class="accordion-header" id="infoK" aria-label="Información">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#infoCollapse" aria-expanded="false" aria-controls="infoCollapse">
                                 <i class="bi bi-info-circle-fill me-2"></i>Información
                             </button>
                         </h2>
                         <div id="infoCollapse" class="accordion-collapse collapse" aria-labelledby="infoHeading" data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
-                                <button class="btn btn-primary btn-gradient btn-sm w-100 animate__animated animate__pulse animate__infinite" data-bs-toggle="modal" data-bs-target="#infoModal" data-bs-toggle="tooltip" title="Ver información de GarBotGPT" aria-label="Ver información">
+                                <button class="btn btn-primary btn-gradient w-100" data-bs-toggle="modal" data-bs-target="#infoModal" title="Ver información de GarBotGPT" aria-label="Ver información">
                                     Ver Información
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-item">
+                    <div class="accordion-item border-0">
                         <h2 class="accordion-header" id="actionsHeading">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#actionsCollapse" aria-expanded="false" aria-controls="actionsCollapse">
                                 <i class="bi bi-tools me-2"></i>Acciones
                             </button>
                         </h2>
                         <div id="actionsCollapse" class="accordion-collapse collapse" aria-labelledby="actionsHeading" data-bs-parent="#sidebarAccordion">
-                            <div class="accordion-body">
-                                <button id="clear-history" class="btn btn-outline-danger btn-sm w-100 mb-2 animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Borrar el historial de chat" aria-label="Borrar historial">Borrar Historial</button>
-                                <a href="{{ url_for('export_history') }}" class="btn btn-outline-secondary btn-sm w-100 mb-2 animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Descargar historial" aria-label="Exportar historial">Exportar Historial</a>
-                                <a href="{{ url_for('export_settings') }}" class="btn btn-outline-secondary btn-sm w-100 mb-2 animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Descargar configuración" aria-label="Exportar configuración">Exportar Configuración</a>
-                                <button id="regenerate-response" class="btn btn-outline-secondary btn-sm w-100 mb-2 animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Regenerar última respuesta" aria-label="Regenerar respuesta">Regenerar Respuesta</button>
-                                <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary btn-sm w-100 animate__animated animate__pulse animate__infinite" data-bs-toggle="tooltip" title="Cerrar sesión" aria-label="Cerrar sesión">Cerrar Sesión</a>
+                            <div class="accordion-body d-flex flex-column gap-2">
+                                <button id="clear-history" class="btn btn-outline-danger w-100" title="Borrar el historial de chat" aria-label="Borrar historial">Borrar Historial</button>
+                                <a href="{{ url_for('export_history') }}" class="btn btn-outline-secondary w-100" title="Descargar historial" aria-label="Exportar historial">Exportar Historial</a>
+                                <a href="{{ url_for('export_settings') }}" class="btn btn-outline-secondary w-100" title="Descargar configuración" aria-label="Exportar configuración">Exportar Configuración</a>
+                                <button id="regenerate-response" class="btn btn-outline-secondary w-100" title="Regenerar última respuesta" aria-label="Regenerar respuesta">Regenerar Respuesta</button>
+                                <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary w-100" title="Cerrar sesión" aria-label="Cerrar sesión">Cerrar Sesión</a>
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-item">
+                    <div class="accordion-item border-0">
                         <h2 class="accordion-header" id="languageHeading">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#languageCollapse" aria-expanded="false" aria-controls="languageCollapse">
                                 <i class="bi bi-translate me-2"></i>Idioma
@@ -173,7 +179,7 @@
                         </h2>
                         <div id="languageCollapse" class="accordion-collapse collapse" aria-labelledby="languageHeading" data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
-                                <select id="language-select" class="form-select" data-bs-toggle="tooltip" title="Cambiar idioma" aria-label="Seleccionar idioma">
+                                <select id="language-select" class="form-select" title="Cambiar idioma" aria-label="Seleccionar idioma">
                                     <option value="es" {% if current_user.language == 'es' %}selected{% endif %}>Español</option>
                                     <option value="en" {% if current_user.language == 'en' %}selected{% endif %}>English</option>
                                     <option value="ca" {% if current_user.language == 'ca' %}selected{% endif %}>Català</option>
@@ -190,33 +196,36 @@
 <!-- Modal para Configuración -->
 <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content glass animate__animated animate__bounceIn">
-            <div class="modal-header">
+        <div class="modal-content glass animate__animated animate__slideInDown">
+            <div class="modal-header border-0">
                 <h5 class="modal-title" id="settingsModalLabel"><i class="bi bi-gear-fill me-2"></i>Configuración del Chat</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar configuración" aria-hidden="true"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar configuración"></button>
             </div>
             <div class="modal-body">
-                <form id="chat-settings-form">
-                    <div class="mb-3">
+                <form id="chat-settings-form" class="d-flex flex-column gap-3">
+                    <div>
                         <label for="model" class="form-label"><i class="bi bi-robot me-2"></i>Modelo de IA</label>
                         <select class="form-select" id="model" name="model" aria-label="Seleccionar modelo de IA">
                             <option value="gpt-3.5-turbo" {% if chat_settings.model == 'gpt-3.5-turbo' %}selected{% endif %}>GPT-3.5 Turbo</option>
                             <option value="gpt-4" {% if chat_settings.model == 'gpt-4' %}selected{% endif %}>GPT-4</option>
+                            <option value="groK-3" {% if chat_settings.model == 'groK-3' %}selected{% endif %}>Grok-3</option>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label for="temperature" class="form-label"><i class="bi bi-thermometer-half me-2"></i>Temperatura</label>
-                        <input type="number" class="form-control" id="temperature" name="temperature" step="0.1" min="0" max="1" value="{{ chat_settings.temperature }}" aria-label="Ajustar temperatura">
+                    <div>
+                        <label for="temperature" class="form-label"><i class="bi bi-thermometer-half me-2"></i>Temperatura <small>(Creatividad)</small></label>
+                        <input type="range" class="form-range" id="temperature" name="temperature" step="0.1" min="0" max="1" value="{{ chat_settings.temperature }}" aria-label="Ajustar temperatura">
+                        <small class="form-text">0 (más predecible) - 1 (más creativo)</small>
                     </div>
-                    <div class="mb-3">
-                        <label for="max_tokens" class="form-label"><i class="bi bi-text-paragraph me-2"></i>Máximo de Tokens</label>
-                        <input type="number" class="form-control" id="max_tokens" name="max_tokens" min="100" max="2000" value="{{ chat_settings.max_tokens }}" aria-label="Ajustar máximo de tokens">
+                    <div>
+                        <label for="max_tokens" class="form-label"><i class="bi bi-text-paragraph me-2"></i>Máximo de Tokens <small>(Longitud)</small></label>
+                        <input type="range" class="form-range" id="max_tokens" name="max_tokens" min="100" max="4000" value="{{ chat_settings.max_tokens }}" aria-label="Ajustar máximo de tokens">
+                        <small class="form-text">100 (corto) - 4000 (largo)</small>
                     </div>
-                    <div class="mb-3">
+                    <div>
                         <label for="theme_color" class="form-label"><i class="bi bi-palette-fill me-2"></i>Color del Tema</label>
                         <input type="color" class="form-control form-control-color" id="theme_color" name="theme_color" value="{{ chat_settings.theme_color }}" aria-label="Seleccionar color del tema">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-gradient btn-sm w-100 animate__animated animate__pulse" data-bs-toggle="tooltip" title="Guardar ajustes" aria-label="Guardar configuración">Guardar</button>
+                    <button type="submit" class="btn btn-primary btn-gradient w-100" title="Guardar ajustes" aria-label="Guardar configuración">Guardar Cambios</button>
                 </form>
             </div>
         </div>
@@ -226,26 +235,357 @@
 <!-- Modal para Información -->
 <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content glass animate__animated animate__bounceIn">
-            <div class="modal-header">
+        <div class="modal-content glass animate__animated animate__slideInDown">
+            <div class="modal-header border-0">
                 <h5 class="modal-title" id="infoModalLabel"><i class="bi bi-info-circle-fill me-2"></i>Información</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar información" aria-hidden="true"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar información"></button>
             </div>
             <div class="modal-body">
-                <p><strong>GarBotGPT</strong> es un chatbot avanzado diseñado para proporcionar respuestas útiles y precisas a una amplia gama de preguntas y tareas.</p>
-                <p><strong>Versión:</strong> 1.5</p>
-                <p><strong>Propósito:</strong> Asistir a usuarios en tareas diarias, responder preguntas complejas, y ofrecer soporte educativo y creativo.</p>
-                <p><strong>Tecnologías:</strong> Flask, Bootstrap 5, PostgreSQL, OpenAI API, JavaScript, HTML5, CSS3</p>
-                <p><strong>Creador:</strong> GarolaCorp, una empresa innovadora dedicada a desarrollar soluciones de inteligencia artificial para el futuro.</p>
-                <p><strong>Contacto:</strong> support@garolacorp.com</p>
-                <p><strong>Lanzamiento:</strong> Abril 2025</p>
+                <div class bụ
+
+<xaiArtifact artifact_id="dab4d85d-44a7-4e19-b8c0-b3c50aad8da1" artifact_version_id="b2cdc0c9-ae86-4d07-842f-4987475cd4b2" title="Improved Chat Template" contentType="text/html">
+{% extends "base.html" %}
+{% block title %}Chatear con GarBotGPT{% endblock %}
+{% block content %}
+<!-- Contenedor Principal del Chat -->
+<div class="chat-page container-fluid d-flex justify-content-center">
+    <div class="chat-container flex-grow-1" id="chat-container-main" role="main" aria-label="Interfaz de chat">
+        <!-- Encabezado del Chat -->
+        <div class="chat-header d-flex justify-content-between align-items-center p-3 border-bottom bg-glass">
+            <div class="d-flex align-items-center gap-2">
+                <button id="sidebar-toggle" class="btn btn-gradient btn-sm" data-bs-toggle="modal" data-bs-target="#sidebarModal" title="Abrir Menú" aria-label="Abrir menú lateral">
+                    <i class="bi bi-list"></i>
+                </button>
+                <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT Logo" class="logo" style="height: 32px;" aria-hidden="true">
+                <h2 class="mb-0 fw-bold">GarBotGPT</h2>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span id="server-status" class="badge bg-success" role="status" aria-live="polite">Conectado</span>
+                <button id="theme-toggle" class="btn btn-gradient btn-sm" title="Alternar tema claro/oscuro" aria-label="Alternar tema">
+                    <i class="bi bi-moon-stars-fill"></i>
+                </button>
+                <button id="fullscreen-toggle" class="btn btn-gradient btn-sm" title="Alternar pantalla completa" aria-label="Alternar pantalla completa">
+                    <i class="bi bi-arrows-fullscreen"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Cuerpo del Chat -->
+        <div id="chat-messages" class="chat-body p-3 overflow-auto" role="log" aria-live="polite">
+            {% if history|length == 0 %}
+                <!-- Carrusel de Sugerencias Iniciales -->
+                <div class="suggestions glass text-center animate__animated animate__fadeIn" role="region" aria-label="Sugerencias iniciales">
+                    <p class="mb-3 fs-5">¡Hola! ¿En qué puedo ayudarte hoy? Prueba con estas ideas:</p>
+                    <div id="suggestions-carousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            {% set suggestions = [
+                                {"icon": "bi-code-slash", "text": "Explica un concepto de programación"},
+                                {"icon": "bi-robot", "text": "Cuéntame sobre inteligencia artificial"},
+                                {"icon": "bi-pen", "text": "Escribe un poema corto"},
+                                {"icon": "bi-calculator", "text": "Ayúdame con una ecuación matemática"},
+                                {"icon": "bi-book", "text": "Cuéntame sobre la historia de Roma"}
+                            ] %}
+                            {% for suggestion in suggestions %}
+                                <div class="carousel-item{% if loop.first %} active{% endif %}">
+                                    <button class="btn btn-outline-primary btn-sm m-1 suggestion-btn w-100" data-message="{{ suggestion.text }}">
+                                        <i class="bi {{ suggestion.icon }} me-1"></i>{{ suggestion.text }}
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#suggestions-carousel" data-bs-slide="prev" aria-label="Anterior sugerencia">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#suggestions-carousel" data-bs-slide="next" aria-label="Siguiente sugerencia">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+            {% endif %}
+            <!-- Historial de Mensajes -->
+            {% for entry in history %}
+                <div class="message user-message animate__animated animate__fadeIn mb-3" role="article">
+                    <div class="d-flex align-items-start gap-2">
+                        <i class="bi bi-person-circle fs-4"></i>
+                        <div class="message-content p-3 rounded shadow-sm bg-light">
+                            <strong>Tú:</strong> {{ entry.message | safe }}
+                        </div>
+                    </div>
+                </div>
+                <div class="message ai-message animate__animated animate__fadeIn mb-3" role="article">
+                    <div class="d-flex align-items-start gap-2">
+                        <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT" class="logo" style="height: 24px;">
+                        <div class="message-content p-3 rounded shadow-sm markdown-body bg-glass">
+                            <strong>GarBotGPT:</strong> {{ entry.response | safe }}
+                            <div class="d-flex gap-2 mt-2">
+                                <button class="copy-btn btn btn-sm btn-outline-secondary" title="Copiar respuesta" data-text="{{ entry.response }}" aria-label="Copiar respuesta">
+                                    <i class="bi bi-clipboard"></i> Copiar
+                                </button>
+                                <button class="share-btn btn btn-sm btn-outline-secondary" title="Compartir respuesta" data-text="{{ entry.response }}" aria-label="Compartir respuesta">
+                                    <i class="bi bi-share"></i> Compartir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <!-- Indicador de Respondiendo -->
+            <div id="responding-indicator" class="message ai-message animate__animated animate__fadeIn glass d-none mb-3" role="status">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT" class="logo" style="height: 24px;">
+                    <div class="message-content typing-effect p-3 rounded shadow-sm">Respondiendo<span class="typing-dots"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pie del Chat -->
+        <div class="chat-footer p-3 border-top bg-glass">
+            <div class="input-group mb-2 position-relative">
+                <input type="text" id="message" class="form-control rounded-pill pe-5" placeholder="Escribe tu mensaje..." autocomplete="off" aria-label="Campo de mensaje">
+                <div class="input-group-append position-absolute end-0 top-50 translate-middle-y pe-2 d-flex gap-1">
+                    <button id="voice-btn" class="btn btn-gradient btn-sm" title="Entrada por voz" aria-label="Entrada por voz">
+                        <i class="bi bi-mic-fill"></i>
+                    </button>
+                    <button class="btn btn-primary btn-gradient btn-sm" onclick="sendMessage()" title="Enviar mensaje" aria-label="Enviar mensaje">
+                        <i class="bi bi-send-fill"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="suggestions-dropdown" class="suggestions-dropdown glass d-none" role="listbox" aria-label="Sugerencias de prompts"></div>
+            <div class="chat-options d-flex justify-content-between align-items-center mt-2">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="send-on-enter" checked aria-label="Enviar con Enter">
+                    <label class="form-check-label" for="send-on-enter">Enviar con Enter</label>
+                </div>
+                <div class="d-flex gap-2">
+                    <button id="upload-btn" class="btn btn-outline-secondary btn-sm" title="Subir archivo" aria-label="Subir archivo">
+                        <i class="bi bi-upload"></i>
+                    </button>
+                    <button id="emoji-btn" class="btn btn-outline-secondary btn-sm" title="Insertar emoji" aria-label="Insertar emoji">
+                        <i class="bi bi-emoji-smile"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Script para Scroll Automático -->
+<!-- Contenedor de Notificaciones -->
+<div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055;" role="alert" aria-live="assertive"></div>
+
+<!-- Modal para el Menú -->
+<div class="modal fade" id="sidebarModal" tabindex="-1" aria-labelledby="sidebarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content glass animate__animated animate__slideInLeft">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="sidebarModalLabel"><i class="bi bi-list me-2"></i>Menú</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar menú"></button>
+            </div>
+            <div class="modal-body">
+                <div class="accordion" id="sidebarAccordion" role="navigation">
+                    <div class="accordion-item border-0">
+                        <h2 class="accordion-header" id="settingsHeading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#settingsCollapse" aria-expanded="false" aria-controls="settingsCollapse">
+                                <i class="bi bi-gear-fill me-2"></i>Configuración
+                            </button>
+                        </h2>
+                        <div id="settingsCollapse" class="accordion-collapse collapse" aria-labelledby="settingsHeading" data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <button class="btn btn-primary btn-gradient w-100" data-bs-toggle="modal" data-bs-target="#settingsModal" title="Configurar ajustes del chat" aria-label="Abrir configuración">
+                                    Abrir Configuración
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item border-0">
+                        <h2 class="accordion-header" id="infoHeading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#infoCollapse" aria-expanded="false" aria-controls="infoCollapse">
+                                <i class="bi bi-info-circle-fill me-2"></i>Información
+                            </button>
+                        </h2>
+                        <div id="infoCollapse" class="accordion-collapse collapse" aria-labelledby="infoHeading" data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <button class="btn btn-primary btn-gradient w-100" data-bs-toggle="modal" data-bs-target="#infoModal" title="Ver información de GarBotGPT" aria-label="Ver información">
+                                    Ver Información
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item border-0">
+                        <h2 class="accordion-header" idUSING-XAI-GROK3-2025-05-06-15-35-37-UTC="actionsHeading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#actionsCollapse" aria-expanded="false" aria-controls="actionsCollapse">
+                                <i class="bi bi-tools me-2"></i>Acciones
+                            </button>
+                        </h2>
+                        <div id="actionsCollapse" class="accordion-collapse collapse" aria-labelledby="actionsHeading" data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body d-flex flex-column gap-2">
+                                <button id="clear-history" class="btn btn-outline-danger w-100" title="Borrar el historial de chat" aria-label="Borrar historial">Borrar Historial</button>
+                                <a href="{{ url_for('export_history') }}" class="btn btn-outline-secondary w-100" title="Descargar historial" aria-label="Exportar historial">Exportar Historial</a>
+                                <a href="{{ url_for('export_settings') }}" class="btn btn-outline-secondary w-100" title="Descargar configuración" aria-label="Exportar configuración">Exportar Configuración</a>
+                                <button id="regenerate-response" class="btn btn-outline-secondary w-100" title="Regenerar última respuesta" aria-label="Regenerar respuesta">Regenerar Respuesta</button>
+                                <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary w-100" title="Cerrar sesión" aria-label="Cerrar sesión">Cerrar Sesión</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item border-0">
+                        <h2 class="accordion-header" id="languageHeading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#languageCollapse" aria-expanded="false" aria-controls="languageCollapse">
+                                <i class="bi bi-translate me-2"></i>Idioma
+                            </button>
+                        </h2>
+                        <div id="languageCollapse" class="accordion-collapse collapse" aria-labelledby="languageHeading" data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <select id="language-select" class="form-select" title="Cambiar idioma" aria-label="Seleccionar idioma">
+                                    <option value="es" {% if current_user.language == 'es' %}selected{% endif %}>Español</option>
+                                    <option value="en" {% if current_user.language == 'en' %}selected{% endif %}>English</option>
+                                    <option value="ca" {% if current_user.language == 'ca' %}selected{% endif %}>Català</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Configuración -->
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass animate__animated animate__slideInDown">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="settingsModalLabel"><i class="bi bi-gear-fill me-2"></i>Configuración del Chat</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar configuración"></button>
+            </div>
+            <div class="modal-body">
+                <form id="chat-settings-form" class="d-flex flex-column gap-3">
+                    <div>
+                        <label for="model" class="form-label"><i class="bi bi-robot me-2"></i>Modelo de IA</label>
+                        <select class="form-select" id="model" name="model" aria-label="Seleccionar modelo de IA">
+                            <option value="gpt-3.5-turbo" {% if chat_settings.model == 'gpt-3.5-turbo' %}selected{% endif %}>GPT-3.5 Turbo</option>
+                            <option value="gpt-4" {% if chat_settings.model == 'gpt-4' %}selected{% endif %}>GPT-4</option>
+                            <option value="grok-3" {% if chat_settings.model == 'grok-3' %}selected{% endif %}>Grok-3</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="temperature" class="form-label"><i class="bi bi-thermometer-half me-2"></i>Temperatura <small>(Creatividad)</small></label>
+                        <input type="range" class="form-range" id="temperature" name="temperature" step="0.1" min="0" max="1" value="{{ chat_settings.temperature }}" aria-label="Ajustar temperatura">
+                        <small class="form-text">0 (más predecible) - 1 (más creativo)</small>
+                    </div>
+                    <div>
+                        <label for="max_tokens" class="form-label"><i class="bi bi-text-paragraph me-2"></i>Máximo de Tokens <small>(Longitud)</small></label>
+                        <input type="range" class="form-range" id="max_tokens" name="max_tokens" min="100" max="4000" value="{{ chat_settings.max_tokens }}" aria-label="Ajustar máximo de tokens">
+                        <small class="form-text">100 (corto) - 4000 (largo)</small>
+                    </div>
+                    <div>
+                        <label for="theme_color" class="form-label"><i class="bi bi-palette-fill me-2"></i>Color del Tema</label>
+                        <input type="color" class="form-control form-control-color" id="theme_color" name="theme_color" value="{{ chat_settings.theme_color }}" aria-label="Seleccionar color del tema">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-gradient w-100" title="Guardar ajustes" aria-label="Guardar configuración">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Información -->
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass animate__animated animate__slideInDown">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="infoModalLabel"><i class="bi bi-info-circle-fill me-2"></i>Información</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar información"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT Logo" class="logo mb-2" style="height: 48px;">
+                    <h5>GarBotGPT</h5>
+                </div>
+                <p>Un chatbot avanzado diseñado para proporcionar respuestas útiles y precisas a una amplia gama de preguntas y tareas.</p>
+                <ul class="list-unstyled">
+                    <li><strong>Versión:</strong> 1.5</li>
+                    <li><strong>Propósito:</strong> Asistir en tareas diarias, responder preguntas complejas y ofrecer soporte educativo y creativo.</li>
+                    <li><strong>Tecnologías:</strong> Flask, Bootstrap 5, PostgreSQL, OpenAI API, xAI Grok, JavaScript, HTML5, CSS3</li>
+                    <li><strong>Creador:</strong> GarolaCorp</li>
+                    <li><strong>Contacto:</strong> <a href="mailto:support@garolacorp.com">support@garolacorp.com</a></li>
+                    <li><strong>Lanzamiento:</strong> Abril 2025</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script para Scroll Automático y Mejoras -->
 <script>
-    document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+    // Scroll automático al último mensaje
+    const chatMessages = document.getElementById('chat-messages');
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Manejo de sugerencias
+    document.querySelectorAll('.suggestion-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.getElementById('message').value = btn.dataset.message;
+            document.getElementById('message').focus();
+        });
+    });
+
+    // Manejo de copiar al portapapeles
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            navigator.clipboard.write(btn.dataset.text).then(() => {
+                const toast = new bootstrap.Toast(document.createElement('div'));
+                toast._element.className = 'toast';
+                toast._element.innerHTML = `
+                    <div class="toast-header">
+                        <strong class="me-auto">Copiado</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                    </div>
+                    <div class="toast-body">¡Texto copiado al portapapeles!</div>
+                `;
+                document.getElementById('toast-container').appendChild(toast._element);
+                toast.show();
+            });
+        });
+    });
 </script>
+
+<style>
+    .chat-container {
+        max-width: 900px;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+    }
+    .bg-glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+    }
+    .glass {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .btn-gradient {
+        background: linear-gradient(45deg, #007bff, #00d4ff);
+        color: white;
+        border: none;
+    }
+    .btn-gradient:hover {
+        background: linear-gradient(45deg, #0056b3, #0096cc);
+    }
+    .message-content {
+        max-width: 80%;
+        word-wrap: break-word;
+    }
+    .typing-dots::after {
+        content: '.';
+        animation: dots 1.5s infinite;
+    }
+    @keyframes dots {
+        0%, 20% { content: '.'; }
+        40% { content: '..'; }
+        60% { content: '...'; }
+    }
+</style>
 {% endblock %}
