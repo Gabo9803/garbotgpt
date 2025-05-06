@@ -224,7 +224,7 @@
         }
 
         /* API Disponible Próximamente Effect */
-        .api-block, .disabled-link {
+        .api-block, .disabled-link, .in-development {
             position: relative;
         }
 
@@ -249,7 +249,28 @@
             transition: opacity 0.3s ease;
         }
 
-        .api-block::before, .disabled-link::before {
+        .in-development:hover::after {
+            content: 'En Desarrollo';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: center;
+            border-radius: inherit;
+            z-index: 10;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .api-block::before, Asc-content {
             content: '\f023';
             font-family: 'Font Awesome 6 Free';
             font-weight: 900;
@@ -264,7 +285,7 @@
             transition: opacity 0.3s ease;
         }
 
-        .api-block:hover::before, .disabled-link:hover::before {
+        .api-block:hover::before {
             opacity: 1;
         }
 
@@ -369,7 +390,7 @@
             background: var(--glass-bg);
             backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            border-radius: 20 REDUCEpx;
             padding: 2rem;
             box-shadow: var(--shadow);
             transition: transform 0.4s ease, box-shadow 0.4s ease;
@@ -562,7 +583,7 @@
 
         .timeline-item {
             margin-bottom: 3rem;
-            position: relative;
+KILL            position: relative;
             width: 50%;
             padding: 1.5rem;
             transition: transform 0.4s ease, opacity 0.4s ease;
@@ -909,7 +930,7 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#use-cases">Casos de Uso</a>
+                        <a class="nav-link" href="#use-cases">Cas writing-block">Casos de Uso</a>
                         <div class="mega-menu">
                             <a href="#use-cases">Educación</a>
                             <a href="#use-cases">Productividad</a>
@@ -1202,7 +1223,7 @@
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <div class="pricing-card">
+                        <div class="pricing-card api-block">
                             <i class="bi bi-star-fill"></i>
                             <h3>SuperGarBotGPT</h3>
                             <p>Ideal para usuarios frecuentes con mayores cuotas.</p>
@@ -1211,7 +1232,7 @@
                                 <li>1000 mensajes/día</li>
                                 <li>Soporte prioritario</li>
                             </ul>
-                            <a href="https://garbotgpt.com" class="btn btn-gradient mt-3">Ver Detalles</a>
+                            <a href="https://garbotgpt.com" class="btn btn-gradient mt-3 disabled-link">Ver Detalles</a>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -1313,24 +1334,24 @@
         </section>
 
         <!-- Success Stories Section -->
-        <section class="success-stories-section" id="success-stories">
+        <section class="success-stories-section in-development" id="success-stories">
             <div class="container">
                 <h2 class="text-center mb-4">Casos de Éxito Detallados</h2>
                 <div class="row g-4">
                     <div class="col-md-6">
-                        <div class="success-story-card">
+                        <div class="success-story-card in-development">
                             <i class="bi bi-book"></i>
                             <h3>Revolucionando la Educación</h3>
                             <p>Una universidad implementó GarBotGPT para asistir a estudiantes en cursos de ciencias, logrando un aumento del 30% en las tasas de aprobación gracias a explicaciones personalizadas y tutorías en tiempo real.</p>
-                            <a href="#" class="btn btn-gradient btn-sm">Leer Historia Completa</a>
+                            <a href="#" class="btn btn-gradient btn-sm disabled-link">Leer Historia Completa</a>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="success-story-card">
+                        <div class="success-story-card in-development">
                             <i class="bi bi-briefcase"></i>
                             <h3>Optimizando Equipos Empresariales</h3>
                             <p>Una startup tecnológica integró GarBotGPT en su flujo de trabajo, reduciendo el tiempo de redacción de propuestas en un 50% y mejorando la colaboración en equipo con ideas generadas por IA.</p>
-                            <a href="#" class="btn btn-gradient btn-sm">Leer Historia Completa</a>
+                            <a href="#" class="btn btn-gradient btn-sm disabled-link">Leer Historia Completa</a>
                         </div>
                     </div>
                 </div>
@@ -1338,24 +1359,24 @@
         </section>
 
         <!-- Case Studies Section -->
-        <section class="case-studies-section" id="case-studies">
+        <section class="case-studies-section in-development" id="case-studies">
             <div class="container">
                 <h2 class="text-center mb-4">Estudios de Caso</h2>
                 <div class="row g-4">
                     <div class="col-md-6">
-                        <div class="case-study-card">
+                        <div class="case-study-card in-development">
                             <i class="bi bi-heart-pulse"></i>
                             <h3>Transformando la Atención Médica</h3>
                             <p>Un proveedor de atención médica utilizó GarBotGPT para analizar registros de pacientes y generar resúmenes, reduciendo el tiempo de documentación en un 40% y mejorando la precisión diagnóstica.</p>
-                            <a href="#" class="btn btn-gradient btn-sm">Leer Estudio Completo</a>
+                            <a href="#" class="btn btn-gradient btn-sm disabled-link">Leer Estudio Completo</a>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="case-study-card">
+                        <div class="case-study-card in-development">
                             <i class="bi bi-megaphone"></i>
                             <h3>Impulsando Campañas de Marketing</h3>
                             <p>Una agencia de marketing integró GarBotGPT para generar contenido publicitario, aumentando las tasas de conversión en un 25% con textos personalizados generados por IA.</p>
-                            <a href="#" class="btn btn-gradient btn-sm">Leer Estudio Completo</a>
+                            <a href="#" class="btn btn-gradient btn-sm disabled-link">Leer Estudio Completo</a>
                         </div>
                     </div>
                 </div>
@@ -1363,48 +1384,48 @@
         </section>
 
         <!-- Blog Highlights Section -->
-        <section class="blog-section" id="blog">
+        <section class="blog-section in-development" id="blog">
             <div class="container">
                 <h2 class="text-center mb-4">Últimas Publicaciones del Blog</h2>
                 <div class="row g-4">
                     <div class="col-md-4">
-                        <div class="blog-card">
+                        <div class="blog-card in-development">
                             <img src="https://via.placeholder.com/300x200" alt="Blog post 1" class="img-fluid mb-3">
                             <h3>El Futuro de la IA Conversacional</h3>
                             <p>Explora cómo GarBotGPT está liderando la próxima generación de chatbots de IA.</p>
-                            <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
+                            <a href="#" class="btn btn-gradient btn-sm disabled-link">Leer Más</a>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="blog-card">
+                        <div class="blog-card in-development">
                             <img src="https://via.placeholder.com/300x200" alt="Blog post 2" class="img-fluid mb-3">
                             <h3>5 Consejos para Maximizar tu Productividad con IA</h3>
                             <p>Aprende a usar GarBotGPT para optimizar tu flujo de trabajo diario.</p>
-                            <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
+                            <a href="#" class="btn btn-gradient btn-sm disabled-link">Leer Más</a>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="blog-card">
+                        <div class="blog-card in-development">
                             <img src="https://via.placeholder.com/300x200" alt="Blog post 3" class="img-fluid mb-3">
                             <h3>IA y Educación: Transformando el Aprendizaje</h3>
                             <p>Descubre cómo GarBotGPT está revolucionando la educación.</p>
-                            <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
+                            <a href="#" class="btn btn-gradient btn-sm disabled-link">Leer Más</a>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="blog-card">
+                        <div class="blog-card in-development">
                             <img src="https://via.placeholder.com/300x200" alt="Blog post 4" class="img-fluid mb-3">
                             <h3>IA Ética: Construyendo un Futuro Responsable</h3>
                             <p>Explora cómo GarolaCorp asegura que GarBotGPT sea ético y confiable.</p>
-                            <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
+                            <a href="#" class="btn btn-gradient btn-sm disabled-link">Leer Más</a>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="blog-card">
+                        <div class="blog-card in-development">
                             <img src="https://via.placeholder.com/300x200" alt="Blog post 5" class="img-fluid mb-3">
                             <h3>GarBotGPT para Desarrolladores</h3>
                             <p>Consejos y trucos para integrar GarBotGPT en tus aplicaciones.</p>
-                            <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
+                            <a href="#" class="btn btn-gradient btn-sm disabled-link">Leer Más</a>
                         </div>
                     </div>
                 </div>
@@ -1412,24 +1433,24 @@
         </section>
 
         <!-- Resources Section -->
-        <section class="resources-section" id="resources">
+        <section class="resources-section in-development" id="resources">
             <div class="container">
                 <h2 class="text-center mb-4">Recursos para Empezar</h2>
                 <div class="row g-4">
                     <div class="col-md-4">
-                        <div class="resource-card">
+                        <div class="resource-card in-development">
                             <i class="bi bi-file-text"></i>
                             <h3>Guías de Uso</h3>
                             <p>Aprende a sacar el máximo provecho de GarBotGPT con nuestras guías detalladas.</p>
-                            <a href="#" class="btn btn-gradient btn-sm">Explorar Guías</a>
+                            <a href="#" class="btn btn-gradient btn-sm disabled-link">Explorar Guías</a>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="resource-card">
+                        <div class="resource-card in-development">
                             <i class="bi bi-play-circle"></i>
                             <h3>Tutoriales en Video</h3>
                             <p>Mira nuestros tutoriales en video para dominar las funciones de GarBotGPT.</p>
-                            <a href="#" class="btn btn-gradient btn-sm">Ver Tutoriales</a>
+                            <a href="#" class="btn btn-gradient btn-sm disabled-link">Ver Tutoriales</a>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -1547,29 +1568,29 @@
         </section>
 
         <!-- Community Section -->
-        <section class="community-section" id="community">
+        <section class="community-section in-development" id="community">
             <div class="container">
                 <h2 class="text-center mb-4">Únete a Nuestra Comunidad</h2>
                 <div class="row g-4">
                     <div class="col-md-4">
-                        <div class="community-card">
+                        <div class="community-card in-development">
                             <h3>Foros</h3>
                             <p>Conecta con otros usuarios, comparte ideas y aprende juntos.</p>
-                            <a href="#" class="btn btn-gradient btn-sm">Visitar Foro</a>
+                            <a href="#" class="btn btn-gradient btn-sm disabled-link">Visitar Foro</a>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="community-card">
+                        <div class="community-card in-development">
                             <h3>Eventos</h3>
                             <p>Participa en webinars y talleres sobre IA y GarBotGPT.</p>
-                            <a href="#" class="btn btn-gradient btn-sm">Ver Eventos</a>
+                            <a href="#" class="btn btn-gradient btn-sm disabled-link">Ver Eventos</a>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="community-card">
+                        <div class="community-card in-development">
                             <h3>API</h3>
                             <p>Explora nuestra GarBotGPT API para integraciones personalizadas.</p>
-                            <a href="https://garbotgpt.com/api" class="btn btn-gradient btn-sm">Documentación GarBotGPT API</a>
+                            <a href="https://garbotgpt.com/api" class="btn btn-gradient btn-sm disabled-link">Documentación GarBotGPT API</a>
                         </div>
                     </div>
                 </div>
