@@ -135,7 +135,7 @@
         <div class="modal-content glass animate__animated animate__slideInLeft">
             <div class="modal-header border-0">
                 <h5 class="modal-title" id="sidebarModalLabel"><i class="bi bi-list me-2"></i>Menú</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar menú"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar menú"></button>
             </div>
             <div class="modal-body">
                 <div class="accordion" id="sidebarAccordion" role="navigation">
@@ -176,10 +176,10 @@
                         <div id="actionsCollapse" class="accordion-collapse collapse" aria-labelledby="actionsHeading" data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body d-flex flex-column gap-2">
                                 <button id="clear-history" class="btn btn-outline-danger w-100" title="Borrar el historial de chat" aria-label="Borrar historial">Borrar Historial</button>
-                                <a href="{{ url_for('export_history') if 'export_history' in url_for else '#' }}" class="btn btn-outline-secondary w-100" title="Descargar historial" aria-label="Exportar historial">Exportar Historial</a>
-                                <a href="{{ url_for('export_settings') if 'export_settings' in url_for else '#' }}" class="btn btn-outline-secondary w-100" title="Descargar configuración" aria-label="Exportar configuración">Exportar Configuración</a>
+                                <a href="{{ url_for('export_history') }}" class="btn btn-outline-secondary w-100" title="Descargar historial" aria-label="Exportar historial">Exportar Historial</a>
+                                <a href="{{ url_for('export_settings') }}" class="btn btn-outline-secondary w-100" title="Descargar configuración" aria-label="Exportar configuración">Exportar Configuración</a>
                                 <button id="regenerate-response" class="btn btn-outline-secondary w-100" title="Regenerar última respuesta" aria-label="Regenerar respuesta">Regenerar Respuesta</button>
-                                <a href="{{ url_for('logout') if 'logout' in url_for else '#' }}" class="btn btn-outline-secondary w-100" title="Cerrar sesión" aria-label="Cerrar sesión">Cerrar Sesión</a>
+                                <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary w-100" title="Cerrar sesión" aria-label="Cerrar sesión">Cerrar Sesión</a>
                             </div>
                         </div>
                     </div>
@@ -211,7 +211,7 @@
         <div class="modal-content glass animate__animated animate__slideInDown">
             <div class="modal-header border-0">
                 <h5 class="modal-title" id="settingsModalLabel"><i class="bi bi-gear-fill me-2"></i>Configuración del Chat</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar configuración"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar configuración"></button>
             </div>
             <div class="modal-body">
                 <form id="chat-settings-form" class="d-flex flex-column gap-3">
@@ -250,7 +250,7 @@
         <div class="modal-content glass animate__animated animate__slideInDown">
             <div class="modal-header border-0">
                 <h5 class="modal-title" id="infoModalLabel"><i class="bi bi-info-circle-fill me-2"></i>Información</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar información"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar información"></button>
             </div>
             <div class="modal-body">
                 <div class="text-center mb-3">
@@ -360,11 +360,183 @@
             });
         }
 
+        // Manejo de carga de archivos
+        const fileUpload = document.getElementById('file-upload');
+        if (fileUpload) {
+            fileUpload.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    try {
+                        const response = await fetch('/upload_file', {
+                            method: 'POST',
+                            body: formData,
+                        });
+                        const data = await response.json();
+                        if (data.success) {
+                            showToast(`Archivo subido: ${file.name}`, 'success');
+                        } else {
+                            showToast(data.error || 'Error al subir el archivo', 'danger');
+                        }
+                    } catch {
+                        showToast('Error al subir el archivo', 'danger');
+                    }
+                }
+            });
+        }
+
+        // Manejo de emojis
+        const emojiBtn = document.getElementById('emoji-btn');
+        if (emojiBtn && messageInput) {
+            emojiBtn.addEventListener('click', () => {
+                const emojis = ['😊', '👍', '🚀', '❤️', '🎉'];
+                const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+                messageInput.value += randomEmoji;
+                messageInput.focus();
+            });
+        }
+
+        // Manejo de configuración del chat
+        const settingsForm = document.getElementById('chat-settings-form');
+        if (settingsForm) {
+            settingsForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(settingsForm);
+                const settings = {
+                    model: formData.get('model'),
+                    temperature: parseFloat(formData.get('temperature')),
+                    max_tokens: parseInt(formData.get('max_tokens')),
+                    theme_color: formData.get('theme_color'),
+                };
+                try {
+                    const response = await fetch('{{ url_for("update_chat_settings") }}', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(settings),
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        showToast('Configuración guardada', 'success');
+                        bootstrap.Modal.getInstance(document.getElementById('settingsModal')).hide();
+                    } else {
+                        showToast(data.error || 'Error al guardar configuración', 'danger');
+                    }
+                } catch {
+                    showToast('Error al guardar configuración', 'danger');
+                }
+            });
+        }
+
+        // Manejo de cambio de idioma
+        const languageSelect = document.getElementById('language-select');
+        if (languageSelect) {
+            languageSelect.addEventListener('change', async () => {
+                try {
+                    const response = await fetch('{{ url_for("update_language") }}', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ language: languageSelect.value }),
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        showToast('Idioma actualizado', 'success');
+                        location.reload();
+                    } else {
+                        showToast(data.error || 'Error al cambiar idioma', 'danger');
+                    }
+                } catch {
+                    showToast('Error al cambiar idioma', 'danger');
+                }
+            });
+        }
+
+        // Manejo de borrar historial
+        const clearHistoryBtn = document.getElementById('clear-history');
+        if (clearHistoryBtn) {
+            clearHistoryBtn.addEventListener('click', async () => {
+                if (confirm('¿Estás seguro de que quieres borrar el historial?')) {
+                    try {
+                        const response = await fetch('{{ url_for("clear_history") }}', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                        });
+                        const data = await response.json();
+                        if (data.success) {
+                            showToast('Historial borrado', 'success');
+                            location.reload();
+                        } else {
+                            showToast(data.error || 'Error al borrar historial', 'danger');
+                        }
+                    } catch {
+                        showToast('Error al borrar historial', 'danger');
+                    }
+                }
+            });
+        }
+
+        // Manejo de regenerar respuesta
+        const regenerateBtn = document.getElementById('regenerate-response');
+        if (regenerateBtn) {
+            regenerateBtn.addEventListener('click', async () => {
+                try {
+                    const response = await fetch('{{ url_for("chat") }}', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ regenerate: true }),
+                    });
+                    const data = await response.json();
+                    if (data.response) {
+                        showToast('Respuesta regenerada', 'success');
+                        location.reload();
+                    } else {
+                        showToast(data.error || 'Error al regenerar respuesta', 'danger');
+                    }
+                } catch {
+                    showToast('Error al regenerar respuesta', 'danger');
+                }
+            });
+        }
+
+        // Función para enviar mensaje
+        window.sendMessage = async function() {
+            const messageInput = document.getElementById('message');
+            const respondingIndicator = document.getElementById('responding-indicator');
+            if (!messageInput || !messageInput.value.trim()) {
+                showToast('Por favor, escribe un mensaje', 'warning');
+                return;
+            }
+            if (respondingIndicator) {
+                respondingIndicator.classList.remove('d-none');
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            try {
+                const response = await fetch('{{ url_for("chat") }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: messageInput.value }),
+                });
+                const data = await response.json();
+                if (data.response) {
+                    messageInput.value = '';
+                    showToast('Mensaje enviado', 'success');
+                    location.reload(); // Recarga para mostrar el nuevo mensaje
+                } else {
+                    showToast(data.error || 'Error al enviar mensaje', 'danger');
+                }
+            } catch {
+                showToast('Error al enviar mensaje', 'danger');
+            } finally {
+                if (respondingIndicator) {
+                    respondingIndicator.classList.add('d-none');
+                }
+            }
+        };
+
         // Función para mostrar notificaciones
         function showToast(message, type) {
             const toastContainer = document.getElementById('toast-container');
             if (!toastContainer) return;
-
             const toast = document.createElement('div');
             toast.className = `toast align-items-center text-white bg-${type} border-0`;
             toast.setAttribute('role', 'alert');
@@ -381,77 +553,7 @@
             bsToast.show();
             setTimeout(() => toast.remove(), 3000);
         }
-
-        // Manejo de carga de archivos
-        const fileUpload = document.getElementById('file-upload');
-        if (fileUpload) {
-            fileUpload.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    showToast(`Archivo seleccionado: ${file.name}`, 'info');
-                    // Aquí puedes implementar la lógica para subir el archivo al servidor
-                }
-            });
-        }
-
-        // Manejo de emojis
-        const emojiBtn = document.getElementById('emoji-btn');
-        if (emojiBtn && messageInput) {
-            emojiBtn.addEventListener('click', () => {
-                const emojis = ['😊', '👍', '🚀', '❤️', '🎉'];
-                const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
-                messageInput.value += randomEmoji;
-                messageInput.focus();
-            });
-        }
     });
-
-    // Función para enviar mensaje (debe ser implementada en el backend)
-    function sendMessage() {
-        const messageInput = document.getElementById('message');
-        if (!messageInput || !messageInput.value.trim()) {
-            showToast('Por favor, escribe un mensaje', 'warning');
-            return;
-        }
-        // Aquí va la lógica para enviar el mensaje al servidor (ejemplo con fetch)
-        /*
-        fetch('/send_message', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: messageInput.value })
-        })
-        .then(response => response.json())
-        .then(data => {
-            messageInput.value = '';
-            showToast('Mensaje enviado', 'success');
-        })
-        .catch(() => showToast('Error al enviar el mensaje', 'danger'));
-        */
-        console.log('Mensaje enviado:', messageInput.value); // Placeholder
-        messageInput.value = '';
-    }
-
-    // Función para mostrar notificaciones (definida nuevamente para evitar errores)
-    function showToast(message, type) {
-        const toastContainer = document.getElementById('toast-container');
-        if (!toastContainer) return;
-
-        const toast = document.createElement('div');
-        toast.className = `toast align-items-center text-white bg-${type} border-0`;
-        toast.setAttribute('role', 'alert');
-        toast.setAttribute('aria-live', 'assertive');
-        toast.setAttribute('aria-atomic', 'true');
-        toast.innerHTML = `
-            <div class="d-flex">
-                <div class="toast-body">${message}</div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
-            </div>
-        `;
-        toastContainer.appendChild(toast);
-        const bsToast = new bootstrap.Toast(toast);
-        bsToast.show();
-        setTimeout(() => toast.remove(), 3000);
-    }
 </script>
 
 <!-- Estilos Mejorados -->
@@ -510,6 +612,10 @@
     .chat-body::-webkit-scrollbar-thumb {
         background: #007bff;
         border-radius: 4px;
+    }
+    .modal-content.glass {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(15px);
     }
     @media (max-width: 576px) {
         .chat-container {
