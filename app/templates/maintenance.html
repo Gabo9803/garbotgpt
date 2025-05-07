@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GarBotGPT - En Transformación</title>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;500;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: #080b1f;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .background-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            text-align: center;
+            padding: 5rem;
+            max-width: 1100px;
+            background: linear-gradient(145deg, rgba(10, 20, 60, 0.92), rgba(50, 80, 120, 0.88));
+            border-radius: 40px;
+            box-shadow: 0 30px 120px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 221, 235, 0.35);
+            backdrop-filter: blur(30px);
+            border: 3px solid rgba(0, 221, 235, 0.5);
+            position: relative;
+            z-index: 1;
+            animation: cyberGlow 3.5s infinite alternate;
+        }
+
+        @keyframes cyberGlow {
+            0% { box-shadow: 0 30px 120px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 221, 235, 0.35); }
+            100% { box-shadow: 0 35px 140px rgba(0, 0, 0, 0.95), inset 0 0 40px rgba(0, 221, 235, 0.6); }
+        }
+
+        .logo {
+            width: 220px;
+            margin-bottom: 3.5rem;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.7));
+            transition: transform 0.6s, filter 0.6s;
+        }
+
+        .logo:hover {
+            transform: scale(1.2) rotate(10deg);
+            filter: drop-shadow(0 12px 24px rgba(0, 221, 235, 1));
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 7rem;
+            margin-bottom: 2.5rem;
+            background: linear-gradient(90deg, #00ddeb, #7b42ff, #ff2e63, #00ffaa, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 8px 16px rgba(0, 0, 0, 0.9);
+            letter-spacing: 5px;
+            animation: neonPulse 3s infinite alternate;
+        }
+
+        @keyframes neonPulse {
+            0% { text-shadow: 0 8px 16px rgba(0, 0, 0, 0.9); }
+            100% { text-shadow: 0 10px 30px rgba(0, 221, 235, 1.2); }
+        }
+
+        .subtitle {
+            font-size: 1.9rem;
+            line-height: 2.4;
+            margin-bottom: 4rem;
+            opacity: 0.92;
+            font-weight: 300;
+            background: linear-gradient(90deg, #ffffff, #b0faff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideInText 2s ease-out;
+        }
+
+        @keyframes slideInText {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 0.92; transform: translateY(0); }
+        }
+
+        .status {
+            font-size: 1.7rem;
+            margin-bottom: 3.5rem;
+            color: #00ffaa;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            transition: opacity 0.9s, transform 0.9s;
+            animation: statusPulse 4s infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.9; }
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 3.5rem 0;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .progress {
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #00ddeb, #7b42ff, #ff2e63, #00ffaa, #ffd700, #00ddeb);
+            background-size: 400%;
+            border-radius: 15px;
+            animation: progress 3.5s infinite ease-in-out, gradientShift 2s infinite;
+            box-shadow: 0 0 30px rgba(0, 221, 235, 1.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0%; }
+            100% { background-position: 400%; }
+        }
+
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.25) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.25) 50%,
+                rgba(255, 255, 255, 0.25) 75%,
+                transparent 75%,
+                transparent
+            );
+            background-size: 60px 60px;
+            animation: move 0.8s linear infinite;
+        }
+
+        @keyframes move {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        @keyframes progress {
+            0% { width: 0; }
+            50% { width: 100%; }
+            100% { width: 0; }
+        }
+
+        .countdown {
+            font-size: 2rem;
+            margin-top: 3.5rem;
+            opacity: 0.96;
+            font-weight: 700;
+            background: linear-gradient(90deg, rgba(0, 221, 235, 0.35), rgba(123, 66, 255, 0.35));
+            padding: 1.2rem 2.5rem;
+            border-radius: 25px;
+            display: inline-block;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transition: transform 0.5s, box-shadow 0.5s;
+        }
+
+        .countdown:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(0, 221, 235, 0.6);
+        }
+
+        .contact {
+            font-size: 1.4rem;
+            margin-top: 4rem;
+            opacity: 0.96;
+        }
+
+        .contact a {
+            color: #00ffaa;
+            text-decoration: none;
+            font-weight: 800;
+            position: relative;
+            padding: 0.4rem 0.8rem;
+            transition: all 0.5s;
+            border-radius: 10px;
+        }
+
+        .contact a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 5px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, #00ffaa, #7b42ff);
+            transition: width 0.5s;
+        }
+
+        .contact a:hover::after {
+            width: 95%;
+        }
+
+        .contact a:hover {
+            color: #ffffff;
+            background: linear-gradient(90deg, rgba(0, 221, 235, 0.35), rgba(123, 66, 255, 0.35));
+            box-shadow: 0 6px 20px rgba(0, 221, 235, 0.5);
+        }
+
+        .social-links {
+            margin-top: 3.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 3.5rem;
+        }
+
+        .social-links a {
+            color: #ffffff;
+            font-size: 2.5rem;
+            opacity: 0.9;
+            transition: all 0.5s;
+            position: relative;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .social-links a::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, #00ffaa, #7b42ff);
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 0.5s, bottom 0.5s;
+            pointer-events: none;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .social-links a:hover::before {
+            opacity: 1;
+            bottom: -55px;
+        }
+
+        .social-links a:hover {
+            opacity: 1;
+            transform: translateY(-10px) scale(1.2);
+            color: #ffd700;
+        }
+
+        .notify-button {
+            margin-top: 3.5rem;
+            padding: 1.2rem 3rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffffff;
+            background: linear-gradient(90deg, #00ffaa, #7b42ff, #ff2e63);
+            background-size: 200%;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: transform 0.5s, box-shadow 0.5s, background-position 0.5s;
+        }
+
+        .notify-button:hover {
+            transform: scale(1.12);
+            box-shadow: 0 12px 30px rgba(0, 221, 235, 0.7);
+            background-position: 100%;
+        }
+
+        .feature-list {
+            margin-top: 3rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .feature-item {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(0, 221, 235, 0.12));
+            padding: 1.5rem 2.5rem;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            min-width: 200px;
+            transition: transform 0.5s, box-shadow 0.5s;
+            text-align: left;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 221, 235, 0.4);
+        }
+
+        .feature-item::before {
+            content: '✨';
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 3.5rem; }
+            h1 { font-size: 4rem; }
+            .subtitle { font-size: 1.4rem; }
+            .logo { width: 160px; }
+            .countdown { font-size: 1.4rem; padding: 0.9rem 1.8rem; }
+            .social-links a { font-size: 2rem; }
+            .status { font-size: 1.3rem; }
+            .notify-button { font-size: 1.1rem; padding: 1rem 2.5rem; }
+            .feature-item { font-size: 1.1rem; min-width: 160px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas class="background-canvas" id="canvas"></canvas>
+    <div class="container">
+        <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT Logo" class="logo">
+        <h1>GarBotGPT en Transformación</h1>
+        <p class="subtitle">Estamos forjando el futuro de la inteligencia artificial con GarBotGPT, integrando tecnologías revolucionarias para ofrecer una experiencia sin precedentes.</p>
+        <p class="status">Activando innovaciones disruptivas...</p>
+        <div class="progress-container">
+            <div class="progress"></div>
+        </div>
+        <p class="countdown" id="countdown">Tiempo estimado: Calculando...</p>
+        <div class="feature-list">
+            <div class="feature-item">Respuestas Ultrarrápidas</div>
+            <div class="feature-item">Contexto Multimodal</div>
+            <div class="feature-item">Precisión Mejorada</div>
+            <div class="feature-item">Interfaz Intuitiva</div>
+        </div>
+        <button class="notify-button" onclick="alert('¡Notificación activada! Te avisaremos cuando GarBotGPT esté listo.')">Notificarme al Lanzamiento</button>
+        <p class="contact">¿Preguntas? Contáctanos en <a href="mailto:soporte@garbotgpt.com">soporte@garbotgpt.com</a></p>
+        <div class="social-links">
+            <a href="https://twitter.com/GarBotGPT" target="_blank" data-tooltip="Twitter" aria-label="Twitter">𝕏</a>
+            <a href="https://linkedin.com/company/garbotgpt" target="_blank" data-tooltip="LinkedIn" aria-label="LinkedIn">LinkedIn</a>
+            <a href="https://github.com/garbotgpt" target="_blank" data-tooltip="GitHub" aria-label="GitHub">GitHub</a>
+            <a href="https://discord.gg/garbotgpt" target="_blank" data-tooltip="Discord" aria-label="Discord">Discord</a>
+            <a href="https://t.me/garbotgpt" target="_blank" data-tooltip="Telegram" aria-label="Telegram">Telegram</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Dynamic status messages
+            const messages = [
+                'Reestructurando redes neuronales avanzadas...',
+                'Integrando flujos de datos hiperescalables...',
+                'Entrenando modelos de IA de última generación...',
+                'Desplegando sistemas de seguridad cuántica...',
+                'Sincronizando con clústeres globales...',
+                'Optimizando interacciones contextuales...',
+                'Implementando capacidades multimodales...',
+                'Finalizando arquitectura futurista...'
+            ];
+
+            let currentMessage = 0;
+            const statusElement = document.querySelector('.status');
+
+            function updateStatus() {
+                statusElement.style.opacity = 0;
+                statusElement.style.transform = 'translateY(25px)';
+                setTimeout(() => {
+                    statusElement.textContent = messages[currentMessage];
+                    statusElement.style.opacity = 1;
+                    statusElement.style.transform = 'translateY(0)';
+                    currentMessage = (currentMessage + 1) % messages.length;
+                }, 900);
+            }
+
+            updateStatus();
+            setInterval(updateStatus, 6000);
+
+            // Countdown timer (example: 30 minutes from now)
+            const countdownElement = document.querySelector('#countdown');
+            const endTime = new Date(Date.now() + 30 * 60 * 1000);
+
+            function updateCountdown() {
+                const now = new Date();
+                const timeLeft = endTime - now;
+                if (timeLeft <= 0) {
+                    countdownElement.textContent = '¡Transformación finalizada! Lanzamiento inminente...';
+                    return;
+                }
+
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                countdownElement.textContent = `Tiempo estimado: ${hours}h ${minutes}m ${seconds}s`;
+            }
+
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+
+            // Canvas background animation with enhanced neural network effect
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const canvasNodes = [];
+            class Node {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 5 + 2;
+                    this.speedX = Math.random() * 0.5 - 0.25;
+                    this.speedY = Math.random() * 0.5 - 0.25;
+                    this.opacity = Math.random() * 0.6 + 0.4;
+                    this.color = ['#00ddeb', '#7b42ff', '#ff2e63', '#00ffaa'][Math.floor(Math.random() * 4)];
+                }
+
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.globalAlpha = this.opacity;
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = this.color;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                    ctx.globalAlpha = 1;
+                }
+            }
+
+            function initNodes() {
+                for (let i = 0; i < 80; i++) {
+                    canvasNodes.push(new Node());
+                }
+            }
+
+            function drawConnections() {
+                for (let i = 0; i < canvasNodes.length; i++) {
+                    for (let j = i + 1; j < canvasNodes.length; j++) {
+                        const dx = canvasNodes[i].x - canvasNodes[j].x;
+                        const dy = canvasNodes[i].y - canvasNodes[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < 250) {
+                            ctx.beginPath();
+                            ctx.moveTo(canvasNodes[i].x, canvasNodes[i].y);
+                            ctx.lineTo(canvasNodes[j].x, canvasNodes[j].y);
+                            ctx.strokeStyle = `rgba(0, 221, 235, ${1 - distance / 250})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                ctx.fillStyle = 'rgba(8, 11, 31, 0.15)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                drawConnections();
+                canvasNodes.forEach(node => {
+                    node.update();
+                    node.draw();
+                });
+                requestAnimationFrame(animate);
+            }
+
+            initNodes();
+            animate();
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+
+            // Interactive canvas effect with mouse and touch
+            function handleInteraction(e) {
+                let clientX, clientY;
+                if (e.type === 'touchmove' && e.touches && e.touches[0]) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                } else if (e.type === 'mousemove') {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                } else {
+                    return;
+                }
+
+                canvasNodes.forEach(node => {
+                    const dx = clientX - node.x;
+                    const dy = clientY - node.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 150) {
+                        node.speedX += dx * 0.002;
+                        node.speedY += dy * 0.002;
+                    }
+                });
+            }
+
+            window.addEventListener('mousemove', handleInteraction);
+            window.addEventListener('touchmove', handleInteraction);
+
+            // Dynamic feature list animation
+            const featureItems = document.querySelectorAll('.feature-item');
+            featureItems.forEach((item, index) => {
+                item.style.animationDelay = `${index * 0.2}s`;
+                item.style.opacity = 0;
+                item.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    item.style.transition = 'opacity 0.5s, transform 0.5s';
+                    item.style.opacity = 1;
+                    item.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>
