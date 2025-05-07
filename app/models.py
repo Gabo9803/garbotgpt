@@ -17,8 +17,7 @@ class ChatSettings(db.Model):
     model = db.Column(db.String(50), default='gpt-3.5-turbo')
     temperature = db.Column(db.Float, default=0.7)
     max_tokens = db.Column(db.Integer, default=1000)
-    theme_color = db.Column(db.String(7), default='#007bff')
-    typing_speed = db.Column(db.Integer, default=20)
+    theme_color = db.Column(db.String(7), default='#007bff')  # Color personalizado
 
 class ChatHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -26,4 +25,3 @@ class ChatHistory(db.Model):
     message = db.Column(db.Text, nullable=False)
     response = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    edited = db.Column(db.Boolean, default=False)
