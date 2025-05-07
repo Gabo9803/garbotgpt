@@ -163,6 +163,21 @@
             line-height: 1.4;
             font-size: 0.9rem;
         }
+        .message-content textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #0288D1;
+            border-radius: 6px;
+            color: #E8ECEF;
+            padding: 8px;
+            font-size: 0.9rem;
+            resize: none;
+        }
+        .message-content textarea:focus {
+            outline: none;
+            border-color: #039BE5;
+            box-shadow: 0 0 6px rgba(2, 136, 209, 0.4);
+        }
         .message-meta {
             font-size: 0.7rem;
             opacity: 0.5;
@@ -177,6 +192,11 @@
         .message-actions .btn {
             font-size: 0.75rem;
             padding: 3px 10px;
+        }
+        .edit-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
         }
         .typing-effect {
             display: inline-flex;
@@ -273,13 +293,18 @@
                 </div>
             {% endif %}
             {% for entry in history %}
-                <div class="message-container">
+                <div class="message-container" data-message-id="{{ entry.id }}">
                     <div class="message user-message" role="article">
                         <div class="avatar user-avatar">T</div>
                         <div class="message-content">
                             <strong>Tú:</strong>
                             <p>{{ entry.message | safe }}</p>
                             <div class="message-meta">{{ entry.timestamp | default('Ahora') }}</div>
+                            <div class="message-actions">
+                                <button class="btn btn-sm btn-grok edit-btn" data-message-id="{{ entry.id }}" data-message="{{ entry.message | safe }}" aria-label="Editar mensaje">Editar</button>
+                                <button class="btn btn-sm btn-grok copy-btn" data-text="{{ entry.response }}" aria-label="Copiar respuesta">Copiar</button>
+                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="{{ entry.message }}" aria-label="Regenerar respuesta">Regenerar</button>
+                            </div>
                         </div>
                     </div>
                     <div class="message ai-message" role="article">
@@ -464,6 +489,11 @@
                     <strong>Tú:</strong>
                     <p>${message}</p>
                     <div class="message-meta">Ahora</div>
+                    <div class="message-actions">
+                        <button class="btn btn-sm btn-grok edit-btn" data-message-id="temp" data-message="${message}" aria-label="Editar mensaje">Editar</button>
+                        <button class="btn btn-sm btn-grok copy-btn" data-text="${message}" aria-label="Copiar mensaje">Copiar</button>
+                        <button class="btn btn-sm btn-grok regenerate-btn" data-message="${message}" aria-label="Regenerar respuesta">Regenerar</button>
+                    </div>
                 </div>`;
             messageContainer.appendChild(userMessage);
             chatMessages.insertBefore(messageContainer, respondingIndicator);
@@ -481,6 +511,10 @@
                     respondingIndicator.classList.add('d-none');
                     return;
                 }
+
+                // Actualizar ID del mensaje
+                messageContainer.setAttribute('data-message-id', data.id);
+                userMessage.querySelector('.edit-btn').setAttribute('data-message-id', data.id);
 
                 // Ocultar indicador de "escribiendo"
                 respondingIndicator.classList.add('d-none');
@@ -507,7 +541,7 @@
                 cancelGeneration = false;
                 typeResponse(responseElement, data.response);
 
-                // Scroll automático para mantener el prompt y la respuesta visibles
+                // Scroll automático
                 setTimeout(() => {
                     chatMessages.scrollTop = chatMessages.scrollHeight;
                 }, 50);
@@ -524,12 +558,12 @@
             if (e.key === 'Enter') sendMessage();
         });
 
-        // Copiar respuesta
+        // Copiar texto
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('copy-btn')) {
                 const text = e.target.getAttribute('data-text');
                 navigator.clipboard.writeText(text).then(() => {
-                    alert('¡Respuesta copiada!');
+                    alert('¡Texto copiado!');
                 });
             }
         });
@@ -540,6 +574,87 @@
                 const message = e.target.getAttribute('data-message');
                 document.getElementById('message-input').value = message;
                 sendMessage();
+            }
+        });
+
+        // Editar mensaje
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('edit-btn')) {
+                const messageId = e.target.getAttribute('data-message-id');
+                const messageText = e.target.getAttribute('data-message');
+                const messageContainer = e.target.closest('.message-container');
+                const messageContent = messageContainer.querySelector('.user-message .message-content');
+                const originalContent = messageContent.innerHTML;
+
+                // Reemplazar contenido con campo de edición
+                messageContent.innerHTML = `
+                    <strong>Tú:</strong>
+                    <textarea rows="3">${messageText}</textarea>
+                    <div class="edit-actions">
+                        <button class="btn btn-sm btn-grok save-edit-btn" data-message-id="${messageId}" aria-label="Desar edició">Desar</button>
+                        <button class="btn btn-sm btn-grok cancel-edit-btn" aria-label="Cancel·lar edició">Cancel·lar</button>
+                    </div>
+                `;
+
+                // Desar edició
+                messageContent.querySelector('.save-edit-btn').addEventListener('click', function() {
+                    const newMessage = messageContent.querySelector('textarea').value.trim();
+                    if (!newMessage) {
+                        alert('El missatge no pot estar buit');
+                        return;
+                    }
+
+                    fetch('/edit_message', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: messageId, message: newMessage })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert('Error: ' + data.error);
+                            return;
+                        }
+
+                        // Actualizar mensaje del usuario
+                        messageContent.innerHTML = `
+                            <strong>Tú:</strong>
+                            <p>${newMessage}</p>
+                            <div class="message-meta">Ahora</div>
+                            <div class="message-actions">
+                                <button class="btn btn-sm btn-grok edit-btn" data-message-id="${messageId}" data-message="${newMessage}" aria-label="Editar mensaje">Editar</button>
+                                <button class="btn btn-sm btn-grok copy-btn" data-text="${newMessage}" aria-label="Copiar mensaje">Copiar</button>
+                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="${newMessage}" aria-label="Regenerar respuesta">Regenerar</button>
+                            </div>
+                        `;
+
+                        // Actualizar respuesta del bot
+                        const aiMessageContent = messageContainer.querySelector('.ai-message .message-content');
+                        aiMessageContent.innerHTML = `
+                            <strong>GarBotGPT:</strong>
+                            <p></p>
+                            <div class="message-meta">Ahora</div>
+                            <div class="message-actions">
+                                <button class="btn btn-sm btn-grok copy-btn" data-text="${data.response}" aria-label="Copiar respuesta">Copiar</button>
+                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="${newMessage}" aria-label="Regenerar respuesta">Regenerar</button>
+                            </div>
+                        `;
+                        typeResponse(aiMessageContent.querySelector('p'), data.response);
+
+                        // Scroll automático
+                        setTimeout(() => {
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }, 50);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+
+                // Cancel·lar edició
+                messageContent.querySelector('.cancel-edit-btn').addEventListener('click', function() {
+                    messageContent.innerHTML = originalContent;
+                });
             }
         });
 
