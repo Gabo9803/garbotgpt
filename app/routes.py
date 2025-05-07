@@ -169,17 +169,57 @@ def chat():
             if not regenerate:
                 chat_entry = ChatHistory(user_id=current_user.id, message=user_message, response=ai_response)
                 db.session.add(chat_entry)
+                db.session.commit()
+                chat_entry_id = chat_entry.id
             else:
                 last_entry.response = ai_response
-            db.session.commit()
+                chat_entry_id = last_entry.id
+                db.session.commit()
             
-            return jsonify({'response': ai_response})
+            return jsonify({'id': chat_entry_id, 'response': ai_response})
         except Exception as e:
             logger.error(f"Error in chat: {str(e)}")
             return jsonify({'error': str(e)}), 500
     history = ChatHistory.query.filter_by(user_id=current_user.id).order_by(ChatHistory.timestamp.asc()).all()
     chat_settings = ChatSettings.query.filter_by(user_id=current_user.id).first()
     return render_template('chat.html', history=history, chat_settings=chat_settings, authenticated=current_user.is_authenticated)
+
+@current_app.route('/edit_message', methods=['POST'])
+@login_required
+def edit_message():
+    try:
+        data = request.get_json()
+        message_id = data.get('id')
+        new_message = data.get('message')
+        if not message_id or not new_message:
+            return jsonify({'error': 'ID or message missing'}), 400
+
+        chat_entry = ChatHistory.query.filter_by(id=message_id, user_id=current_user.id).first()
+        if not chat_entry:
+            return jsonify({'error': 'Message not found'}), 404
+
+        chat_settings = ChatSettings.query.filter_by(user_id=current_user.id).first()
+        messages = [
+            {"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI."},
+            {"role": "user", "content": new_message}
+        ]
+        response = openai.chat.completions.create(
+            model=chat_settings.model,
+            messages=messages,
+            temperature=chat_settings.temperature,
+            max_tokens=chat_settings.max_tokens
+        )
+        bot_response = response.choices[0].message.content
+
+        chat_entry.message = new_message
+        chat_entry.response = bot_response
+        chat_entry.timestamp = datetime.utcnow()
+        db.session.commit()
+
+        return jsonify({'response': bot_response})
+    except Exception as e:
+        logger.error(f"Error editing message: {str(e)}")
+        return jsonify({'error': str(e)}), 500
 
 @current_app.route('/clear_history', methods=['POST'])
 @login_required
