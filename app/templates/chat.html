@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatear con GarBotGPT - Interfaz Mejorada</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -17,9 +17,9 @@
             height: 100vh;
             width: 100vw;
             overflow: hidden;
-            background: linear-gradient(135deg, #1E1A3C, #0B2A5E);
-            color: #E0E7FF;
-            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(180deg, #1A1A1A, #2A2A2A);
+            color: #E8ECEF;
+            font-family: 'Inter', sans-serif;
         }
         .chat-container {
             height: 100vh;
@@ -27,138 +27,216 @@
             display: flex;
             flex-direction: column;
             position: relative;
+            z-index: 1;
         }
         .chat-header {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 10px 20px;
-            border-bottom: 1px solid #3B82F6;
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 30px;
+            border-bottom: 1px solid #4B5EAA;
+            backdrop-filter: blur(15px);
         }
         .chat-header img {
-            height: 35px;
-            margin-right: 10px;
+            height: 40px;
+            margin-right: 15px;
+        }
+        .chat-header h3 {
+            font-weight: 600;
+            font-size: 1.5rem;
         }
         .chat-body {
             flex: 1;
-            padding: 20px;
+            padding: 40px 60px;
             overflow-y: auto;
             scroll-behavior: smooth;
         }
-        .chat-footer {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 10px 20px;
-            border-top: 1px solid #3B82F6;
-            backdrop-filter: blur(5px);
+        @media (max-width: 768px) {
+            .chat-body {
+                padding: 20px 15px;
+            }
         }
-        .chat-footer.centered {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            max-width: 600px;
-            background: transparent;
-            border: none;
+        .chat-footer {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 20px;
+            border-top: 1px solid #4B5EAA;
+            backdrop-filter: blur(15px);
         }
         .input-group {
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 50px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.2s ease;
+        }
+        .input-group:hover {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
         }
         .form-control {
             background: transparent;
             border: none;
-            color: #E0E7FF;
-            font-size: 16px;
-            padding: 10px 20px;
+            color: #E8ECEF;
+            font-size: 1.1rem;
+            padding: 12px 20px;
         }
         .form-control:focus {
             box-shadow: none;
             background: transparent;
-            color: #E0E7FF;
+            color: #E8ECEF;
         }
-        .btn-neon {
-            background: #3B82F6;
-            color: #E0E7FF;
+        .btn-modern {
+            background: #4B5EAA;
+            color: #E8ECEF;
             border: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
         }
-        .btn-neon:hover {
-            background: #2563EB;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
-            transform: translateY(-2px);
+        .btn-modern:hover {
+            background: #5A6FC0;
+            box-shadow: 0 4px 10px rgba(75, 94, 170, 0.4);
+            transform: translateY(-1px);
         }
-        .message {
-            margin: 15px 0;
-            padding: 10px 15px;
-            border-radius: 15px;
-            max-width: 70%;
+        .message-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
             position: relative;
         }
+        .message {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            max-width: 80%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
         .user-message {
-            background: #3B82F6;
+            background: #4B5EAA;
             margin-left: auto;
-            text-align: right;
+            border-top-right-radius: 4px;
+            border-bottom-left-radius: 12px;
         }
         .ai-message {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
             margin-right: auto;
+            border-top-left-radius: 4px;
+            border-bottom-right-radius: 12px;
         }
-        .typing-effect::after {
-            content: '';
-            display: inline-block;
-            width: 5px;
-            height: 5px;
-            background: #3B82F6;
+        .message:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            margin-left: 5px;
-            animation: typing 1.5s infinite;
+            object-fit: cover;
+            border: 2px solid #4B5EAA;
         }
-        @keyframes typing {
-            0%, 100% { transform: translateY(0); opacity: 1; }
-            50% { transform: translateY(-5px); opacity: 0.5; }
+        .message-content {
+            flex: 1;
+        }
+        .message-content strong {
+            font-size: 1rem;
+            font-weight: 600;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .message-content p {
+            margin: 0;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+        .message-meta {
+            font-size: 0.75rem;
+            opacity: 0.6;
+            margin-top: 8px;
+            font-weight: 300;
+        }
+        .message-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .message-actions .btn {
+            font-size: 0.8rem;
+            padding: 4px 12px;
+        }
+        .typing-effect {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .typing-effect span {
+            width: 6px;
+            height: 6px;
+            background: #4B5EAA;
+            border-radius: 50%;
+            animation: typingFade 1.2s ease-in-out infinite;
+        }
+        .typing-effect span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-effect span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingFade {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        #responding-indicator {
+            position: relative;
+            margin-top: 20px;
         }
         .suggestions {
             text-align: center;
-            margin: 20px 0;
+            margin: 40px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
         .suggestion-btn {
             background: transparent;
-            border: 1px solid #3B82F6;
-            color: #3B82F6;
-            margin: 5px;
-            transition: all 0.3s ease;
+            border: 1px solid #4B5EAA;
+            color: #4B5EAA;
+            margin: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
         .suggestion-btn:hover {
-            background: #3B82F6;
-            color: #E0E7FF;
+            background: #4B5EAA;
+            color: #E8ECEF;
+            box-shadow: 0 2px 6px rgba(75, 94, 170, 0.3);
         }
         .modal-content {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid #3B82F6;
-            color: #E0E7FF;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(15px);
+            border: 1px solid #4B5EAA;
+            color: #E8ECEF;
         }
         .modal-header, .modal-footer {
-            border-color: #3B82F6;
+            border-color: #4B5EAA;
         }
         .form-select, .form-control-color {
             background: rgba(255, 255, 255, 0.1);
-            color: #E0E7FF;
-            border: 1px solid #3B82F6;
+            color: #E8ECEF;
+            border: 1px solid #4B5EAA;
+            font-family: 'Inter', sans-serif;
         }
         .form-select:focus {
             background: rgba(255, 255, 255, 0.1);
-            color: #E0E7FF;
-            border-color: #3B82F6;
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            color: #E8ECEF;
+            border-color: #4B5EAA;
+            box-shadow: 0 0 8px rgba(75, 94, 170, 0.4);
         }
     </style>
 </head>
 <body>
-    <div class="chat-container animate__animated animate__fadeIn">
+    <div class="chat-container">
         <!-- Encabezado del Chat -->
         <div class="chat-header d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
@@ -166,7 +244,7 @@
                 <h3 class="mb-0">GarBotGPT</h3>
             </div>
             <div>
-                <button class="btn btn-neon btn-sm me-2" data-bs-toggle="modal" data-bs-target="#menuModal" aria-label="Abrir menú">
+                <button class="btn btn-modern btn-sm me-2" data-bs-toggle="modal" data-bs-target="#menuModal" aria-label="Abrir menú">
                     <i class="bi bi-list"></i> Menú
                 </button>
                 <span id="server-status" class="badge bg-success" role="status" aria-live="polite">Conectado</span>
@@ -176,36 +254,58 @@
         <!-- Cuerpo del Chat -->
         <div id="chat-messages" class="chat-body" role="log" aria-live="polite">
             {% if history|length == 0 %}
-                <div class="suggestions animate__animated animate__fadeIn" role="region" aria-label="Sugerencias iniciales">
-                    <p class="mb-3">¡Bienvenido a GarBotGPT! ¿En qué puedo ayudarte?</p>
-                    <button class="btn suggestion-btn" data-message="Explora la IA">Explora la IA</button>
-                    <button class="btn suggestion-btn" data-message="Crea un cuento">Crea un cuento</button>
-                    <button class="btn suggestion-btn" data-message="Resuelve un problema">Resuelve un problema</button>
+                <div class="suggestions" role="region" aria-label="Sugerencias iniciales">
+                    <p class="mb-4">¡Bienvenido a GarBotGPT! ¿Cómo puedo asistirte hoy?</p>
+                    <button class="btn suggestion-btn" data-message="Explora la inteligencia artificial">Explora la IA</button>
+                    <button class="btn suggestion-btn" data-message="Escribe un cuento corto">Crea un cuento</button>
+                    <button class="btn suggestion-btn" data-message="Resuelve un problema matemático">Resuelve un problema</button>
                 </div>
             {% endif %}
             {% for entry in history %}
-                <div class="message user-message animate__animated animate__fadeInRight" role="article">
-                    <strong>Tú:</strong> {{ entry.message | safe }}
-                </div>
-                <div class="message ai-message animate__animated animate__fadeInLeft" role="article">
-                    <strong>GarBotGPT:</strong> {{ entry.response | safe }}
-                    <button class="btn btn-sm btn-neon mt-1 copy-btn" data-text="{{ entry.response }}" aria-label="Copiar respuesta">Copiar</button>
+                <div class="message-container">
+                    <div class="message user-message" role="article">
+                        <img src="{{ url_for('static', filename='img/user-avatar.png') }}" alt="Avatar del usuario" class="avatar" aria-hidden="true">
+                        <div class="message-content">
+                            <strong>Tú:</strong>
+                            <p>{{ entry.message | safe }}</p>
+                            <div class="message-meta">{{ entry.timestamp | default('Ahora') }}</div>
+                        </div>
+                    </div>
+                    <div class="message ai-message" role="article">
+                        <img src="{{ url_for('static', filename='img/garbotgpt-avatar.png') }}" alt="Avatar de GarBotGPT" class="avatar" aria-hidden="true">
+                        <div class="message-content">
+                            <strong>GarBotGPT:</strong>
+                            <p>{{ entry.response | safe }}</p>
+                            <div class="message-meta">{{ entry.timestamp | default('Ahora') }}</div>
+                            <div class="message-actions">
+                                <button class="btn btn-sm btn-modern copy-btn" data-text="{{ entry.response }}" aria-label="Copiar respuesta">Copiar</button>
+                                <button class="btn btn-sm btn-modern regenerate-btn" data-message="{{ entry.message }}" aria-label="Regenerar respuesta">Regenerar</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             {% endfor %}
-            <div id="responding-indicator" class="message ai-message d-none animate__animated animate__fadeIn" role="status">
-                <strong>GarBotGPT:</strong> <span class="typing-effect">Escribiendo</span>
+            <div id="responding-indicator" class="message ai-message d-none" role="status">
+                <img src="{{ url_for('static', filename='img/garbotgpt-avatar.png') }}" alt="Avatar de GarBotGPT" class="avatar" aria-hidden="true">
+                <div class="message-content">
+                    <strong>GarBotGPT:</strong>
+                    <div class="typing-effect"><span></span><span></span><span></span></div>
+                </div>
             </div>
         </div>
 
         <!-- Pie del Chat -->
-        <div class="chat-footer {% if history|length == 0 %}centered{% endif %}">
+        <div class="chat-footer">
             <div class="input-group">
                 <input type="text" id="message-input" class="form-control" placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje">
-                <button class="btn btn-neon" onclick="sendMessage()" aria-label="Enviar mensaje">
+                <button class="btn btn-modern" onclick="sendMessage()" aria-label="Enviar mensaje">
                     <i class="bi bi-send-fill"></i>
                 </button>
-                <button id="voice-btn" class="btn btn-neon" data-bs-toggle="tooltip" title="Entrada por voz" aria-label="Entrada por voz">
+                <button id="voice-btn" class="btn btn-modern" data-bs-toggle="tooltip" title="Entrada por voz" aria-label="Entrada por voz">
                     <i class="bi bi-mic-fill"></i>
+                </button>
+                <button id="cancel-btn" class="btn btn-modern d-none" onclick="cancelResponse()" aria-label="Cancelar respuesta">
+                    <i class="bi bi-x-circle-fill"></i>
                 </button>
             </div>
         </div>
@@ -220,12 +320,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar menú"></button>
                 </div>
                 <div class="modal-body">
-                    <button class="btn btn-neon w-100 mb-2" data-bs-toggle="modal" data-bs-target="#settingsModal" data-bs-dismiss="modal" aria-label="Abrir configuración">Configuración</button>
-                    <button class="btn btn-neon w-100 mb-2" data-bs-toggle="modal" data-bs-target="#infoModal" data-bs-dismiss="modal" aria-label="Ver información">Información</button>
-                    <button id="clear-history" class="btn btn-neon w-100 mb-2" aria-label="Borrar historial">Borrar Historial</button>
-                    <a href="{{ url_for('export_history') }}" class="btn btn-neon w-100 mb-2" aria-label="Exportar historial">Exportar Historial</a>
-                    <a href="{{ url_for('export_settings') }}" class="btn btn-neon w-100 mb-2" aria-label="Exportar configuración">Exportar Configuración</a>
-                    <a href="{{ url_for('logout') }}" class="btn btn-neon w-100" aria-label="Cerrar sesión">Cerrar Sesión</a>
+                    <button class="btn btn-modern w-100 mb-2" data-bs-toggle="modal" data-bs-target="#settingsModal" data-bs-dismiss="modal" aria-label="Abrir configuración">Configuración</button>
+                    <button class="btn btn-modern w-100 mb-2" data-bs-toggle="modal" data-bs-target="#infoModal" data-bs-dismiss="modal" aria-label="Ver información">Información</button>
+                    <button id="clear-history" class="btn btn-modern w-100 mb-2" aria-label="Borrar historial">Borrar Historial</button>
+                    <a href="{{ url_for('export_history') }}" class="btn btn-modern w-100 mb-2" aria-label="Exportar historial">Exportar Historial</a>
+                    <a href="{{ url_for('export_settings') }}" class="btn btn-modern w-100 mb-2" aria-label="Exportar configuración">Exportar Configuración</a>
+                    <a href="{{ url_for('logout') }}" class="btn btn-modern w-100" aria-label="Cerrar sesión">Cerrar Sesión</a>
                 </div>
             </div>
         </div>
@@ -260,7 +360,7 @@
                             <label for="theme_color" class="form-label">Color del Tema</label>
                             <input type="color" class="form-control form-control-color" id="theme_color" name="theme_color" value="{{ chat_settings.theme_color }}" aria-label="Seleccionar color del tema">
                         </div>
-                        <button type="submit" class="btn btn-neon w-100" aria-label="Guardar configuración">Guardar</button>
+                        <button type="submit" class="btn btn-modern w-100" aria-label="Guardar configuración">Guardar</button>
                     </form>
                 </div>
             </div>
@@ -293,8 +393,44 @@
         const chatMessages = document.getElementById('chat-messages');
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
+        let isGenerating = false;
+        let cancelGeneration = false;
+
+        // Función para simular escritura progresiva
+        function typeResponse(element, text, speed = 25) {
+            let index = 0;
+            element.innerHTML = '';
+            isGenerating = true;
+
+            function type() {
+                if (cancelGeneration) {
+                    element.innerHTML = text;
+                    isGenerating = false;
+                    document.getElementById('cancel-btn').classList.add('d-none');
+                    return;
+                }
+                if (index < text.length) {
+                    element.innerHTML += text.charAt(index);
+                    index++;
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    setTimeout(type, speed);
+                } else {
+                    isGenerating = false;
+                    document.getElementById('cancel-btn').classList.add('d-none');
+                }
+            }
+            type();
+        }
+
+        // Cancelar generación
+        function cancelResponse() {
+            cancelGeneration = true;
+        }
+
         // Enviar mensaje
         function sendMessage() {
+            if (isGenerating) return;
+
             const input = document.getElementById('message-input');
             const message = input.value.trim();
             if (!message) return;
@@ -302,6 +438,24 @@
             // Mostrar indicador de "escribiendo"
             const respondingIndicator = document.getElementById('responding-indicator');
             respondingIndicator.classList.remove('d-none');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Crear contenedor de mensajes
+            const messageContainer = document.createElement('div');
+            messageContainer.className = 'message-container';
+
+            // Mensaje del usuario
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user-message';
+            userMessage.innerHTML = `
+                <img src="{{ url_for('static', filename='img/user-avatar.png') }}" alt="Avatar del usuario" class="avatar" aria-hidden="true">
+                <div class="message-content">
+                    <strong>Tú:</strong>
+                    <p>${message}</p>
+                    <div class="message-meta">Ahora</div>
+                </div>`;
+            messageContainer.appendChild(userMessage);
+            chatMessages.insertBefore(messageContainer, respondingIndicator);
 
             // Enviar mensaje al servidor
             fetch('/chat', {
@@ -313,26 +467,37 @@
             .then(data => {
                 if (data.error) {
                     alert('Error: ' + data.error);
+                    respondingIndicator.classList.add('d-none');
                     return;
                 }
-                // Afegir el missatge de l'usuari i la resposta de l'IA al xat
-                const userMessage = document.createElement('div');
-                userMessage.className = 'message user-message animate__animated animate__fadeInRight';
-                userMessage.innerHTML = `<strong>Tú:</strong> ${message}`;
-                chatMessages.appendChild(userMessage);
 
-                const aiMessage = document.createElement('div');
-                aiMessage.className = 'message ai-message animate__animated animate__fadeInLeft';
-                aiMessage.innerHTML = `<strong>GarBotGPT:</strong> ${data.response}<button class="btn btn-sm btn-neon mt-1 copy-btn" data-text="${data.response}" aria-label="Copiar respuesta">Copiar</button>`;
-                chatMessages.appendChild(aiMessage);
-
-                // Actualitzar posició del prompt
-                const chatFooter = document.querySelector('.chat-footer');
-                chatFooter.classList.remove('centered');
-
-                // Scroll automàtic
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+                // Ocultar indicador de "escribiendo"
                 respondingIndicator.classList.add('d-none');
+
+                // Mensaje de la IA
+                const aiMessage = document.createElement('div');
+                aiMessage.className = 'message ai-message';
+                aiMessage.innerHTML = `
+                    <img src="{{ url_for('static', filename='img/garbotgpt-avatar.png') }}" alt="Avatar de GarBotGPT" class="avatar" aria-hidden="true">
+                    <div class="message-content">
+                        <strong>GarBotGPT:</strong>
+                        <p></p>
+                        <div class="message-meta">Ahora</div>
+                        <div class="message-actions">
+                            <button class="btn btn-sm btn-modern copy-btn" data-text="${data.response}" aria-label="Copiar respuesta">Copiar</button>
+                            <button class="btn btn-sm btn-modern regenerate-btn" data-message="${message}" aria-label="Regenerar respuesta">Regenerar</button>
+                        </div>
+                    </div>`;
+                messageContainer.appendChild(aiMessage);
+
+                // Iniciar escritura progresiva
+                const responseElement = aiMessage.querySelector('p');
+                document.getElementById('cancel-btn').classList.remove('d-none');
+                cancelGeneration = false;
+                typeResponse(responseElement, data.response);
+
+                // Scroll automático
+                chatMessages.scrollTop = chatMessages.scrollHeight;
                 input.value = '';
             })
             .catch(error => {
@@ -346,13 +511,22 @@
             if (e.key === 'Enter') sendMessage();
         });
 
-        // Copiar resposta
+        // Copiar respuesta
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('copy-btn')) {
                 const text = e.target.getAttribute('data-text');
                 navigator.clipboard.writeText(text).then(() => {
                     alert('¡Respuesta copiada!');
                 });
+            }
+        });
+
+        // Regenerar respuesta
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('regenerate-btn')) {
+                const message = e.target.getAttribute('data-message');
+                document.getElementById('message-input').value = message;
+                sendMessage();
             }
         });
 
@@ -363,20 +537,24 @@
                 .then(data => {
                     if (data.success) {
                         chatMessages.innerHTML = `
-                            <div class="suggestions animate__animated animate__fadeIn" role="region" aria-label="Sugerencias iniciales">
-                                <p class="mb-3">¡Bienvenido a GarBotGPT! ¿En qué puedo ayudarte?</p>
-                                <button class="btn suggestion-btn" data-message="Explora la IA">Explora la IA</button>
-                                <button class="btn suggestion-btn" data-message="Crea un cuento">Crea un cuento</button>
-                                <button class="btn suggestion-btn" data-message="Resuelve un problema">Resuelve un problema</button>
+                            <div class="suggestions" role="region" aria-label="Sugerencias iniciales">
+                                <p class="mb-4">¡Bienvenido a GarBotGPT! ¿Cómo puedo asistirte hoy?</p>
+                                <button class="btn suggestion-btn" data-message="Explora la inteligencia artificial">Explora la IA</button>
+                                <button class="btn suggestion-btn" data-message="Escribe un cuento corto">Crea un cuento</button>
+                                <button class="btn suggestion-btn" data-message="Resuelve un problema matemático">Resuelve un problema</button>
                             </div>
-                        `;
-                        const chatFooter = document.querySelector('.chat-footer');
-                        chatFooter.classList.add('centered');
+                            <div id="responding-indicator" class="message ai-message d-none" role="status">
+                                <img src="{{ url_for('static', filename='img/garbotgpt-avatar.png') }}" alt="Avatar de GarBotGPT" class="avatar" aria-hidden="true">
+                                <div class="message-content">
+                                    <strong>GarBotGPT:</strong>
+                                    <div class="typing-effect"><span></span><span></span><span></span></div>
+                                </div>
+                            </div>`;
                     }
                 });
         });
 
-        // Enviar suggeriments
+        // Enviar sugerencias
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('suggestion-btn')) {
                 const message = e.target.getAttribute('data-message');
@@ -385,7 +563,7 @@
             }
         });
 
-        // Actualitzar configuració
+        // Actualizar configuración
         document.getElementById('chat-settings-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const formData = new FormData(this);
