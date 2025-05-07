@@ -139,8 +139,6 @@ def chat():
         regenerate = request.json.get('regenerate', False)
         if not user_message and not regenerate:
             return jsonify({'error': 'Se requiere un mensaje'}), 400
-        if len(user_message) > 1000:
-            return jsonify({'error': 'El mensaje es demasiado largo (máximo 1000 caracteres)'}), 400
         try:
             chat_settings = ChatSettings.query.filter_by(user_id=current_user.id).first()
             if not chat_settings:
@@ -170,13 +168,12 @@ def chat():
             ai_response = response.choices[0].message.content
             
             if not regenerate:
-                chat_entry = ChatHistory(user_id=current_user.id, message=user_message, response=ai_response, edited=False)
+                chat_entry = ChatHistory(user_id=current_user.id, message=user_message, response=ai_response)
                 db.session.add(chat_entry)
                 db.session.commit()
                 chat_entry_id = chat_entry.id
             else:
                 last_entry.response = ai_response
-                last_entry.edited = True
                 chat_entry_id = last_entry.id
                 db.session.commit()
             
@@ -196,15 +193,11 @@ def edit_message():
         message_id = data.get('id')
         new_message = data.get('message')
         if not message_id or not new_message:
-            return jsonify({'error': 'Falta el ID o el mensaje'}), 400
-        if len(new_message) > 1000:
-            return jsonify({'error': 'El mensaje es demasiado largo (máximo 1000 caracteres)'}), 400
-        if not new_message.strip():
-            return jsonify({'error': 'El mensaje no puede estar vacío'}), 400
+            return jsonify({'error': 'ID or message missing'}), 400
 
         chat_entry = ChatHistory.query.filter_by(id=message_id, user_id=current_user.id).first()
         if not chat_entry:
-            return jsonify({'error': 'Mensaje no encontrado'}), 404
+            return jsonify({'error': 'Message not found'}), 404
 
         chat_settings = ChatSettings.query.filter_by(user_id=current_user.id).first()
         messages = [
@@ -222,7 +215,6 @@ def edit_message():
         chat_entry.message = new_message
         chat_entry.response = bot_response
         chat_entry.timestamp = datetime.utcnow()
-        chat_entry.edited = True
         db.session.commit()
 
         return jsonify({'response': bot_response})
@@ -249,7 +241,7 @@ def export_history():
         history = ChatHistory.query.filter_by(user_id=current_user.id).order_by(ChatHistory.timestamp.asc()).all()
         output = io.StringIO()
         for entry in history:
-            output.write(f"[{entry.timestamp}] Tú: {entry.message} {'(Editado)' if entry.edited else ''}\n")
+            output.write(f"[{entry.timestamp}] Tú: {entry.message}\n")
             output.write(f"[{entry.timestamp}] GarBotGPT: {entry.response}\n\n")
         output.seek(0)
         return send_file(
