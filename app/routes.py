@@ -289,3 +289,7 @@ def update_chat_settings():
     except Exception as e:
         logger.error(f"Error updating chat settings: {str(e)}")
         return jsonify({'success': False, 'error': str(e)}), 500
+
+@current_app.route('/maintenance')
+def maintenance():
+    return render_template('maintenance.html')
