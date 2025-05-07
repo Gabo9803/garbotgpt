@@ -6,6 +6,7 @@ import openai
 from app.config import Config
 from app import db
 from sqlalchemy.exc import ProgrammingError, OperationalError
+from datetime import datetime
 import logging
 import io
 import json
