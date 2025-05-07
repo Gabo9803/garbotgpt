@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatear con GarBotGPT - Estilo Grok</title>
+    <title>Chatear con GarBotGPT - Estilo Grok Mejorado</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
             height: 100vh;
             width: 100vw;
             overflow: hidden;
-            background: #212121;
+            background: linear-gradient(135deg, #1C2526 0%, #2E3B3E 100%);
             color: #E8ECEF;
             font-family: 'Inter', sans-serif;
         }
@@ -30,24 +30,28 @@
             z-index: 1;
         }
         .chat-header {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             padding: 12px 20px;
-            border-bottom: 1px solid #0288D1;
-            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #0288D1;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
         .chat-header img {
-            height: 35px;
+            height: 40px;
             margin-right: 12px;
+            filter: drop-shadow(0 0 4px rgba(2, 136, 209, 0.5));
         }
         .chat-header h3 {
-            font-weight: 600;
-            font-size: 1.4rem;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #E8ECEF;
         }
         .chat-body {
             flex: 1;
             padding: 30px 40px;
             overflow-y: auto;
             scroll-behavior: smooth;
+            background: linear-gradient(180deg, rgba(44, 54, 57, 0.2) 0%, rgba(44, 54, 57, 0.5) 100%);
         }
         @media (max-width: 768px) {
             .chat-body {
@@ -55,47 +59,50 @@
             }
         }
         .chat-footer {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             padding: 12px 15px;
-            border-top: 1px solid #0288D1;
-            backdrop-filter: blur(10px);
+            border-top: 2px solid #0288D1;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
         }
         .input-group {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-            transition: box-shadow 0.2s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
         .input-group:hover {
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
         }
         .form-control {
             background: transparent;
             border: none;
             color: #E8ECEF;
             font-size: 1rem;
-            padding: 10px 15px;
+            padding: 12px 15px;
+            transition: background 0.3s ease;
         }
         .form-control:focus {
             box-shadow: none;
-            background: transparent;
+            background: rgba(255, 255, 255, 0.05);
             color: #E8ECEF;
         }
         .btn-grok {
             background: #0288D1;
             color: #E8ECEF;
             border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-            font-weight: 500;
-            font-size: 0.85rem;
+            padding: 10px 14px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
         }
         .btn-grok:hover {
             background: #039BE5;
-            box-shadow: 0 3px 8px rgba(2, 136, 209, 0.4);
-            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.5);
+            transform: translateY(-2px);
         }
         .message-container {
             display: flex;
@@ -103,166 +110,241 @@
             gap: 15px;
             margin-bottom: 25px;
             position: relative;
+            transition: all 0.3s ease;
         }
         .message {
             display: flex;
             align-items: flex-start;
             gap: 12px;
-            padding: 12px 16px;
-            border-radius: 10px;
+            padding: 14px 18px;
+            border-radius: 12px;
             max-width: 85%;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .user-message {
             background: #0288D1;
             margin-left: auto;
-            border-top-right-radius: 3px;
-            border-bottom-left-radius: 10px;
+            border-top-right-radius: 4px;
+            border-bottom-left-radius: 12px;
         }
         .ai-message {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
             margin-right: auto;
-            border-top-left-radius: 3px;
-            border-bottom-right-radius: 10px;
+            border-top-left-radius: 4px;
+            border-bottom-right-radius: 12px;
         }
         .message:hover {
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
         }
         .avatar {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-size: 1.3rem;
+            font-weight: 700;
             color: #E8ECEF;
+            flex-shrink: 0;
         }
         .user-avatar {
             background: #01579B;
             border: 2px solid #0288D1;
         }
         .ai-avatar {
-            background: #F57C00;
-            border: 2px solid #FF9800;
+            background: #D81B60;
+            border: 2px solid #F06292;
         }
         .message-content {
             flex: 1;
         }
         .message-content strong {
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 600;
             opacity: 0.9;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             display: block;
         }
         .message-content p {
             margin: 0;
-            line-height: 1.4;
-            font-size: 0.9rem;
+            line-height: 1.5;
+            font-size: 0.95rem;
         }
         .message-content textarea {
             width: 100%;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             border: 1px solid #0288D1;
-            border-radius: 6px;
+            border-radius: 8px;
             color: #E8ECEF;
-            padding: 8px;
-            font-size: 0.9rem;
+            padding: 10px;
+            font-size: 0.95rem;
             resize: none;
+            transition: border-color 0.3s ease;
         }
         .message-content textarea:focus {
             outline: none;
             border-color: #039BE5;
-            box-shadow: 0 0 6px rgba(2, 136, 209, 0.4);
+            box-shadow: 0 0 8px rgba(2, 136, 209, 0.5);
         }
         .message-meta {
-            font-size: 0.7rem;
-            opacity: 0.5;
-            margin-top: 6px;
+            font-size: 0.75rem;
+            opacity: 0.6;
+            margin-top: 8px;
             font-weight: 300;
+        }
+        .message-edited {
+            font-size: 0.75rem;
+            color: #4CAF50;
+            margin-left: 10px;
+            font-style: italic;
         }
         .message-actions {
             display: flex;
-            gap: 8px;
-            margin-top: 8px;
+            gap: 10px;
+            margin-top: 10px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .message:hover .message-actions {
+            opacity: 1;
         }
         .message-actions .btn {
-            font-size: 0.75rem;
-            padding: 3px 10px;
+            font-size: 0.8rem;
+            padding: 4px 12px;
         }
         .edit-actions {
             display: flex;
-            gap: 8px;
-            margin-top: 8px;
+            gap: 10px;
+            margin-top: 10px;
         }
         .typing-effect {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+            margin-top: 8px;
         }
         .typing-effect span {
-            width: 5px;
-            height: 5px;
-            background: #F57C00;
+            width: 6px;
+            height: 6px;
+            background: #D81B60;
             border-radius: 50%;
-            animation: typingPulse 1s ease-in-out infinite;
+            animation: typingPulse 1.2s ease-in-out infinite;
         }
-        .typing-effect span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-effect span:nth-child(3) { animation-delay: 0.4s; }
+        .typing-effect span:nth-child(2) { animation-delay: 0.3s; }
+        .typing-effect span:nth-child(3) { animation-delay: 0.6s; }
         @keyframes typingPulse {
             0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.5; }
+            50% { transform: scale(1.4); opacity: 0.6; }
         }
         #responding-indicator {
             position: relative;
-            margin-top: 15px;
+            margin-top: 20px;
+            animation: fadeIn 0.3s ease;
         }
         .suggestions {
             text-align: center;
-            margin: 30px 0;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            margin: 40px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        .suggestions:hover {
+            transform: translateY(-3px);
         }
         .suggestion-btn {
             background: transparent;
             border: 1px solid #0288D1;
             color: #0288D1;
-            margin: 6px;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: all 0.2s ease;
+            margin: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
         .suggestion-btn:hover {
             background: #0288D1;
             color: #E8ECEF;
-            box-shadow: 0 2px 6px rgba(2, 136, 209, 0.3);
+            box-shadow: 0 3px 8px rgba(2, 136, 209, 0.4);
         }
         .modal-content {
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(12px);
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(14px);
             border: 1px solid #0288D1;
             color: #E8ECEF;
+            border-radius: 12px;
         }
         .modal-header, .modal-footer {
             border-color: #0288D1;
         }
         .form-select, .form-control-color {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.1);
             color: #E8ECEF;
             border: 1px solid #0288D1;
             font-family: 'Inter', sans-serif;
+            border-radius: 8px;
         }
         .form-select:focus {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.1);
             color: #E8ECEF;
-            border-color: #0288D1;
-            box-shadow: 0 0 6px rgba(2, 136, 209, 0.4);
+            border-color: #039BE5;
+            box-shadow: 0 0 8px rgba(2, 136, 209, 0.5);
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: #E8ECEF;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease, fadeOut 0.3s ease 3s forwards;
+        }
+        .notification.success {
+            background: #4CAF50;
+            border: 1px solid #66BB6A;
+        }
+        .notification.error {
+            background: #D32F2F;
+            border: 1px solid #EF5350;
+        }
+        .notification.info {
+            background: #0288D1;
+            border: 1px solid #039BE5;
+        }
+        .notification .close-btn {
+            background: transparent;
+            border: none;
+            color: #E8ECEF;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .notification .close-btn:hover {
+            color: #B0BEC5;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; display: none; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -299,11 +381,22 @@
                         <div class="message-content">
                             <strong>Tú:</strong>
                             <p>{{ entry.message | safe }}</p>
-                            <div class="message-meta">{{ entry.timestamp | default('Ahora') }}</div>
+                            <div class="message-meta">
+                                {{ entry.timestamp | default('Ahora') }}
+                                {% if entry.edited %}
+                                    <span class="message-edited">(Editado)</span>
+                                {% endif %}
+                            </div>
                             <div class="message-actions">
-                                <button class="btn btn-sm btn-grok edit-btn" data-message-id="{{ entry.id }}" data-message="{{ entry.message | safe }}" aria-label="Editar mensaje">Editar</button>
-                                <button class="btn btn-sm btn-grok copy-btn" data-text="{{ entry.response }}" aria-label="Copiar respuesta">Copiar</button>
-                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="{{ entry.message }}" aria-label="Regenerar respuesta">Regenerar</button>
+                                <button class="btn btn-sm btn-grok edit-btn" data-message-id="{{ entry.id }}" data-message="{{ entry.message | safe }}" aria-label="Editar mensaje">
+                                    <i class="bi bi-pencil-fill"></i> Editar
+                                </button>
+                                <button class="btn btn-sm btn-grok copy-btn" data-text="{{ entry.message }}" aria-label="Copiar mensaje">
+                                    <i class="bi bi-clipboard"></i> Copiar
+                                </button>
+                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="{{ entry.message }}" aria-label="Regenerar respuesta">
+                                    <i class="bi bi-arrow-repeat"></i> Regenerar
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -314,8 +407,12 @@
                             <p>{{ entry.response | safe }}</p>
                             <div class="message-meta">{{ entry.timestamp | default('Ahora') }}</div>
                             <div class="message-actions">
-                                <button class="btn btn-sm btn-grok copy-btn" data-text="{{ entry.response }}" aria-label="Copiar respuesta">Copiar</button>
-                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="{{ entry.message }}" aria-label="Regenerar respuesta">Regenerar</button>
+                                <button class="btn btn-sm btn-grok copy-btn" data-text="{{ entry.response }}" aria-label="Copiar respuesta">
+                                    <i class="bi bi-clipboard"></i> Copiar
+                                </button>
+                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="{{ entry.message }}" aria-label="Regenerar respuesta">
+                                    <i class="bi bi-arrow-repeat"></i> Regenerar
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -333,7 +430,7 @@
         <!-- Pie del Chat -->
         <div class="chat-footer">
             <div class="input-group">
-                <input type="text" id="message-input" class="form-control" placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje">
+                <input type="text" id="message-input" class="form-control" placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje" maxlength="1000">
                 <button class="btn btn-grok" onclick="sendMessage()" aria-label="Enviar mensaje">
                     <i class="bi bi-send-fill"></i>
                 </button>
@@ -380,21 +477,25 @@
                         <div class="mb-3">
                             <label for="model" class="form-label">Modelo de IA</label>
                             <select class="form-select" id="model" name="model" aria-label="Seleccionar modelo de IA">
-                                <option value="gpt-3.5-turbo" {% if chat_settings.model == 'gpt-3.5-turbo' %}selected{% endif %}>GPT-3.5 Turbo</option>
-                                <option value="gpt-4" {% if chat_settings.model == 'gpt-4' %}selected{% endif %}>GPT-4</option>
+                                <option value="gpt-3.5-turbo" {% if chat_settings and chat_settings.model == 'gpt-3.5-turbo' %}selected{% endif %}>GPT-3.5 Turbo</option>
+                                <option value="gpt-4" {% if chat_settings and chat_settings.model == 'gpt-4' %}selected{% endif %}>GPT-4</option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="temperature" class="form-label">Temperatura</label>
-                            <input type="number" class="form-control" id="temperature" name="temperature" step="0.1" min="0" max="1" value="{{ chat_settings.temperature }}" aria-label="Ajustar temperatura">
+                            <input type="number" class="form-control" id="temperature" name="temperature" step="0.1" min="0" max="1" value="{{ chat_settings.temperature if chat_settings else 0.7 }}" aria-label="Ajustar temperatura">
                         </div>
                         <div class="mb-3">
                             <label for="max_tokens" class="form-label">Máximo de Tokens</label>
-                            <input type="number" class="form-control" id="max_tokens" name="max_tokens" min="100" max="2000" value="{{ chat_settings.max_tokens }}" aria-label="Ajustar máximo de tokens">
+                            <input type="number" class="form-control" id="max_tokens" name="max_tokens" min="100" max="4000" value="{{ chat_settings.max_tokens if chat_settings else 1000 }}" aria-label="Ajustar máximo de tokens">
+                        </div>
+                        <div class="mb-3">
+                            <label for="typing_speed" class="form-label">Velocidad de Escritura</label>
+                            <input type="number" class="form-control" id="typing_speed" name="typing_speed" min="10" max="100" value="{{ chat_settings.typing_speed if chat_settings else 20 }}" aria-label="Ajustar velocidad de escritura">
                         </div>
                         <div class="mb-3">
                             <label for="theme_color" class="form-label">Color del Tema</label>
-                            <input type="color" class="form-control form-control-color" id="theme_color" name="theme_color" value="{{ chat_settings.theme_color }}" aria-label="Seleccionar color del tema">
+                            <input type="color" class="form-control form-control-color" id="theme_color" name="theme_color" value="{{ chat_settings.theme_color if chat_settings else '#007bff' }}" aria-label="Seleccionar color del tema">
                         </div>
                         <button type="submit" class="btn btn-grok w-100" aria-label="Guardar configuración">Guardar</button>
                     </form>
@@ -413,8 +514,8 @@
                 </div>
                 <div class="modal-body">
                     <p><strong>GarBotGPT</strong> es un asistente de IA avanzado.</p>
-                    <p><strong>Versión:</strong> 1.5</p>
-                    <p><strong>Lanzamiento:</strong> Abril 2025</p>
+                    <p><strong>Versión:</strong> 2.0</p>
+                    <p><strong>Lanzamiento:</strong> Mayo 2025</p>
                     <p><strong>Creador:</strong> GarolaCorp</p>
                 </div>
             </div>
@@ -425,6 +526,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
+        // Configuración inicial
+        const typingSpeed = {{ chat_settings.typing_speed if chat_settings else 20 }};
+
         // Scroll automático
         const chatMessages = document.getElementById('chat-messages');
         chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -432,8 +536,31 @@
         let isGenerating = false;
         let cancelGeneration = false;
 
+        // Función para mostrar notificaciones
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button class="close-btn" aria-label="Cerrar notificación">×</button>
+            `;
+            document.body.appendChild(notification);
+
+            // Cerrar manualmente
+            notification.querySelector('.close-btn').addEventListener('click', () => {
+                notification.style.animation = 'fadeOut 0.3s ease forwards';
+                setTimeout(() => notification.remove(), 300);
+            });
+
+            // Cerrar automáticamente después de 3 segundos
+            setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.3s ease forwards';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
         // Función para simular escritura progresiva
-        function typeResponse(element, text, speed = 25) {
+        function typeResponse(element, text, speed = typingSpeed) {
             let index = 0;
             element.innerHTML = '';
             isGenerating = true;
@@ -465,11 +592,21 @@
 
         // Enviar mensaje
         function sendMessage() {
-            if (isGenerating) return;
+            if (isGenerating) {
+                showNotification('Espera a que se complete la respuesta actual', 'error');
+                return;
+            }
 
             const input = document.getElementById('message-input');
             const message = input.value.trim();
-            if (!message) return;
+            if (!message) {
+                showNotification('El mensaje no puede estar vacío', 'error');
+                return;
+            }
+            if (message.length > 1000) {
+                showNotification('El mensaje es demasiado largo (máximo 1000 caracteres)', 'error');
+                return;
+            }
 
             // Mostrar indicador de "escribiendo"
             const respondingIndicator = document.getElementById('responding-indicator');
@@ -479,6 +616,12 @@
             // Crear contenedor de mensajes
             const messageContainer = document.createElement('div');
             messageContainer.className = 'message-container';
+            messageContainer.style.opacity = '0';
+            messageContainer.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                messageContainer.style.opacity = '1';
+                messageContainer.style.transform = 'translateY(0)';
+            }, 50);
 
             // Mensaje del usuario
             const userMessage = document.createElement('div');
@@ -490,9 +633,15 @@
                     <p>${message}</p>
                     <div class="message-meta">Ahora</div>
                     <div class="message-actions">
-                        <button class="btn btn-sm btn-grok edit-btn" data-message-id="temp" data-message="${message}" aria-label="Editar mensaje">Editar</button>
-                        <button class="btn btn-sm btn-grok copy-btn" data-text="${message}" aria-label="Copiar mensaje">Copiar</button>
-                        <button class="btn btn-sm btn-grok regenerate-btn" data-message="${message}" aria-label="Regenerar respuesta">Regenerar</button>
+                        <button class="btn btn-sm btn-grok edit-btn" data-message-id="temp" data-message="${message}" aria-label="Editar mensaje">
+                            <i class="bi bi-pencil-fill"></i> Editar
+                        </button>
+                        <button class="btn btn-sm btn-grok copy-btn" data-text="${message}" aria-label="Copiar mensaje">
+                            <i class="bi bi-clipboard"></i> Copiar
+                        </button>
+                        <button class="btn btn-sm btn-grok regenerate-btn" data-message="${message}" aria-label="Regenerar respuesta">
+                            <i class="bi bi-arrow-repeat"></i> Regenerar
+                        </button>
                     </div>
                 </div>`;
             messageContainer.appendChild(userMessage);
@@ -507,7 +656,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
-                    alert('Error: ' + data.error);
+                    showNotification('Error: ' + data.error, 'error');
                     respondingIndicator.classList.add('d-none');
                     return;
                 }
@@ -522,6 +671,8 @@
                 // Mensaje de la IA
                 const aiMessage = document.createElement('div');
                 aiMessage.className = 'message ai-message';
+                aiMessage.style.opacity = '0';
+                aiMessage.style.transform = 'translateY(20px)';
                 aiMessage.innerHTML = `
                     <div class="avatar ai-avatar">G</div>
                     <div class="message-content">
@@ -529,11 +680,19 @@
                         <p></p>
                         <div class="message-meta">Ahora</div>
                         <div class="message-actions">
-                            <button class="btn btn-sm btn-grok copy-btn" data-text="${data.response}" aria-label="Copiar respuesta">Copiar</button>
-                            <button class="btn btn-sm btn-grok regenerate-btn" data-message="${message}" aria-label="Regenerar respuesta">Regenerar</button>
+                            <button class="btn btn-sm btn-grok copy-btn" data-text="${data.response}" aria-label="Copiar respuesta">
+                                <i class="bi bi-clipboard"></i> Copiar
+                            </button>
+                            <button class="btn btn-sm btn-grok regenerate-btn" data-message="${message}" aria-label="Regenerar respuesta">
+                                <i class="bi bi-arrow-repeat"></i> Regenerar
+                            </button>
                         </div>
                     </div>`;
                 messageContainer.appendChild(aiMessage);
+                setTimeout(() => {
+                    aiMessage.style.opacity = '1';
+                    aiMessage.style.transform = 'translateY(0)';
+                }, 50);
 
                 // Iniciar escritura progresiva
                 const responseElement = aiMessage.querySelector('p');
@@ -546,10 +705,12 @@
                     chatMessages.scrollTop = chatMessages.scrollHeight;
                 }, 50);
                 input.value = '';
+                showNotification('Mensaje enviado correctamente', 'success');
             })
             .catch(error => {
                 console.error('Error:', error);
                 respondingIndicator.classList.add('d-none');
+                showNotification('Error al enviar el mensaje', 'error');
             });
         }
 
@@ -560,18 +721,18 @@
 
         // Copiar texto
         document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('copy-btn')) {
-                const text = e.target.getAttribute('data-text');
+            if (e.target.closest('.copy-btn')) {
+                const text = e.target.closest('.copy-btn').getAttribute('data-text');
                 navigator.clipboard.writeText(text).then(() => {
-                    alert('¡Texto copiado!');
+                    showNotification('¡Texto copiado al portapapeles!', 'success');
                 });
             }
         });
 
         // Regenerar respuesta
         document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('regenerate-btn')) {
-                const message = e.target.getAttribute('data-message');
+            if (e.target.closest('.regenerate-btn')) {
+                const message = e.target.closest('.regenerate-btn').getAttribute('data-message');
                 document.getElementById('message-input').value = message;
                 sendMessage();
             }
@@ -579,9 +740,9 @@
 
         // Editar mensaje
         document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('edit-btn')) {
-                const messageId = e.target.getAttribute('data-message-id');
-                const messageText = e.target.getAttribute('data-message');
+            if (e.target.closest('.edit-btn')) {
+                const messageId = e.target.closest('.edit-btn').getAttribute('data-message-id');
+                const messageText = e.target.closest('.edit-btn').getAttribute('data-message');
                 const messageContainer = e.target.closest('.message-container');
                 const messageContent = messageContainer.querySelector('.user-message .message-content');
                 const originalContent = messageContent.innerHTML;
@@ -589,20 +750,34 @@
                 // Reemplazar contenido con campo de edición
                 messageContent.innerHTML = `
                     <strong>Tú:</strong>
-                    <textarea rows="3">${messageText}</textarea>
+                    <textarea rows="3" maxlength="1000">${messageText}</textarea>
                     <div class="edit-actions">
-                        <button class="btn btn-sm btn-grok save-edit-btn" data-message-id="${messageId}" aria-label="Desar edició">Desar</button>
-                        <button class="btn btn-sm btn-grok cancel-edit-btn" aria-label="Cancel·lar edició">Cancel·lar</button>
+                        <button class="btn btn-sm btn-grok save-edit-btn" data-message-id="${messageId}" aria-label="Guardar edición">
+                            <i class="bi bi-check-circle-fill"></i> Guardar
+                        </button>
+                        <button class="btn btn-sm btn-grok cancel-edit-btn" aria-label="Cancelar edición">
+                            <i class="bi bi-x-circle-fill"></i> Cancelar
+                        </button>
                     </div>
                 `;
+                messageContent.querySelector('textarea').focus();
 
-                // Desar edició
+                // Desar edición
                 messageContent.querySelector('.save-edit-btn').addEventListener('click', function() {
                     const newMessage = messageContent.querySelector('textarea').value.trim();
                     if (!newMessage) {
-                        alert('El missatge no pot estar buit');
+                        showNotification('El mensaje no puede estar vacío', 'error');
                         return;
                     }
+                    if (newMessage.length > 1000) {
+                        showNotification('El mensaje es demasiado largo (máximo 1000 caracteres)', 'error');
+                        return;
+                    }
+
+                    // Mostrar indicador de "escribiendo"
+                    const respondingIndicator = document.getElementById('responding-indicator');
+                    respondingIndicator.classList.remove('d-none');
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
 
                     fetch('/edit_message', {
                         method: 'POST',
@@ -612,19 +787,29 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.error) {
-                            alert('Error: ' + data.error);
+                            showNotification('Error: ' + data.error, 'error');
+                            respondingIndicator.classList.add('d-none');
                             return;
                         }
+
+                        // Ocultar indicador de "escribiendo"
+                        respondingIndicator.classList.add('d-none');
 
                         // Actualizar mensaje del usuario
                         messageContent.innerHTML = `
                             <strong>Tú:</strong>
                             <p>${newMessage}</p>
-                            <div class="message-meta">Ahora</div>
+                            <div class="message-meta">Ahora <span class="message-edited">(Editado)</span></div>
                             <div class="message-actions">
-                                <button class="btn btn-sm btn-grok edit-btn" data-message-id="${messageId}" data-message="${newMessage}" aria-label="Editar mensaje">Editar</button>
-                                <button class="btn btn-sm btn-grok copy-btn" data-text="${newMessage}" aria-label="Copiar mensaje">Copiar</button>
-                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="${newMessage}" aria-label="Regenerar respuesta">Regenerar</button>
+                                <button class="btn btn-sm btn-grok edit-btn" data-message-id="${messageId}" data-message="${newMessage}" aria-label="Editar mensaje">
+                                    <i class="bi bi-pencil-fill"></i> Editar
+                                </button>
+                                <button class="btn btn-sm btn-grok copy-btn" data-text="${newMessage}" aria-label="Copiar mensaje">
+                                    <i class="bi bi-clipboard"></i> Copiar
+                                </button>
+                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="${newMessage}" aria-label="Regenerar respuesta">
+                                    <i class="bi bi-arrow-repeat"></i> Regenerar
+                                </button>
                             </div>
                         `;
 
@@ -635,8 +820,12 @@
                             <p></p>
                             <div class="message-meta">Ahora</div>
                             <div class="message-actions">
-                                <button class="btn btn-sm btn-grok copy-btn" data-text="${data.response}" aria-label="Copiar respuesta">Copiar</button>
-                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="${newMessage}" aria-label="Regenerar respuesta">Regenerar</button>
+                                <button class="btn btn-sm btn-grok copy-btn" data-text="${data.response}" aria-label="Copiar respuesta">
+                                    <i class="bi bi-clipboard"></i> Copiar
+                                </button>
+                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="${newMessage}" aria-label="Regenerar respuesta">
+                                    <i class="bi bi-arrow-repeat"></i> Regenerar
+                                </button>
                             </div>
                         `;
                         typeResponse(aiMessageContent.querySelector('p'), data.response);
@@ -645,15 +834,19 @@
                         setTimeout(() => {
                             chatMessages.scrollTop = chatMessages.scrollHeight;
                         }, 50);
+                        showNotification('Mensaje editado correctamente', 'success');
                     })
                     .catch(error => {
                         console.error('Error:', error);
+                        respondingIndicator.classList.add('d-none');
+                        showNotification('Error al editar el mensaje', 'error');
                     });
                 });
 
-                // Cancel·lar edició
+                // Cancelar edición
                 messageContent.querySelector('.cancel-edit-btn').addEventListener('click', function() {
                     messageContent.innerHTML = originalContent;
+                    showNotification('Edición cancelada', 'info');
                 });
             }
         });
@@ -679,6 +872,9 @@
                                 </div>
                             </div>`;
                         chatMessages.scrollTop = chatMessages.scrollHeight;
+                        showNotification('Historial borrado correctamente', 'success');
+                    } else {
+                        showNotification('Error al borrar el historial', 'error');
                     }
                 });
         });
@@ -698,8 +894,9 @@
             const formData = new FormData(this);
             const settings = {
                 model: formData.get('model'),
-                temperature: formData.get('temperature'),
-                max_tokens: formData.get('max_tokens'),
+                temperature: parseFloat(formData.get('temperature')),
+                max_tokens: parseInt(formData.get('max_tokens')),
+                typing_speed: parseInt(formData.get('typing_speed')),
                 theme_color: formData.get('theme_color')
             };
             fetch('/update_chat_settings', {
@@ -710,10 +907,17 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('Configuración actualizada');
+                    showNotification('Configuración actualizada correctamente', 'success');
                     document.querySelector('[data-bs-dismiss="modal"]').click();
+                } else {
+                    showNotification('Error al actualizar la configuración', 'error');
                 }
             });
+        });
+
+        // Inicializar tooltips
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+            new bootstrap.Tooltip(el);
         });
     </script>
 </body>
