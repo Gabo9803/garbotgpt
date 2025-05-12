@@ -153,7 +153,7 @@ def chat():
             if chat_settings.model.startswith('gemini'):
                 messages.append({"role": "system", "content": "Ets un assistent d'IA útil creat per xAI. Respon sempre en català."})
             else:  # OpenAI com a fallback
-                messages.append({"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI. Responde siempre en castellano.")
+                messages.append({"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI. Responde siempre en castellano."})
             messages.append({"role": "user", "content": user_message})
             
             if regenerate:
@@ -163,7 +163,7 @@ def chat():
                     if chat_settings.model.startswith('gemini'):
                         messages.append({"role": "system", "content": "Ets un assistent d'IA útil creat per xAI. Respon sempre en català."})
                     else:
-                        messages.append({"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI. Responde siempre en castellano.")
+                        messages.append({"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI. Responde siempre en castellano."})
                     messages.append({"role": "user", "content": last_entry.message})
             
             # Determinar si utilitzem OpenAI o Gemini basant-nos en el model seleccionat
@@ -223,7 +223,7 @@ def edit_message():
         if chat_settings.model.startswith('gemini'):
             messages.append({"role": "system", "content": "Ets un assistent d'IA útil creat per xAI. Respon sempre en català."})
         else:
-            messages.append({"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI. Responde siempre en castellano.")
+            messages.append({"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI. Responde siempre en castellano."})
         messages.append({"role": "user", "content": new_message})
         if chat_settings.model.startswith('gemini'):
             model_instance = genai.GenerativeModel(chat_settings.model)
@@ -316,14 +316,14 @@ def update_theme():
         data = request.json
         theme = data.get('theme')
         if theme not in ['light', 'dark']:
-            return jsonify({'success': false, 'error': 'Tema inválido'}), 400
+            return jsonify({'success': False, 'error': 'Tema inválido'}), 400
         current_user.theme = theme
         db.session.commit()
         logger.info(f"Tema actualizado a {theme} para usuario {current_user.username}")
-        return jsonify({'success': true})
+        return jsonify({'success': True})
     except Exception as e:
         logger.error(f"Error updating theme: {str(e)}")
-        return jsonify({'success': false, 'error': str(e)}), 500
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 @current_app.route('/update_language', methods=['POST'])
 @login_required
@@ -332,14 +332,14 @@ def update_language():
         data = request.json
         language = data.get('language')
         if language not in ['es', 'en', 'ca']:
-            return jsonify({'success': false, 'error': 'Idioma inválido'}), 400
+            return jsonify({'success': False, 'error': 'Idioma inválido'}), 400
         current_user.language = language
         db.session.commit()
         logger.info(f"Idioma actualizado a {language} para usuario {current_user.username}")
-        return jsonify({'success': true})
+        return jsonify({'success': True})
     except Exception as e:
         logger.error(f"Error updating language: {str(e)}")
-        return jsonify({'success': false, 'error': str(e)}), 500
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 @current_app.route('/update_chat_settings', methods=['POST'])
 @login_required
@@ -356,10 +356,10 @@ def update_chat_settings():
         chat_settings.theme_color = data.get('theme_color', '#007bff')
         db.session.commit()
         logger.info(f"Configuración de chat actualizada para usuario {current_user.username}")
-        return jsonify({'success': true})
+        return jsonify({'success': True})
     except Exception as e:
         logger.error(f"Error updating chat settings: {str(e)}")
-        return jsonify({'success': false, 'error': str(e)}), 500
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 @current_app.route('/maintenance')
 def maintenance():
