@@ -121,7 +121,6 @@ def settings():
             chat_settings.model = request.form.get('model', 'gpt-3.5-turbo')
             chat_settings.temperature = float(request.form.get('temperature', 0.7))
             chat_settings.max_tokens = int(request.form.get('max_tokens', 2000))
-            chat_settings.typing_speed = int(request.form.get('typing_speed', 20))
             chat_settings.theme_color = request.form.get('theme_color', '#007bff')
             
             db.session.commit()
@@ -149,18 +148,23 @@ def chat():
                 db.session.add(chat_settings)
                 db.session.commit()
             
-            messages = [
-                {"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI."},
-                {"role": "user", "content": user_message}
-            ]
+            # Configurar missatges inicials amb instruccions de llenguatge
+            messages = []
+            if chat_settings.model.startswith('gemini'):
+                messages.append({"role": "system", "content": "Ets un assistent d'IA útil creat per xAI. Respon sempre en català."})
+            else:  # OpenAI com a fallback
+                messages.append({"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI. Responde siempre en castellano.")
+            messages.append({"role": "user", "content": user_message})
             
             if regenerate:
                 last_entry = ChatHistory.query.filter_by(user_id=current_user.id).order_by(ChatHistory.timestamp.desc()).first()
                 if last_entry:
-                    messages = [
-                        {"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI."},
-                        {"role": "user", "content": last_entry.message}
-                    ]
+                    messages = []
+                    if chat_settings.model.startswith('gemini'):
+                        messages.append({"role": "system", "content": "Ets un assistent d'IA útil creat per xAI. Respon sempre en català."})
+                    else:
+                        messages.append({"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI. Responde siempre en castellano.")
+                    messages.append({"role": "user", "content": last_entry.message})
             
             # Determinar si utilitzem OpenAI o Gemini basant-nos en el model seleccionat
             if chat_settings.model.startswith('gemini'):
@@ -215,10 +219,12 @@ def edit_message():
             return jsonify({'error': 'Message not found'}), 404
 
         chat_settings = ChatSettings.query.filter_by(user_id=current_user.id).first()
-        messages = [
-            {"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI."},
-            {"role": "user", "content": new_message}
-        ]
+        messages = []
+        if chat_settings.model.startswith('gemini'):
+            messages.append({"role": "system", "content": "Ets un assistent d'IA útil creat per xAI. Respon sempre en català."})
+        else:
+            messages.append({"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI. Responde siempre en castellano.")
+        messages.append({"role": "user", "content": new_message})
         if chat_settings.model.startswith('gemini'):
             model_instance = genai.GenerativeModel(chat_settings.model)
             response = model_instance.generate_content(
@@ -290,7 +296,6 @@ def export_settings():
             'model': chat_settings.model,
             'temperature': chat_settings.temperature,
             'max_tokens': chat_settings.max_tokens,
-            'typing_speed': chat_settings.typing_speed,
             'theme_color': chat_settings.theme_color
         }
         return send_file(
@@ -311,14 +316,14 @@ def update_theme():
         data = request.json
         theme = data.get('theme')
         if theme not in ['light', 'dark']:
-            return jsonify({'success': False, 'error': 'Tema inválido'}), 400
+            return jsonify({'success': false, 'error': 'Tema inválido'}), 400
         current_user.theme = theme
         db.session.commit()
         logger.info(f"Tema actualizado a {theme} para usuario {current_user.username}")
-        return jsonify({'success': True})
+        return jsonify({'success': true})
     except Exception as e:
         logger.error(f"Error updating theme: {str(e)}")
-        return jsonify({'success': False, 'error': str(e)}), 500
+        return jsonify({'success': false, 'error': str(e)}), 500
 
 @current_app.route('/update_language', methods=['POST'])
 @login_required
@@ -327,14 +332,14 @@ def update_language():
         data = request.json
         language = data.get('language')
         if language not in ['es', 'en', 'ca']:
-            return jsonify({'success': False, 'error': 'Idioma inválido'}), 400
+            return jsonify({'success': false, 'error': 'Idioma inválido'}), 400
         current_user.language = language
         db.session.commit()
         logger.info(f"Idioma actualizado a {language} para usuario {current_user.username}")
-        return jsonify({'success': True})
+        return jsonify({'success': true})
     except Exception as e:
         logger.error(f"Error updating language: {str(e)}")
-        return jsonify({'success': False, 'error': str(e)}), 500
+        return jsonify({'success': false, 'error': str(e)}), 500
 
 @current_app.route('/update_chat_settings', methods=['POST'])
 @login_required
@@ -348,14 +353,13 @@ def update_chat_settings():
         chat_settings.model = data.get('model', 'gpt-3.5-turbo')
         chat_settings.temperature = float(data.get('temperature', 0.7))
         chat_settings.max_tokens = int(data.get('max_tokens', 2000))
-        chat_settings.typing_speed = int(data.get('typing_speed', 20))
         chat_settings.theme_color = data.get('theme_color', '#007bff')
         db.session.commit()
         logger.info(f"Configuración de chat actualizada para usuario {current_user.username}")
-        return jsonify({'success': True})
+        return jsonify({'success': true})
     except Exception as e:
         logger.error(f"Error updating chat settings: {str(e)}")
-        return jsonify({'success': False, 'error': str(e)}), 500
+        return jsonify({'success': false, 'error': str(e)}), 500
 
 @current_app.route('/maintenance')
 def maintenance():
