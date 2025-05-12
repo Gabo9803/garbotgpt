@@ -277,21 +277,21 @@
     <div class="scene" id="scene"></div>
     <div class="container">
         <img src="https://tecnofgb.com/wp-content/uploads/2025/05/ChatGPT-Image-7-may-2025-15_43_29.png" alt="GarBotGPT Logo" class="logo" data-gsap="fade-up">
-        <h1 data-gsap="fade-up" data-delay="0.2">GarBotGPT en Evolución</h1>
-        <p class="subtitle" data-gsap="fade-up" data-delay="0.4">Estamos reconstruyendo el núcleo de nuestra IA para ofrecer una experiencia revolucionaria. ¡Prepárate para el futuro!</p>
-        <p class="status" data-gsap="fade-up" data-delay="0.6">Recalibrando sistemas...</p>
+        <h1 data-translate="title" data-gsap="fade-up" data-delay="0.2">GarBotGPT en Evolución</h1>
+        <p class="subtitle" data-translate="subtitle" data-gsap="fade-up" data-delay="0.4">Estamos reconstruyendo el núcleo de nuestra IA para ofrecer una experiencia revolucionaria. ¡Prepárate para el futuro!</p>
+        <p class="status" data-translate="status" data-gsap="fade-up" data-delay="0.6">Recalibrando sistemas...</p>
         <div class="progress-container" data-gsap="fade-up" data-delay="0.8">
             <div class="progress" id="progress"></div>
         </div>
-        <p class="countdown" id="countdown" data.el="countdown" data-gsap="fade-up" data-delay="1">Tiempo estimado: Calculando...</p>
+        <p class="countdown" id="countdown" data-translate="countdown" data-gsap="fade-up" data-delay="1">Tiempo estimado: Calculando...</p>
         <div class="feature-grid" data-gsap="fade-up" data-delay="1.2">
-            <div class="feature-item">Procesamiento Ultrarrápido</div>
-            <div class="feature-item">Interacciones Multimodales</div>
-            <div class="feature-item">Precisión Avanzada</div>
-            <div class="feature-item">Diseño Futurista</div>
+            <div class="feature-item" data-translate="features.0">Procesamiento Ultrarrápido</div>
+            <div class="feature-item" data-translate="features.1">Interacciones Multimodales</div>
+            <div class="feature-item" data-translate="features.2">Precisión Avanzada</div>
+            <div class="feature-item" data-translate="features.3">Diseño Futurista</div>
         </div>
-        <button class="notify-button" onclick="alert('¡Notificación activada! Te avisaremos al lanzamiento.')" data-gsap="fade-up" data-delay="1.4">Notificarme</button>
-        <p class="contact" data-gsap="fade-up" data-delay="1.6">¿Dudas? Escríbenos a <a href="mailto:garbot@garbotgpt.com">soporte@garbotgpt.com</a></p>
+        <button class="notify-button" onclick="alert('¡Notificación activada! Te avisaremos al lanzamiento.')" data-translate="notifyButton" data-gsap="fade-up" data-delay="1.4">Notificarme</button>
+        <p class="contact" data-gsap="fade-up" data-delay="1.6" data-translate="contact">¿Dudas? Escríbenos a <a href="mailto:garbot@garbotgpt.com" data-translate="contactLink">soporte@garbotgpt.com</a></p>
         <div class="social-links" data-gsap="fade-up" data-delay="1.8">
             <a href="https://twitter.com" target="_blank" data-tooltip="Twitter" aria-label="Twitter">𝕏</a>
             <a href="https://www.linkedin.com/in/ferran-garola-bonilla-4b275a337/" target="_blank" data-tooltip="LinkedIn" aria-label="LinkedIn">LinkedIn</a>
@@ -304,6 +304,87 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     <script>
+        // Traducciones para español y catalán
+        const translations = {
+            es: {
+                title: "GarBotGPT en Evolución",
+                subtitle: "Estamos reconstruyendo el núcleo de nuestra IA para ofrecer una experiencia revolucionaria. ¡Prepárate para el futuro!",
+                status: [
+                    "Recalibrando sistemas...",
+                    "Optimizando algoritmos...",
+                    "Entrenando redes neuronales...",
+                    "Sincronizando clústeres...",
+                    "Actualizando protocolos...",
+                    "Reforzando seguridad...",
+                    "Integrando módulos..."
+                ],
+                countdown: "Tiempo estimado: ",
+                features: [
+                    "Procesamiento Ultrarrápido",
+                    "Interacciones Multimodales",
+                    "Precisión Avanzada",
+                    "Diseño Futurista"
+                ],
+                notifyButton: "Notificarme",
+                contact: "¿Dudas? Escríbenos a ",
+                contactLink: "soporte@garbotgpt.com"
+            },
+            ca: {
+                title: "GarBotGPT en Evolució",
+                subtitle: "Estem reconstruint el nucli de la nostra IA per oferir una experiència revolucionària. Prepara't per al futur!",
+                status: [
+                    "Recalibrant sistemes...",
+                    "Optimitzant algoritmes...",
+                    "Entrenant xarxes neuronals...",
+                    "Sincronitzant clústers...",
+                    "Actualitzant protocols...",
+                    "Reforçant la seguretat...",
+                    "Integrant mòduls..."
+                ],
+                countdown: "Temps estimat: ",
+                features: [
+                    "Processament Ultraràpid",
+                    "Interaccions Multimodals",
+                    "Precisió Avançada",
+                    "Disseny Futurista"
+                ],
+                notifyButton: "Notifica'm",
+                contact: "Dubtes? Escriu-nos a ",
+                contactLink: "suport@garbotgpt.com"
+            }
+        };
+
+        // Variable para rastrear el idioma actual
+        let currentLang = 'es';
+
+        // Función para obtener el valor de una clave de traducción anidada
+        function getTranslation(lang, key) {
+            const keys = key.split('.');
+            let value = translations[lang];
+            for (const k of keys) {
+                value = value[k];
+            }
+            return value;
+        }
+
+        // Función para actualizar todos los textos según el idioma
+        function updateLanguage(lang) {
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (key === 'status') {
+                    // El status se manejará por separado para mantener su rotación
+                    return;
+                } else if (key === 'countdown') {
+                    // Para el countdown, solo actualizamos el prefijo
+                    const currentText = element.textContent;
+                    const timePart = currentText.match(/\d{2}:\d{2}:\d{2}/) || ['Calculando...'];
+                    element.textContent = `${getTranslation(lang, key)}${timePart[0]}`;
+                } else {
+                    element.textContent = getTranslation(lang, key);
+                }
+            });
+        }
+
         // Initialize Lenis for smooth scrolling
         const lenis = new Lenis({
             duration: 1.5,
@@ -352,23 +433,7 @@
         });
 
         // Dynamic Status Messages
-        const messages = [
-            'Recalibrando sistemas...',
-            'Recalibrant sistemes...',
-            'Optimitzant algoritmes...',
-            'Optimizando algoritmos...',
-            'Entrenando redes neuronales...',
-            'Entrenant xarxes neuronals...',
-            'Sincronizando clústeres...',
-            'Sincronitzant clústers...',
-            'Actualizando protocolos...',
-            'Reforzando seguridad...',
-            'Reforçant la seguretat...',
-            'Integrando módulos...',
-            'Integrant mòduls...',
-        ];
-
-        let currentMessage = 0;
+        let currentMessageIndex = 0;
         const statusElement = document.querySelector('.status');
 
         function updateStatus() {
@@ -378,20 +443,31 @@
                 duration: 0.6,
                 ease: 'power2.in',
                 onComplete: () => {
-                    statusElement.textContent = messages[currentMessage];
+                    statusElement.textContent = translations[currentLang].status[currentMessageIndex];
                     gsap.to(statusElement, {
                         opacity: 1,
                         y: 0,
                         duration: 0.6,
                         ease: 'power2.out',
                     });
-                    currentMessage = (currentMessage + 1) % messages.length;
+                    currentMessageIndex = (currentMessageIndex + 1) % translations[currentLang].status.length;
                 },
             });
         }
 
+        // Función para alternar idioma
+        function toggleLanguage() {
+            currentLang = currentLang === 'es' ? 'ca' : 'es';
+            updateLanguage(currentLang);
+            updateStatus(); // Actualizar el status inmediatamente al cambiar idioma
+        }
+
+        // Actualizar idioma y estado inicialmente
+        updateLanguage(currentLang);
         updateStatus();
-        setInterval(updateStatus, 6000);
+
+        // Alternar idioma cada 6 segundos
+        setInterval(toggleLanguage, 6000);
 
         // Countdown Timer
         const countdownElement = document.querySelector('#countdown');
@@ -401,7 +477,7 @@
             const now = new Date();
             const timeLeft = endTime - now;
             if (timeLeft <= 0) {
-                countdownElement.textContent = '¡Evolución Completada!';
+                countdownElement.textContent = currentLang === 'es' ? '¡Evolución Completada!' : 'Evolució Completada!';
                 gsap.to(countdownElement, {
                     scale: 1.1,
                     duration: 0.3,
@@ -414,7 +490,7 @@
             const hours = Math.floor(timeLeft / (1000 * 60 * 60));
             const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-            countdownElement.textContent = `Tiempo estimado: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            countdownElement.textContent = `${getTranslation(currentLang, 'countdown')}${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
 
         updateCountdown();
