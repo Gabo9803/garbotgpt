@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GarBotGPT - En Transformación</title>
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;500;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <title>GarBotGPT - Evolución en Progreso</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;600;800&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,133 +13,98 @@
         }
 
         body {
-            font-family: 'Exo 2', sans-serif;
-            background: #080b1f;
+            font-family: 'IBM Plex Mono', monospace;
+            background: #05051a;
             color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             overflow: hidden;
+            min-height: 100vh;
             position: relative;
         }
 
-        .background-canvas {
-            position: absolute;
+        .scene {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
+            opacity: 0.6;
         }
 
         .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
             text-align: center;
-            padding: 5rem;
-            max-width: 1100px;
-            background: linear-gradient(145deg, rgba(10, 20, 60, 0.92), rgba(50, 80, 120, 0.88));
-            border-radius: 40px;
-            box-shadow: 0 30px 120px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 221, 235, 0.35);
-            backdrop-filter: blur(30px);
-            border: 3px solid rgba(0, 221, 235, 0.5);
             position: relative;
             z-index: 1;
-            animation: cyberGlow 3.5s infinite alternate;
-        }
-
-        @keyframes cyberGlow {
-            0% { box-shadow: 0 30px 120px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 221, 235, 0.35); }
-            100% { box-shadow: 0 35px 140px rgba(0, 0, 0, 0.95), inset 0 0 40px rgba(0, 221, 235, 0.6); }
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 30, 0.5);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.1);
         }
 
         .logo {
-            width: 220px;
-            margin-bottom: 3.5rem;
-            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.7));
-            transition: transform 0.6s, filter 0.6s;
+            width: 200px;
+            margin-bottom: 2.5rem;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.6));
+            transition: transform 0.4s ease;
         }
 
         .logo:hover {
-            transform: scale(1.2) rotate(10deg);
-            filter: drop-shadow(0 12px 24px rgba(0, 221, 235, 1));
+            transform: scale(1.15) rotate(5deg);
         }
 
         h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 7rem;
-            margin-bottom: 2.5rem;
-            background: linear-gradient(90deg, #00ddeb, #7b42ff, #ff2e63, #00ffaa, #ffd700);
+            font-family: 'Oxanium', sans-serif;
+            font-size: 5rem;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff, #00ff88, #ffd700);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 8px 16px rgba(0, 0, 0, 0.9);
-            letter-spacing: 5px;
-            animation: neonPulse 3s infinite alternate;
-        }
-
-        @keyframes neonPulse {
-            0% { text-shadow: 0 8px 16px rgba(0, 0, 0, 0.9); }
-            100% { text-shadow: 0 10px 30px rgba(0, 221, 235, 1.2); }
+            margin-bottom: 1.5rem;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
         }
 
         .subtitle {
-            font-size: 1.9rem;
-            line-height: 2.4;
-            margin-bottom: 4rem;
-            opacity: 0.92;
-            font-weight: 300;
-            background: linear-gradient(90deg, #ffffff, #b0faff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: slideInText 2s ease-out;
-        }
-
-        @keyframes slideInText {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 0.92; transform: translateY(0); }
+            font-size: 1.4rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+            opacity: 0.85;
+            color: #ccffff;
         }
 
         .status {
-            font-size: 1.7rem;
-            margin-bottom: 3.5rem;
-            color: #00ffaa;
+            font-size: 1.3rem;
+            color: #00ff88;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 4px;
-            transition: opacity 0.9s, transform 0.9s;
-            animation: statusPulse 4s infinite;
-        }
-
-        @keyframes statusPulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.9; }
+            letter-spacing: 3px;
+            margin-bottom: 2.5rem;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
         }
 
         .progress-container {
-            width: 100%;
-            height: 30px;
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 15px;
+            width: 70%;
+            height: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin: 2.5rem auto;
             overflow: hidden;
-            margin: 3.5rem 0;
             position: relative;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.7);
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
         }
 
         .progress {
             width: 0;
             height: 100%;
-            background: linear-gradient(90deg, #00ddeb, #7b42ff, #ff2e63, #00ffaa, #ffd700, #00ddeb);
-            background-size: 400%;
-            border-radius: 15px;
-            animation: progress 3.5s infinite ease-in-out, gradientShift 2s infinite;
-            box-shadow: 0 0 30px rgba(0, 221, 235, 1.2);
+            background: linear-gradient(90deg, #00f7ff, #ff00ff, #00ff88);
+            background-size: 300%;
+            border-radius: 12px;
             position: relative;
             overflow: hidden;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0%; }
-            100% { background-position: 400%; }
+            transition: width 0.3s ease;
         }
 
         .progress::after {
@@ -151,392 +116,424 @@
             height: 100%;
             background: linear-gradient(
                 45deg,
-                rgba(255, 255, 255, 0.25) 25%,
+                rgba(255, 255, 255, 0.3) 25%,
                 transparent 25%,
                 transparent 50%,
-                rgba(255, 255, 255, 0.25) 50%,
-                rgba(255, 255, 255, 0.25) 75%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0.3) 75%,
                 transparent 75%,
                 transparent
             );
-            background-size: 60px 60px;
-            animation: move 0.8s linear infinite;
+            background-size: 50px 50px;
+            animation: move 0.7s linear infinite;
         }
 
         @keyframes move {
             0% { background-position: 0 0; }
-            100% { background-position: 60px 60px; }
-        }
-
-        @keyframes progress {
-            0% { width: 0; }
-            50% { width: 100%; }
-            100% { width: 0; }
+            100% { background-position: 50px 50px; }
         }
 
         .countdown {
             font-size: 2rem;
-            margin-top: 3.5rem;
-            opacity: 0.96;
             font-weight: 700;
-            background: linear-gradient(90deg, rgba(0, 221, 235, 0.35), rgba(123, 66, 255, 0.35));
+            background: linear-gradient(90deg, rgba(0, 255, 255, 0.2), rgba(255, 0, 255, 0.2));
             padding: 1.2rem 2.5rem;
-            border-radius: 25px;
+            border-radius: 20px;
             display: inline-block;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            transition: transform 0.5s, box-shadow 0.5s;
+            margin: 2.5rem 0;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            transition: transform 0.3s ease;
         }
 
         .countdown:hover {
-            transform: scale(1.1);
-            box-shadow: 0 12px 30px rgba(0, 221, 235, 0.6);
+            transform: scale(1.05);
         }
 
-        .contact {
-            font-size: 1.4rem;
-            margin-top: 4rem;
-            opacity: 0.96;
-        }
-
-        .contact a {
-            color: #00ffaa;
-            text-decoration: none;
-            font-weight: 800;
-            position: relative;
-            padding: 0.4rem 0.8rem;
-            transition: all 0.5s;
-            border-radius: 10px;
-        }
-
-        .contact a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 5px;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(90deg, #00ffaa, #7b42ff);
-            transition: width 0.5s;
-        }
-
-        .contact a:hover::after {
-            width: 95%;
-        }
-
-        .contact a:hover {
-            color: #ffffff;
-            background: linear-gradient(90deg, rgba(0, 221, 235, 0.35), rgba(123, 66, 255, 0.35));
-            box-shadow: 0 6px 20px rgba(0, 221, 235, 0.5);
-        }
-
-        .social-links {
-            margin-top: 3.5rem;
-            display: flex;
-            justify-content: center;
-            gap: 3.5rem;
-        }
-
-        .social-links a {
-            color: #ffffff;
-            font-size: 2.5rem;
-            opacity: 0.9;
-            transition: all 0.5s;
-            position: relative;
-            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
-        }
-
-        .social-links a::before {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: -45px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(90deg, #00ffaa, #7b42ff);
-            color: #ffffff;
-            padding: 10px 18px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            opacity: 0;
-            transition: opacity 0.5s, bottom 0.5s;
-            pointer-events: none;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-        }
-
-        .social-links a:hover::before {
-            opacity: 1;
-            bottom: -55px;
-        }
-
-        .social-links a:hover {
-            opacity: 1;
-            transform: translateY(-10px) scale(1.2);
-            color: #ffd700;
-        }
-
-        .notify-button {
-            margin-top: 3.5rem;
-            padding: 1.2rem 3rem;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #ffffff;
-            background: linear-gradient(90deg, #00ffaa, #7b42ff, #ff2e63);
-            background-size: 200%;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: transform 0.5s, box-shadow 0.5s, background-position 0.5s;
-        }
-
-        .notify-button:hover {
-            transform: scale(1.12);
-            box-shadow: 0 12px 30px rgba(0, 221, 235, 0.7);
-            background-position: 100%;
-        }
-
-        .feature-list {
-            margin-top: 3rem;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2rem;
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2.5rem 0;
         }
 
         .feature-item {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(0, 221, 235, 0.12));
-            padding: 1.5rem 2.5rem;
-            border-radius: 20px;
-            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            font-size: 1.1rem;
             font-weight: 500;
-            min-width: 200px;
-            transition: transform 0.5s, box-shadow 0.5s;
             text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-item::before {
+            content: '⚡️';
+            margin-right: 0.5rem;
         }
 
         .feature-item:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 25px rgba(0, 221, 235, 0.4);
+            box-shadow: 0 10px 20px rgba(0, 255, 255, 0.3);
         }
 
-        .feature-item::before {
-            content: '✨';
-            margin-right: 0.5rem;
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .social-links a {
+            color: #00f7ff;
+            font-size: 2.2rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        .social-links a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #00f7ff;
+            color: #05051a;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 0.3s ease, bottom 0.3s ease;
+            pointer-events: none;
+        }
+
+        .social-links a:hover::after {
+            opacity: 1;
+            bottom: -50px;
+        }
+
+        .social-links a:hover {
+            color: #ff00ff;
+            transform: translateY(-8px);
+        }
+
+        .notify-button {
+            padding: 1.2rem 3rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff, #00ff88);
+            background-size: 300%;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 2.5rem;
+            transition: background-position 0.5s ease, transform 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+        }
+
+        .notify-button:hover {
+            background-position: 100%;
+            transform: scale(1.1);
+        }
+
+        .contact {
+            margin-top: 2.5rem;
+            font-size: 1.2rem;
+        }
+
+        .contact a {
+            color: #00ff88;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        .contact a:hover {
+            color: #ff00ff;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            .subtitle { font-size: 1.2rem; }
+            .countdown { font-size: 1.6rem; }
+            .logo { width: 160px; }
+            .container { padding: 3rem 1.5rem; }
         }
 
         @media (max-width: 480px) {
-            .container { padding: 3.5rem; }
-            h1 { font-size: 4rem; }
-            .subtitle { font-size: 1.4rem; }
-            .logo { width: 160px; }
-            .countdown { font-size: 1.4rem; padding: 0.9rem 1.8rem; }
-            .social-links a { font-size: 2rem; }
-            .status { font-size: 1.3rem; }
-            .notify-button { font-size: 1.1rem; padding: 1rem 2.5rem; }
-            .feature-item { font-size: 1.1rem; min-width: 160px; }
+            h1 { font-size: 2.8rem; }
+            .subtitle { font-size: 1rem; }
+            .countdown { font-size: 1.4rem; }
+            .logo { width: 140px; }
+            .container { padding: 2rem 1rem; }
+            .feature-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <canvas class="background-canvas" id="canvas"></canvas>
+    <div class="scene" id="scene"></div>
     <div class="container">
-        <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT Logo" class="logo">
-        <h1>GarBotGPT en Transformación</h1>
-        <p class="subtitle">Estamos forjando el futuro de la inteligencia artificial con GarBotGPT, integrando tecnologías revolucionarias para ofrecer una experiencia sin precedentes.</p>
-        <p class="status">Activando innovaciones disruptivas...</p>
-        <div class="progress-container">
-            <div class="progress"></div>
+        <img src="https://via.placeholder.com/200" alt="GarBotGPT Logo" class="logo" data-gsap="fade-up">
+        <h1 data-gsap="fade-up" data-delay="0.2">GarBotGPT en Evolución</h1>
+        <p class="subtitle" data-gsap="fade-up" data-delay="0.4">Estamos reconstruyendo el núcleo de nuestra IA para ofrecer una experiencia revolucionaria. ¡Prepárate para el futuro!</p>
+        <p class="status" data-gsap="fade-up" data-delay="0.6">Recalibrando sistemas...</p>
+        <div class="progress-container" data-gsap="fade-up" data-delay="0.8">
+            <div class="progress" id="progress"></div>
         </div>
-        <p class="countdown" id="countdown">Tiempo estimado: Calculando...</p>
-        <div class="feature-list">
-            <div class="feature-item">Respuestas Ultrarrápidas</div>
-            <div class="feature-item">Contexto Multimodal</div>
-            <div class="feature-item">Precisión Mejorada</div>
-            <div class="feature-item">Interfaz Intuitiva</div>
+        <p class="countdown" id="countdown" data.el="countdown" data-gsap="fade-up" data-delay="1">Tiempo estimado: Calculando...</p>
+        <div class="feature-grid" data-gsap="fade-up" data-delay="1.2">
+            <div class="feature-item">Procesamiento Ultrarrápido</div>
+            <div class="feature-item">Interacciones Multimodales</div>
+            <div class="feature-item">Precisión Avanzada</div>
+            <div class="feature-item">Diseño Futurista</div>
         </div>
-        <button class="notify-button" onclick="alert('¡Notificación activada! Te avisaremos cuando GarBotGPT esté listo.')">Notificarme al Lanzamiento</button>
-        <p class="contact">¿Preguntas? Contáctanos en <a href="mailto:soporte@garbotgpt.com">soporte@garbotgpt.com</a></p>
-        <div class="social-links">
-            <a href="https://twitter.com/GarBotGPT" target="_blank" data-tooltip="Twitter" aria-label="Twitter">𝕏</a>
-            <a href="https://linkedin.com/company/garbotgpt" target="_blank" data-tooltip="LinkedIn" aria-label="LinkedIn">LinkedIn</a>
-            <a href="https://github.com/garbotgpt" target="_blank" data-tooltip="GitHub" aria-label="GitHub">GitHub</a>
-            <a href="https://discord.gg/garbotgpt" target="_blank" data-tooltip="Discord" aria-label="Discord">Discord</a>
-            <a href="https://t.me/garbotgpt" target="_blank" data-tooltip="Telegram" aria-label="Telegram">Telegram</a>
+        <button class="notify-button" onclick="alert('¡Notificación activada! Te avisaremos al lanzamiento.')" data-gsap="fade-up" data-delay="1.4">Notificarme</button>
+        <p class="contact" data-gsap="fade-up" data-delay="1.6">¿Dudas? Escríbenos a <a href="mailto:soporte@garbotgpt.com">soporte@garbotgpt.com</a></p>
+        <div class="social-links" data-gsap="fade-up" data-delay="1.8">
+            <a href="https://twitter.com" target="_blank" data-tooltip="Twitter" aria-label="Twitter">𝕏</a>
+            <a href="https://www.linkedin.com/in/ferran-garola-bonilla-4b275a337/" target="_blank" data-tooltip="LinkedIn" aria-label="LinkedIn">LinkedIn</a>
+            <a href="https://github.com" target="_blank" data-tooltip="GitHub" aria-label="GitHub">GitHub</a>
+            <a href="https://discord.com" target="_blank" data-tooltip="Discord" aria-label="Discord">Discord</a>
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Dynamic status messages
-            const messages = [
-                'Reestructurando redes neuronales avanzadas...',
-                'Integrando flujos de datos hiperescalables...',
-                'Entrenando modelos de IA de última generación...',
-                'Desplegando sistemas de seguridad cuántica...',
-                'Sincronizando con clústeres globales...',
-                'Optimizando interacciones contextuales...',
-                'Implementando capacidades multimodales...',
-                'Finalizando arquitectura futurista...'
-            ];
+        // Initialize Lenis for smooth scrolling
+        const lenis = new Lenis({
+            duration: 1.5,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smooth: true,
+            smoothTouch: true,
+        });
 
-            let currentMessage = 0;
-            const statusElement = document.querySelector('.status');
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
 
-            function updateStatus() {
-                statusElement.style.opacity = 0;
-                statusElement.style.transform = 'translateY(25px)';
-                setTimeout(() => {
+        requestAnimationFrame(raf);
+
+        // GSAP Animations
+        document.querySelectorAll('[data-gsap="fade-up"]').forEach((element) => {
+            gsap.fromTo(
+                element,
+                { opacity: 0, y: 60 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.2,
+                    ease: 'power4.out',
+                    delay: parseFloat(element.dataset.delay || 0),
+                    scrollTrigger: {
+                        trigger: element,
+                        start: 'top 85%',
+                    },
+                }
+            );
+        });
+
+        // Progress Bar Animation
+        gsap.to('#progress', {
+            width: '100%',
+            duration: 4,
+            ease: 'power2.inOut',
+            repeat: -1,
+            yoyo: true,
+            onUpdate: function () {
+                const progress = this.progress();
+                gsap.set('#progress', { backgroundPosition: `${progress * 300}% 0` });
+            },
+        });
+
+        // Dynamic Status Messages
+        const messages = [
+            'Recalibrando sistemas...',
+            'Optimizando algoritmos...',
+            'Entrenando redes neuronales...',
+            'Sincronizando clústeres...',
+            'Actualizando protocolos...',
+            'Reforzando seguridad...',
+            'Integrando módulos...',
+        ];
+
+        let currentMessage = 0;
+        const statusElement = document.querySelector('.status');
+
+        function updateStatus() {
+            gsap.to(statusElement, {
+                opacity: 0,
+                y: 30,
+                duration: 0.6,
+                ease: 'power2.in',
+                onComplete: () => {
                     statusElement.textContent = messages[currentMessage];
-                    statusElement.style.opacity = 1;
-                    statusElement.style.transform = 'translateY(0)';
+                    gsap.to(statusElement, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.6,
+                        ease: 'power2.out',
+                    });
                     currentMessage = (currentMessage + 1) % messages.length;
-                }, 900);
+                },
+            });
+        }
+
+        updateStatus();
+        setInterval(updateStatus, 6000);
+
+        // Countdown Timer
+        const countdownElement = document.querySelector('#countdown');
+        const endTime = new Date(Date.now() + 20 * 60 * 1000); // 20 minutes from now
+
+        function updateCountdown() {
+            const now = new Date();
+            const timeLeft = endTime - now;
+            if (timeLeft <= 0) {
+                countdownElement.textContent = '¡Evolución Completada!';
+                gsap.to(countdownElement, {
+                    scale: 1.1,
+                    duration: 0.3,
+                    yoyo: true,
+                    repeat: 3,
+                });
+                return;
             }
 
-            updateStatus();
-            setInterval(updateStatus, 6000);
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            countdownElement.textContent = `Tiempo estimado: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
 
-            // Countdown timer (example: 30 minutes from now)
-            const countdownElement = document.querySelector('#countdown');
-            const endTime = new Date(Date.now() + 30 * 60 * 1000);
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
 
-            function updateCountdown() {
-                const now = new Date();
-                const timeLeft = endTime - now;
-                if (timeLeft <= 0) {
-                    countdownElement.textContent = '¡Transformación finalizada! Lanzamiento inminente...';
-                    return;
-                }
+        // Three.js Scene
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('scene').appendChild(renderer.domElement);
 
-                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                countdownElement.textContent = `Tiempo estimado: ${hours}h ${minutes}m ${seconds}s`;
-            }
+        const particles = new THREE.Group();
+        const particleCount = 300;
+        const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
 
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
+        for (let i = 0; i < particleCount; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 100;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
 
-            // Canvas background animation with enhanced neural network effect
-            const canvas = document.getElementById('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            const color = new THREE.Color().setHSL(Math.random(), 0.7, 0.7);
+            colors[i * 3] = color.r;
+            colors[i * 3 + 1] = color.g;
+            colors[i * 3 + 2] = color.b;
+        }
 
-            const canvasNodes = [];
-            class Node {
-                constructor() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.size = Math.random() * 5 + 2;
-                    this.speedX = Math.random() * 0.5 - 0.25;
-                    this.speedY = Math.random() * 0.5 - 0.25;
-                    this.opacity = Math.random() * 0.6 + 0.4;
-                    this.color = ['#00ddeb', '#7b42ff', '#ff2e63', '#00ffaa'][Math.floor(Math.random() * 4)];
-                }
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-                update() {
-                    this.x += this.speedX;
-                    this.y += this.speedY;
-                    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-                }
+        const material = new THREE.PointsMaterial({
+            size: 0.5,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8,
+        });
 
-                draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fillStyle = this.color;
-                    ctx.globalAlpha = this.opacity;
-                    ctx.shadowBlur = 15;
-                    ctx.shadowColor = this.color;
-                    ctx.fill();
-                    ctx.shadowBlur = 0;
-                    ctx.globalAlpha = 1;
-                }
-            }
+        const particleSystem = new THREE.Points(geometry, material);
+        particles.add(particleSystem);
+        scene.add(particles);
 
-            function initNodes() {
-                for (let i = 0; i < 80; i++) {
-                    canvasNodes.push(new Node());
-                }
-            }
+        camera.position.z = 50;
 
-            function drawConnections() {
-                for (let i = 0; i < canvasNodes.length; i++) {
-                    for (let j = i + 1; j < canvasNodes.length; j++) {
-                        const dx = canvasNodes[i].x - canvasNodes[j].x;
-                        const dy = canvasNodes[i].y - canvasNodes[j].y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-                        if (distance < 250) {
-                            ctx.beginPath();
-                            ctx.moveTo(canvasNodes[i].x, canvasNodes[i].y);
-                            ctx.lineTo(canvasNodes[j].x, canvasNodes[j].y);
-                            ctx.strokeStyle = `rgba(0, 221, 235, ${1 - distance / 250})`;
-                            ctx.lineWidth = 1;
-                            ctx.stroke();
-                        }
+        // Lines for connections
+        const lineGeometry = new THREE.BufferGeometry();
+        const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00f7ff, transparent: true, opacity: 0.3 });
+        const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+        scene.add(lines);
+
+        function updateLines() {
+            const positions = particleSystem.geometry.attributes.position.array;
+            const linePositions = [];
+
+            for (let i = 0; i < particleCount; i++) {
+                for (let j = i + 1; j < particleCount; j++) {
+                    const dx = positions[i * 3] - positions[j * 3];
+                    const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                    const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                    const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+                    if (distance < 20) {
+                        linePositions.push(
+                            positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2],
+                            positions[j * 3], positions[j * 3 + 1], positions[j * 3 + 2]
+                        );
                     }
                 }
             }
 
-            function animate() {
-                ctx.fillStyle = 'rgba(8, 11, 31, 0.15)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                drawConnections();
-                canvasNodes.forEach(node => {
-                    node.update();
-                    node.draw();
-                });
-                requestAnimationFrame(animate);
+            lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particles.rotation.y += 0.001;
+            particles.rotation.x += 0.0005;
+
+            const positions = particleSystem.geometry.attributes.position.array;
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3 + 1] += Math.sin(Date.now() * 0.001 + i) * 0.01;
+                positions[i * 3 + 2] += Math.cos(Date.now() * 0.001 + i) * 0.01;
             }
+            particleSystem.geometry.attributes.position.needsUpdate = true;
 
-            initNodes();
-            animate();
+            updateLines();
+            renderer.render(scene, camera);
+        }
 
-            window.addEventListener('resize', () => {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Mouse Interaction
+        const mouse = new THREE.Vector2();
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            gsap.to(particles.rotation, {
+                x: mouse.y * 0.1,
+                y: mouse.x * 0.1,
+                duration: 1,
+                ease: 'power2.out',
             });
+        });
 
-            // Interactive canvas effect with mouse and touch
-            function handleInteraction(e) {
-                let clientX, clientY;
-                if (e.type === 'touchmove' && e.touches && e.touches[0]) {
-                    clientX = e.touches[0].clientX;
-                    clientY = e.touches[0].clientY;
-                } else if (e.type === 'mousemove') {
-                    clientX = e.clientX;
-                    clientY = e.clientY;
-                } else {
-                    return;
-                }
+        // Touch Interaction
+        window.addEventListener('touchmove', (event) => {
+            if (event.touches.length > 0) {
+                mouse.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
 
-                canvasNodes.forEach(node => {
-                    const dx = clientX - node.x;
-                    const dy = clientY - node.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < 150) {
-                        node.speedX += dx * 0.002;
-                        node.speedY += dy * 0.002;
-                    }
+                gsap.to(particles.rotation, {
+                    x: mouse.y * 0.1,
+                    y: mouse.x * 0.1,
+                    duration: 1,
+                    ease: 'power2.out',
                 });
             }
-
-            window.addEventListener('mousemove', handleInteraction);
-            window.addEventListener('touchmove', handleInteraction);
-
-            // Dynamic feature list animation
-            const featureItems = document.querySelectorAll('.feature-item');
-            featureItems.forEach((item, index) => {
-                item.style.animationDelay = `${index * 0.2}s`;
-                item.style.opacity = 0;
-                item.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    item.style.transition = 'opacity 0.5s, transform 0.5s';
-                    item.style.opacity = 1;
-                    item.style.transform = 'translateY(0)';
-                }, index * 200);
-            });
         });
     </script>
 </body>
