@@ -15,7 +15,12 @@ import json
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Configura les claus API
+# Configura les claus API i valida-les
+if not Config.OPENAI_API_KEY:
+    raise ValueError("OPENAI_API_KEY no està definida a la configuració.")
+if not Config.GOOGLE_API_KEY:
+    raise ValueError("GOOGLE_API_KEY no està definida a la configuració.")
+
 openai.api_key = Config.OPENAI_API_KEY
 genai.configure(api_key=Config.GOOGLE_API_KEY)
 
@@ -151,8 +156,8 @@ def chat():
             # Configurar missatges inicials amb instruccions de llenguatge
             messages = []
             if chat_settings.model.startswith('gemini'):
-                messages.append({"role": "system", "content": "Ets un assistent d'IA útil creat per xAI. Respon sempre en català."})
-            else:  # OpenAI com a fallback
+                messages.append({"role": "system", "content": "Ets GarBotGPT, un assistent d'IA útil creat per xAI. Respon sempre en català."})
+            else:  # OpenAI
                 messages.append({"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI. Responde siempre en castellano."})
             messages.append({"role": "user", "content": user_message})
             
@@ -161,30 +166,40 @@ def chat():
                 if last_entry:
                     messages = []
                     if chat_settings.model.startswith('gemini'):
-                        messages.append({"role": "system", "content": "Ets un assistent d'IA útil creat per xAI. Respon sempre en català."})
+                        messages.append({"role": "system", "content": "Ets GarBotGPT, un assistent d'IA útil creat per xAI. Respon sempre en català."})
                     else:
                         messages.append({"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI. Responde siempre en castellano."})
                     messages.append({"role": "user", "content": last_entry.message})
+                    user_message = last_entry.message
             
             # Determinar si utilitzem OpenAI o Gemini basant-nos en el model seleccionat
+            ai_response = None
             if chat_settings.model.startswith('gemini'):
-                model_instance = genai.GenerativeModel(chat_settings.model)
-                response = model_instance.generate_content(
-                    user_message,
-                    generation_config=genai.types.GenerationConfig(
-                        temperature=chat_settings.temperature,
-                        max_output_tokens=chat_settings.max_tokens
+                try:
+                    model_instance = genai.GenerativeModel(chat_settings.model)
+                    response = model_instance.generate_content(
+                        user_message,
+                        generation_config=genai.types.GenerationConfig(
+                            temperature=chat_settings.temperature,
+                            max_output_tokens=chat_settings.max_tokens
+                        )
                     )
-                )
-                ai_response = response.text
-            else:  # OpenAI com a fallback
-                response = openai.chat.completions.create(
-                    model=chat_settings.model,
-                    messages=messages,
-                    temperature=chat_settings.temperature,
-                    max_tokens=chat_settings.max_tokens
-                )
-                ai_response = response.choices[0].message.content
+                    ai_response = response.text
+                except Exception as e:
+                    logger.error(f"Error amb Gemini API: {str(e)}")
+                    return jsonify({'error': 'Error al connectar amb Gemini API'}), 500
+            else:  # OpenAI
+                try:
+                    response = openai.chat.completions.create(
+                        model=chat_settings.model,
+                        messages=messages,
+                        temperature=chat_settings.temperature,
+                        max_tokens=chat_settings.max_tokens
+                    )
+                    ai_response = response.choices[0].message.content
+                except Exception as e:
+                    logger.error(f"Error amb OpenAI API: {str(e)}")
+                    return jsonify({'error': 'Error al connectar amb OpenAI API'}), 500
             
             if not regenerate:
                 chat_entry = ChatHistory(user_id=current_user.id, message=user_message, response=ai_response)
@@ -221,28 +236,37 @@ def edit_message():
         chat_settings = ChatSettings.query.filter_by(user_id=current_user.id).first()
         messages = []
         if chat_settings.model.startswith('gemini'):
-            messages.append({"role": "system", "content": "Ets un assistent d'IA útil creat per xAI. Respon sempre en català."})
+            messages.append({"role": "system", "content": "Ets GarBotGPT, un assistent d'IA útil creat per xAI. Respon sempre en català."})
         else:
             messages.append({"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI. Responde siempre en castellano."})
         messages.append({"role": "user", "content": new_message})
+
         if chat_settings.model.startswith('gemini'):
-            model_instance = genai.GenerativeModel(chat_settings.model)
-            response = model_instance.generate_content(
-                new_message,
-                generation_config=genai.types.GenerationConfig(
-                    temperature=chat_settings.temperature,
-                    max_output_tokens=chat_settings.max_tokens
+            try:
+                model_instance = genai.GenerativeModel(chat_settings.model)
+                response = model_instance.generate_content(
+                    new_message,
+                    generation_config=genai.types.GenerationConfig(
+                        temperature=chat_settings.temperature,
+                        max_output_tokens=chat_settings.max_tokens
+                    )
                 )
-            )
-            bot_response = response.text
+                bot_response = response.text
+            except Exception as e:
+                logger.error(f"Error amb Gemini API: {str(e)}")
+                return jsonify({'error': 'Error al connectar amb Gemini API'}), 500
         else:
-            response = openai.chat.completions.create(
-                model=chat_settings.model,
-                messages=messages,
-                temperature=chat_settings.temperature,
-                max_tokens=chat_settings.max_tokens
-            )
-            bot_response = response.choices[0].message.content
+            try:
+                response = openai.chat.completions.create(
+                    model=chat_settings.model,
+                    messages=messages,
+                    temperature=chat_settings.temperature,
+                    max_tokens=chat_settings.max_tokens
+                )
+                bot_response = response.choices[0].message.content
+            except Exception as e:
+                logger.error(f"Error amb OpenAI API: {str(e)}")
+                return jsonify({'error': 'Error al connectar amb OpenAI API'}), 500
 
         chat_entry.message = new_message
         chat_entry.response = bot_response
