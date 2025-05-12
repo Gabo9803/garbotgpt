@@ -14,7 +14,7 @@ class User(UserMixin, db.Model):
 class ChatSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    model = db.Column(db.String(50), default='gpt-3.5-turbo')
+    model = db.Column(db.String(50), default='gpt-3.5-turbo')  # Soporta OpenAI i Gemini
     temperature = db.Column(db.Float, default=0.7)
     max_tokens = db.Column(db.Integer, default=1000)
     theme_color = db.Column(db.String(7), default='#007bff')  # Color personalizado
