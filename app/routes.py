@@ -3,6 +3,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from app.models import User, ChatHistory, ChatSettings
 from werkzeug.security import generate_password_hash, check_password_hash
 import openai
+import google.generativeai as genai
 from app.config import Config
 from app import db
 from sqlalchemy.exc import ProgrammingError, OperationalError
@@ -14,7 +15,9 @@ import json
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Configura les claus API
 openai.api_key = Config.OPENAI_API_KEY
+genai.configure(api_key=Config.GOOGLE_API_KEY)
 
 login_manager = LoginManager()
 login_manager.init_app(current_app)
@@ -159,13 +162,25 @@ def chat():
                         {"role": "user", "content": last_entry.message}
                     ]
             
-            response = openai.chat.completions.create(
-                model=chat_settings.model,
-                messages=messages,
-                temperature=chat_settings.temperature,
-                max_tokens=chat_settings.max_tokens
-            )
-            ai_response = response.choices[0].message.content
+            # Determinar si utilitzem OpenAI o Gemini basant-nos en el model seleccionat
+            if chat_settings.model.startswith('gemini'):
+                model_instance = genai.GenerativeModel(chat_settings.model)
+                response = model_instance.generate_content(
+                    user_message,
+                    generation_config=genai.types.GenerationConfig(
+                        temperature=chat_settings.temperature,
+                        max_output_tokens=chat_settings.max_tokens
+                    )
+                )
+                ai_response = response.text
+            else:  # OpenAI com a fallback
+                response = openai.chat.completions.create(
+                    model=chat_settings.model,
+                    messages=messages,
+                    temperature=chat_settings.temperature,
+                    max_tokens=chat_settings.max_tokens
+                )
+                ai_response = response.choices[0].message.content
             
             if not regenerate:
                 chat_entry = ChatHistory(user_id=current_user.id, message=user_message, response=ai_response)
@@ -183,7 +198,7 @@ def chat():
             return jsonify({'error': str(e)}), 500
     history = ChatHistory.query.filter_by(user_id=current_user.id).order_by(ChatHistory.timestamp.asc()).all()
     chat_settings = ChatSettings.query.filter_by(user_id=current_user.id).first()
-    return render_template('chat.html', history=history, chat_settings=chat_settings, authenticated=current_user.is_authenticated)
+    return render_template('chat_improved.html', history=history, chat_settings=chat_settings, authenticated=current_user.is_authenticated)
 
 @current_app.route('/edit_message', methods=['POST'])
 @login_required
@@ -204,13 +219,24 @@ def edit_message():
             {"role": "system", "content": "Eres GarBotGPT, un asistente de IA útil creado por xAI."},
             {"role": "user", "content": new_message}
         ]
-        response = openai.chat.completions.create(
-            model=chat_settings.model,
-            messages=messages,
-            temperature=chat_settings.temperature,
-            max_tokens=chat_settings.max_tokens
-        )
-        bot_response = response.choices[0].message.content
+        if chat_settings.model.startswith('gemini'):
+            model_instance = genai.GenerativeModel(chat_settings.model)
+            response = model_instance.generate_content(
+                new_message,
+                generation_config=genai.types.GenerationConfig(
+                    temperature=chat_settings.temperature,
+                    max_output_tokens=chat_settings.max_tokens
+                )
+            )
+            bot_response = response.text
+        else:
+            response = openai.chat.completions.create(
+                model=chat_settings.model,
+                messages=messages,
+                temperature=chat_settings.temperature,
+                max_tokens=chat_settings.max_tokens
+            )
+            bot_response = response.choices[0].message.content
 
         chat_entry.message = new_message
         chat_entry.response = bot_response
