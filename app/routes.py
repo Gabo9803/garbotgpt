@@ -198,7 +198,7 @@ def chat():
             return jsonify({'error': str(e)}), 500
     history = ChatHistory.query.filter_by(user_id=current_user.id).order_by(ChatHistory.timestamp.asc()).all()
     chat_settings = ChatSettings.query.filter_by(user_id=current_user.id).first()
-    return render_template('chat_improved.html', history=history, chat_settings=chat_settings, authenticated=current_user.is_authenticated)
+    return render_template('chat.html', history=history, chat_settings=chat_settings, authenticated=current_user.is_authenticated)
 
 @current_app.route('/edit_message', methods=['POST'])
 @login_required
