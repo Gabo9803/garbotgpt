@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GarBotGPT - Evolución en Progreso</title>
     <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;600;800&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -16,7 +17,7 @@
             font-family: 'IBM Plex Mono', monospace;
             background: #05051a;
             color: #ffffff;
-            overflow: hidden;
+            overflow-x: hidden;
             min-height: 100vh;
             position: relative;
         }
@@ -120,7 +121,7 @@
                 transparent 25%,
                 transparent 50%,
                 rgba(255, 255, 255, 0.3) 50%,
-                rgba(255, 255, 255, 0.3) 75%,
+                rgbaンが255, 255, 255, 0.3) 75%,
                 transparent 75%,
                 transparent
             );
@@ -192,6 +193,11 @@
             position: relative;
         }
 
+        .social-links a:hover {
+            color: #ff00ff;
+            transform: scale(1.2) translateY(-8px);
+        }
+
         .social-links a::after {
             content: attr(data-tooltip);
             position: absolute;
@@ -214,11 +220,6 @@
             bottom: -50px;
         }
 
-        .social-links a:hover {
-            color: #ff00ff;
-            transform: translateY(-8px);
-        }
-
         .notify-button {
             padding: 1.2rem 3rem;
             font-size: 1.3rem;
@@ -230,12 +231,36 @@
             border-radius: 20px;
             cursor: pointer;
             margin-top: 2.5rem;
-            transition: background-position 0.5s ease, transform 0.3s ease;
+            transition: background-position 0.5s ease;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+            animation: pulse 2s ease-in-out infinite;
         }
 
         .notify-button:hover {
             background-position: 100%;
+            transform: scale(1.1);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .push-notify {
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            background: linear-gradient(90deg, #ff00ff, #00ff88);
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            margin: 1.5rem auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .push-notify:hover {
             transform: scale(1.1);
         }
 
@@ -255,12 +280,46 @@
             color: #ff00ff;
         }
 
+        .faq {
+            margin-top: 3rem;
+            text-align: left;
+        }
+
+        .faq h2 {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .faq-item h3 {
+            font-size: 1.3rem;
+            color: #00ff88;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-item p {
+            font-size: 1.1rem;
+            color: #ccffff;
+        }
+
         @media (max-width: 768px) {
             h1 { font-size: 3.5rem; }
             .subtitle { font-size: 1.2rem; }
             .countdown { font-size: 1.6rem; }
             .logo { width: 160px; }
             .container { padding: 3rem 1.5rem; }
+            .faq h2 { font-size: 2rem; }
         }
 
         @media (max-width: 480px) {
@@ -270,33 +329,46 @@
             .logo { width: 140px; }
             .container { padding: 2rem 1rem; }
             .feature-grid { grid-template-columns: 1fr; }
+            .faq h2 { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
     <div class="scene" id="scene"></div>
     <div class="container">
-        <img src="https://tecnofgb.com/wp-content/uploads/2025/05/ChatGPT-Image-7-may-2025-15_43_29.png" alt="GarBotGPT Logo" class="logo" data-gsap="fade-up">
+        <img src="https://tecnofgb.com/wp-content/uploads/2025/05/ChatGPT-Image-7-may-2025-15_43_29.png" alt="GarBotGPT Logo" class="logo" data-gsap="fade-up" loading="lazy">
         <h1 data-translate="title" data-gsap="fade-up" data-delay="0.2">GarBotGPT en Evolución</h1>
         <p class="subtitle" data-translate="subtitle" data-gsap="fade-up" data-delay="0.4">Estamos reconstruyendo el núcleo de nuestra IA para ofrecer una experiencia revolucionaria. ¡Prepárate para el futuro!</p>
         <p class="status" data-translate="status" data-gsap="fade-up" data-delay="0.6">Recalibrando sistemas...</p>
         <div class="progress-container" data-gsap="fade-up" data-delay="0.8">
             <div class="progress" id="progress"></div>
         </div>
-        <p class="countdown" id="countdown" data-translate="countdown" data-gsap="fade-up" data-delay="1">Tiempo estimado: Calculando...</p>
+        <p class="countdown" id="countdown" data-translate="countdown" data-gsap="fade-up" data-delay="1" role="status">Tiempo estimado: Calculando...</p>
         <div class="feature-grid" data-gsap="fade-up" data-delay="1.2">
             <div class="feature-item" data-translate="features.0">Procesamiento Ultrarrápido</div>
             <div class="feature-item" data-translate="features.1">Interacciones Multimodales</div>
             <div class="feature-item" data-translate="features.2">Precisión Avanzada</div>
             <div class="feature-item" data-translate="features.3">Diseño Futurista</div>
         </div>
-        <button class="notify-button" onclick="alert('¡Notificación activada! Te avisaremos al lanzamiento.')" data-translate="notifyButton" data-gsap="fade-up" data-delay="1.4">Notificarme</button>
+        <button class="notify-button" onclick="alert('¡Notificación activada! Te avisaremos al lanzamiento.')" data-translate="notifyButton" data-gsap="fade-up" data-delay="1.4" aria-label="Activar notificación de lanzamiento">Notificarme</button>
+        <button class="push-notify" onclick="requestPushPermission()" data-gsap="fade-up" data-delay="1.5" aria-label="Activar notificaciones push">Activar Notificaciones Push</button>
         <p class="contact" data-gsap="fade-up" data-delay="1.6" data-translate="contact">¿Dudas? Escríbenos a <a href="mailto:garbot@garbotgpt.com" data-translate="contactLink">soporte@garbotgpt.com</a></p>
         <div class="social-links" data-gsap="fade-up" data-delay="1.8">
-            <a href="https://twitter.com" target="_blank" data-tooltip="Twitter" aria-label="Twitter">𝕏</a>
-            <a href="https://www.linkedin.com/in/ferran-garola-bonilla-4b275a337/" target="_blank" data-tooltip="LinkedIn" aria-label="LinkedIn">LinkedIn</a>
-            <a href="https://github.com" target="_blank" data-tooltip="GitHub" aria-label="GitHub">GitHub</a>
-            <a href="https://discord.com" target="_blank" data-tooltip="Discord" aria-label="Discord">Discord</a>
+            <a href="https://twitter.com" target="_blank" data-tooltip="Twitter" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+            <a href="https://www.linkedin.com/in/ferran-garola-bonilla-4b275a337/" target="_blank" data-tooltip="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="https://github.com" target="_blank" data-tooltip="GitHub" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://discord.com" target="_blank" data-tooltip="Discord" aria-label="Discord"><i class="fab fa-discord"></i></a>
+        </div>
+        <div class="faq" data-gsap="fade-up" data-delay="2">
+            <h2 data-translate="faqTitle">Preguntas Frecuentes</h2>
+            <div class="faq-item">
+                <h3 data-translate="faq.0.question">¿Qué es GarBotGPT?</h3>
+                <p data-translate="faq.0.answer">GarBotGPT es una IA avanzada en desarrollo para ofrecer interacciones multimodales y precisas.</p>
+            </div>
+            <div class="faq-item">
+                <h3 data-translate="faq.1.question">¿Cuándo estará disponible?</h3>
+                <p data-translate="faq.1.answer">Estamos trabajando en la evolución, ¡sigue el temporizador para saber más!</p>
+            </div>
         </div>
     </div>
 
@@ -327,7 +399,12 @@
                 ],
                 notifyButton: "Notificarme",
                 contact: "¿Dudas? Escríbenos a ",
-                contactLink: "soporte@garbotgpt.com"
+                contactLink: "soporte@garbotgpt.com",
+                faqTitle: "Preguntas Frecuentes",
+                faq: [
+                    { question: "¿Qué es GarBotGPT?", answer: "GarBotGPT es una IA avanzada en desarrollo para ofrecer interacciones multimodales y precisas." },
+                    { question: "¿Cuándo estará disponible?", answer: "Estamos trabajando en la evolución, ¡sigue el temporizador para saber más!" }
+                ]
             },
             ca: {
                 title: "GarBotGPT en Evolució",
@@ -350,7 +427,12 @@
                 ],
                 notifyButton: "Notifica'm",
                 contact: "Dubtes? Escriu-nos a ",
-                contactLink: "suport@garbotgpt.com"
+                contactLink: "suport@garbotgpt.com",
+                faqTitle: "Preguntes Freqüents",
+                faq: [
+                    { question: "Què és GarBotGPT?", answer: "GarBotGPT és una IA avançada en desenvolupament per oferir interaccions multimodals i precises." },
+                    { question: "Quan estarà disponible?", answer: "Estem treballant en l'evolució, segueix el temporitzador per saber-ne més!" }
+                ]
             }
         };
 
@@ -459,7 +541,7 @@
         function toggleLanguage() {
             currentLang = currentLang === 'es' ? 'ca' : 'es';
             updateLanguage(currentLang);
-            updateStatus(); // Actualizar el status inmediatamente al cambiar idioma
+            updateStatus();
         }
 
         // Actualizar idioma y estado inicialmente
@@ -493,7 +575,6 @@
                     yoyo: true,
                     repeat: 3,
                 });
-                // Limpiar localStorage cuando el temporizador termine
                 localStorage.removeItem('countdownEndTime');
                 return;
             }
@@ -628,6 +709,25 @@
                 });
             }
         });
+
+        // Push Notification Permission
+        async function requestPushPermission() {
+            if ('Notification' in window) {
+                try {
+                    const permission = await Notification.requestPermission();
+                    if (permission === 'granted') {
+                        alert('¡Notificaciones push activadas! Te avisaremos cuando GarBotGPT esté listo.');
+                    } else {
+                        alert('Permiso para notificaciones denegado.');
+                    }
+                } catch (error) {
+                    console.error('Error al solicitar permiso de notificaciones:', error);
+                    alert('No se pudo activar las notificaciones push. Por favor, intenta de nuevo.');
+                }
+            } else {
+                alert('Las notificaciones push no son compatibles con este navegador.');
+            }
+        }
     </script>
 </body>
 </html>
