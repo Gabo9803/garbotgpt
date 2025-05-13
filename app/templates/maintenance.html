@@ -471,7 +471,16 @@
 
         // Countdown Timer
         const countdownElement = document.querySelector('#countdown');
-        const endTime = new Date(Date.now() + 820 * 60 * 1000); // 20 minutes from now
+        let endTime;
+
+        // Comprobar si hay un endTime almacenado en localStorage
+        if (localStorage.getItem('countdownEndTime')) {
+            endTime = new Date(parseInt(localStorage.getItem('countdownEndTime')));
+        } else {
+            // Si no hay endTime, establecer uno nuevo (20 minutos desde ahora)
+            endTime = new Date(Date.now() + 20 * 60 * 1000);
+            localStorage.setItem('countdownEndTime', endTime.getTime());
+        }
 
         function updateCountdown() {
             const now = new Date();
@@ -484,6 +493,8 @@
                     yoyo: true,
                     repeat: 3,
                 });
+                // Limpiar localStorage cuando el temporizador termine
+                localStorage.removeItem('countdownEndTime');
                 return;
             }
 
