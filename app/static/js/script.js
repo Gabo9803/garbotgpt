@@ -714,4 +714,104 @@ document.getElementById('fullscreen-toggle')?.addEventListener('click', () => {
     } catch (error) {
         console.error('Error alternant pantalla completa:', error);
     }
+    
+});
+
+hljs.highlightAll();
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize tooltips
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+    // Theme and contrast toggle
+    const html = document.getElementById('html-root');
+    const themeToggle = document.getElementById('theme-toggle');
+    const contrastToggle = document.getElementById('contrast-toggle');
+    themeToggle.addEventListener('click', () => {
+        html.dataset.theme = html.dataset.theme === 'light' ? 'dark' : 'light';
+    });
+    contrastToggle.addEventListener('click', () => {
+        html.dataset.contrast = html.dataset.contrast === 'high' ? 'normal' : 'high';
+    });
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // Chat demo animation
+    const messages = document.querySelectorAll('#chat-demo-messages .message');
+    messages.forEach((msg, index) => {
+        gsap.fromTo(msg, { opacity: 0, y: 30 }, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            delay: index * 0.4,
+            ease: 'power2.out',
+            onComplete: () => msg.classList.add('show')
+        });
+    });
+
+    // Stats counter
+    const stats = document.querySelectorAll('.stat-item');
+    stats.forEach(stat => {
+        const target = parseFloat(stat.dataset.count);
+        let current = 0;
+        const increment = target / 100;
+        const updateCount = () => {
+            current += increment;
+            stat.textContent = Math.round(current).toLocaleString();
+            if (current < target) requestAnimationFrame(updateCount);
+            else stat.textContent = target.toLocaleString();
+        };
+        updateCount();
+    });
+
+    // Scroll animations with GSAP
+    gsap.registerPlugin(ScrollTrigger);
+    document.querySelectorAll('section').forEach(section => {
+        gsap.from(section.children, {
+            opacity: 0,
+            y: 50,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 85%',
+                end: 'bottom 20%',
+                toggleActions: 'play none none reverse'
+            }
+        });
+    });
+
+    // Timeline animations
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    timelineItems.forEach(item => {
+        gsap.fromTo(item, { opacity: 0, x: item.classList.contains('left') ? -30 : 30 }, {
+            opacity: 1,
+            x: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: item,
+                start: 'top 85%',
+                toggleActions: 'play none none reverse',
+                onEnter: () => item.classList.add('show')
+            }
+        });
+    });
+
+    // Placeholder for WebGL background
+    const canvas = document.getElementById('webgl-bg');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 });
