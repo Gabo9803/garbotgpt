@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<!-- Google tag (gtag.js) -->
+    <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-608TQ0BE6H"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -12,6 +12,9 @@
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GarBotGPT: IA revolucionaria en evolución. Suscríbete para el lanzamiento.">
+    <meta name="keywords" content="GarBotGPT, IA, inteligencia artificial, tecnología futurista">
+    <meta name="robots" content="index, follow">
     <title>GarBotGPT - Evolución en Progreso</title>
     <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;600;800&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -59,11 +62,12 @@
             width: 200px;
             margin-bottom: 2.5rem;
             filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.6));
-            transition: transform 0.4s ease;
+            transition: transform 0.4s ease, filter 0.4s ease;
         }
 
         .logo:hover {
-            transform: scale(1.15) rotate(5deg);
+            transform: scale(1.15) rotateY(15deg);
+            filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.8));
         }
 
         h1 {
@@ -75,6 +79,15 @@
             margin-bottom: 1.5rem;
             letter-spacing: 4px;
             text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            position: relative;
+            animation: glitch 3s linear infinite;
+        }
+
+        @keyframes glitch {
+            2%, 64% { transform: translate(2px, 0) skew(0deg); }
+            4%, 60% { transform: translate(-2px, 0) skew(0deg); }
+            62% { transform: translate(0, 0) skew(5deg); }
+            0%, 5%, 65%, 100% { transform: translate(0, 0) skew(0deg); }
         }
 
         .subtitle {
@@ -130,7 +143,7 @@
                 transparent 25%,
                 transparent 50%,
                 rgba(255, 255, 255, 0.3) 50%,
-                rgbaンが255, 255, 255, 0.3) 75%,
+                rgba(255, 255, 255, 0.3) 75%,
                 transparent 75%,
                 transparent
             );
@@ -153,6 +166,7 @@
             margin: 2.5rem 0;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
             transition: transform 0.3s ease;
+            cursor: pointer;
         }
 
         .countdown:hover {
@@ -322,13 +336,92 @@
             color: #ccffff;
         }
 
+        .preview-chat {
+            margin-top: 3rem;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .preview-chat h2 {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 1rem;
+            font-size: 1rem;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+        }
+
+        .chat-input input:focus {
+            outline: 2px solid #00f7ff;
+        }
+
+        .chat-input button {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ffffff;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-history {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-message {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .chat-message.user {
+            color: #00ff88;
+            text-align: right;
+        }
+
+        .chat-message.bot {
+            color: #00f7ff;
+            text-align: left;
+        }
+
         @media (max-width: 768px) {
             h1 { font-size: 3.5rem; }
             .subtitle { font-size: 1.2rem; }
             .countdown { font-size: 1.6rem; }
             .logo { width: 160px; }
             .container { padding: 3rem 1.5rem; }
-            .faq h2 { font-size: 2rem; }
+            .faq h2, .preview-chat h2 { font-size: 2rem; }
         }
 
         @media (max-width: 480px) {
@@ -338,12 +431,15 @@
             .logo { width: 140px; }
             .container { padding: 2rem 1rem; }
             .feature-grid { grid-template-columns: 1fr; }
-            .faq h2 { font-size: 1.8rem; }
+            .faq h2, .preview-chat h2 { font-size: 1.8rem; }
+            .chat-input { flex-direction: column; }
+            .chat-input button { width: 100%; }
         }
     </style>
 </head>
 <body>
-    <div class="scene" id="scene"></div>
+    <div class="scene" id="scene" aria-hidden="true"></div>
+    <div class="sr-only">Fondo animado decorativo con partículas</div>
     <div class="container">
         <img src="https://tecnofgb.com/wp-content/uploads/2025/05/ChatGPT-Image-7-may-2025-15_43_29.png" alt="GarBotGPT Logo" class="logo" data-gsap="fade-up" loading="lazy">
         <h1 data-translate="title" data-gsap="fade-up" data-delay="0.2">GarBotGPT en Evolución</h1>
@@ -359,8 +455,8 @@
             <div class="feature-item" data-translate="features.2">Precisión Avanzada</div>
             <div class="feature-item" data-translate="features.3">Diseño Futurista</div>
         </div>
-        <button class="notify-button" onclick="alert('¡Notificación activada! Te avisaremos al lanzamiento.')" data-translate="notifyButton" data-gsap="fade-up" data-delay="1.4" aria-label="Activar notificación de lanzamiento">Notificarme</button>
-        <button class="push-notify" onclick="requestPushPermission()" data-gsap="fade-up" data-delay="1.5" aria-label="Activar notificaciones push">Activar Notificaciones Push</button>
+        <button class="notify-button" data-translate="notifyButton" data-gsap="fade-up" data-delay="1.4" aria-label="Activar notificación de lanzamiento">Notificarme</button>
+        <button class="push-notify" data-gsap="fade-up" data-delay="1.5" aria-label="Activar notificaciones push">Activar Notificaciones Push</button>
         <p class="contact" data-gsap="fade-up" data-delay="1.6" data-translate="contact">¿Dudas? Escríbenos a <a href="mailto:garbot@garbotgpt.com" data-translate="contactLink">soporte@garbotgpt.com</a></p>
         <div class="social-links" data-gsap="fade-up" data-delay="1.8">
             <a href="https://twitter.com" target="_blank" data-tooltip="Twitter" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
@@ -379,11 +475,30 @@
                 <p data-translate="faq.1.answer">Estamos trabajando en la evolución, ¡sigue el temporizador para saber más!</p>
             </div>
         </div>
+        <div class="preview-chat" data-gsap="fade-up" data-delay="2.2">
+            <h2 data-translate="previewTitle">Prueba GarBotGPT</h2>
+            <div class="chat-history" id="chatHistory"></div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Escribe un mensaje..." aria-label="Mensaje para GarBotGPT">
+                <button onclick="sendChatMessage()" data-translate="chatButton">Enviar</button>
+            </div>
+        </div>
     </div>
 
+    <audio id="clickSound" src="https://example.com/click.mp3"></audio>
+    <audio id="completeSound" src="https://example.com/complete.mp3"></audio>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-608TQ0BE6H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-608TQ0BE6H');
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script>
         // Traducciones para español y catalán
         const translations = {
@@ -413,6 +528,13 @@
                 faq: [
                     { question: "¿Qué es GarBotGPT?", answer: "GarBotGPT es una IA avanzada en desarrollo para ofrecer interacciones multimodales y precisas." },
                     { question: "¿Cuándo estará disponible?", answer: "Estamos trabajando en la evolución, ¡sigue el temporizador para saber más!" }
+                ],
+                previewTitle: "Prueba GarBotGPT",
+                chatButton: "Enviar",
+                chatResponses: [
+                    "¡Hola! Estoy en evolución, pero pronto seré una IA increíble.",
+                    "Pregúntame cualquier cosa, aunque por ahora mis respuestas son limitadas.",
+                    "GarBotGPT: ¡Preparándome para revolucionar el mundo de la IA!"
                 ]
             },
             ca: {
@@ -441,6 +563,13 @@
                 faq: [
                     { question: "Què és GarBotGPT?", answer: "GarBotGPT és una IA avançada en desenvolupament per oferir interaccions multimodals i precises." },
                     { question: "Quan estarà disponible?", answer: "Estem treballant en l'evolució, segueix el temporitzador per saber-ne més!" }
+                ],
+                previewTitle: "Prova GarBotGPT",
+                chatButton: "Enviar",
+                chatResponses: [
+                    "Hola! Estic en evolució, però aviat seré una IA increïble.",
+                    "Pregunta'm qualsevol cosa, tot i que ara les meves respostes són limitades.",
+                    "GarBotGPT: Preparant-me per revolucionar el món de la IA!"
                 ]
             }
         };
@@ -463,10 +592,8 @@
             document.querySelectorAll('[data-translate]').forEach(element => {
                 const key = element.getAttribute('data-translate');
                 if (key === 'status') {
-                    // El status se manejará por separado para mantener su rotación
                     return;
                 } else if (key === 'countdown') {
-                    // Para el countdown, solo actualizamos el prefijo
                     const currentText = element.textContent;
                     const timePart = currentText.match(/\d{2}:\d{2}:\d{2}/) || ['Calculando...'];
                     element.textContent = `${getTranslation(lang, key)}${timePart[0]}`;
@@ -474,6 +601,7 @@
                     element.textContent = getTranslation(lang, key);
                 }
             });
+            document.querySelector('.logo').setAttribute('alt', `GarBotGPT Logo (${lang === 'es' ? 'Español' : 'Català'})`);
         }
 
         // Initialize Lenis for smooth scrolling
@@ -563,12 +691,12 @@
         // Countdown Timer
         const countdownElement = document.querySelector('#countdown');
         let endTime;
+        const clickSound = document.getElementById('clickSound');
+        const completeSound = document.getElementById('completeSound');
 
-        // Comprobar si hay un endTime almacenado en localStorage
         if (localStorage.getItem('countdownEndTime')) {
             endTime = new Date(parseInt(localStorage.getItem('countdownEndTime')));
         } else {
-            // Si no hay endTime, establecer uno nuevo (20 minutos desde ahora)
             endTime = new Date(Date.now() + 20 * 60 * 1000);
             localStorage.setItem('countdownEndTime', endTime.getTime());
         }
@@ -583,6 +711,10 @@
                     duration: 0.3,
                     yoyo: true,
                     repeat: 3,
+                    onStart: () => {
+                        completeSound.play().catch(() => console.log('Error al reproducir sonido de completado'));
+                        gtag('event', 'timer_completed', { event_category: 'Timer', event_label: 'Evolution Completed' });
+                    },
                 });
                 localStorage.removeItem('countdownEndTime');
                 return;
@@ -594,8 +726,105 @@
             countdownElement.textContent = `${getTranslation(currentLang, 'countdown')}${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
 
+        // Temporizador interactivo
+        countdownElement.addEventListener('click', () => {
+            const now = new Date();
+            const timeLeft = endTime - now;
+            if (timeLeft <= 0) return;
+            const minutes = Math.floor(timeLeft / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            const message = currentLang === 'es'
+                ? `Tiempo restante: ${minutes} minutos y ${seconds} segundos`
+                : `Temps restant: ${minutes} minuts i ${seconds} segons`;
+            alert(message);
+            gtag('event', 'timer_clicked', { event_category: 'Timer', event_label: 'Time Remaining' });
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        });
+
         updateCountdown();
         setInterval(updateCountdown, 1000);
+
+        // Efectos de sonido y partículas para botones
+        document.querySelector('.notify-button').addEventListener('click', () => {
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+            alert('¡Notificación activada! Te avisaremos al lanzamiento.');
+            gtag('event', 'notify_clicked', { event_category: 'Button', event_label: 'Notify Me' });
+            spawnParticles(event.clientX, event.clientY);
+        });
+
+        document.querySelector('.push-notify').addEventListener('click', () => {
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+            requestPushPermission();
+            spawnParticles(event.clientX, event.clientY);
+        });
+
+        // Función para generar partículas al hacer clic
+        function spawnParticles(x, y) {
+            const particleDiv = document.createElement('div');
+            particleDiv.id = 'click-particles-' + Date.now();
+            particleDiv.style.position = 'absolute';
+            particleDiv.style.left = `${x}px`;
+            particleDiv.style.top = `${y}px`;
+            particleDiv.style.pointerEvents = 'none';
+            particleDiv.style.zIndex = '1000';
+            document.body.appendChild(particleDiv);
+
+            particlesJS(particleDiv.id, {
+                particles: {
+                    number: { value: 20, density: { enable: true, value_area: 800 } },
+                    color: { value: ['#00f7ff', '#ff00ff', '#00ff88'] },
+                    shape: { type: 'circle' },
+                    opacity: { value: 0.8, random: true },
+                    size: { value: 5, random: true },
+                    line_linked: { enable: false },
+                    move: {
+                        enable: true,
+                        speed: 6,
+                        direction: 'none',
+                        random: true,
+                        straight: false,
+                        out_mode: 'out',
+                        bounce: false,
+                        attract: { enable: false }
+                    }
+                },
+                interactivity: { detect_on: 'canvas', events: { onhover: { enable: false }, onclick: { enable: false } } },
+                retina_detect: true
+            });
+
+            setTimeout(() => particleDiv.remove(), 1000);
+        }
+
+        // Modo de vista previa de GarBotGPT
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const history = document.getElementById('chatHistory');
+            const userMessage = document.createElement('div');
+            userMessage.className = 'chat-message user';
+            userMessage.textContent = message;
+            history.appendChild(userMessage);
+
+            const responses = getTranslation(currentLang, 'chatResponses');
+            const botResponse = responses[Math.floor(Math.random() * responses.length)];
+            const botMessage = document.createElement('div');
+            botMessage.className = 'chat-message bot';
+            botMessage.textContent = botResponse;
+            history.appendChild(botMessage);
+
+            history.scrollTop = history.scrollHeight;
+            input.value = '';
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+            gtag('event', 'chat_message_sent', { event_category: 'Chat', event_label: message });
+        }
+
+        document.getElementById('chatInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendChatMessage();
+            }
+        });
 
         // Three.js Scene
         const scene = new THREE.Scene();
@@ -637,7 +866,6 @@
 
         camera.position.z = 50;
 
-        // Lines for connections
         const lineGeometry = new THREE.BufferGeometry();
         const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00f7ff, transparent: true, opacity: 0.3 });
         const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
@@ -726,8 +954,10 @@
                     const permission = await Notification.requestPermission();
                     if (permission === 'granted') {
                         alert('¡Notificaciones push activadas! Te avisaremos cuando GarBotGPT esté listo.');
+                        gtag('event', 'push_permission_granted', { event_category: 'Notifications', event_label: 'Push Enabled' });
                     } else {
                         alert('Permiso para notificaciones denegado.');
+                        gtag('event', 'push_permission_denied', { event_category: 'Notifications', event_label: 'Push Denied' });
                     }
                 } catch (error) {
                     console.error('Error al solicitar permiso de notificaciones:', error);
