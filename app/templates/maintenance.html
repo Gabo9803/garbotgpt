@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-608TQ0BE6H"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-608TQ0BE6H');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="GarBotGPT: IA revolucionaria en evolución. Suscríbete para el lanzamiento.">
@@ -243,7 +234,7 @@
             bottom: -50px;
         }
 
-        .notify-button {
+        .notify-button, .push-notify {
             padding: 1.2rem 3rem;
             font-size: 1.3rem;
             font-weight: 700;
@@ -253,13 +244,13 @@
             border: none;
             border-radius: 20px;
             cursor: pointer;
-            margin-top: 2.5rem;
-            transition: background-position 0.5s ease;
+            margin: 1.5rem;
+            transition: background-position 0.5s ease, transform 0.3s ease;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
             animation: pulse 2s ease-in-out infinite;
         }
 
-        .notify-button:hover {
+        .notify-button:hover, .push-notify:hover {
             background-position: 100%;
             transform: scale(1.1);
         }
@@ -267,24 +258,6 @@
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
-        }
-
-        .push-notify {
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #ffffff;
-            background: linear-gradient(90deg, #ff00ff, #00ff88);
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            margin: 1.5rem auto;
-            display: block;
-            transition: transform 0.3s ease;
-        }
-
-        .push-notify:hover {
-            transform: scale(1.1);
         }
 
         .contact {
@@ -336,47 +309,62 @@
             color: #ccffff;
         }
 
-        .preview-chat {
-            margin-top: 3rem;
-            text-align: left;
-            background: rgba(255, 255, 255, 0.05);
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: rgba(10, 10, 30, 0.9);
+            border: 2px solid #00f7ff;
+            border-radius: 20px;
             padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            max-width: 500px;
+            width: 90%;
+            z-index: 1000;
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.4);
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        .preview-chat h2 {
+        .popup.show {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .popup h3 {
             font-family: 'Oxanium', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2rem;
             background: linear-gradient(90deg, #00f7ff, #ff00ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .popup .time {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00ff88;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .popup .message {
+            font-size: 1.2rem;
+            color: #ccffff;
             margin-bottom: 1.5rem;
-            text-align: center;
         }
 
-        .chat-input {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
+        .popup .progress-container {
+            width: 80%;
+            height: 15px;
+            margin: 1rem auto;
         }
 
-        .chat-input input {
-            flex: 1;
-            padding: 1rem;
-            font-size: 1rem;
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            color: #ffffff;
-        }
-
-        .chat-input input:focus {
-            outline: 2px solid #00f7ff;
-        }
-
-        .chat-input button {
-            padding: 1rem 2rem;
+        .popup .close-button {
+            padding: 0.8rem 2rem;
             font-size: 1rem;
             font-weight: 700;
             color: #ffffff;
@@ -387,32 +375,170 @@
             transition: transform 0.3s ease;
         }
 
-        .chat-input button:hover {
+        .popup .close-button:hover {
             transform: scale(1.1);
         }
 
-        .chat-history {
-            max-height: 200px;
-            overflow-y: auto;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.2);
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        .chat-message {
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
+        .popup-overlay.show {
+            display: block;
+            opacity: 1;
         }
 
-        .chat-message.user {
-            color: #00ff88;
-            text-align: right;
-        }
-
-        .chat-message.bot {
-            color: #00f7ff;
+        .music-player {
+            margin: 2.5rem auto;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            max-width: 500px;
             text-align: left;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .music-player h3 {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .music-player .track-title {
+            font-size: 1.2rem;
+            color: #00ff88;
+            margin-bottom: 1rem;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .player-controls button {
+            background: none;
+            border: none;
+            color: #00f7ff;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .player-controls button:hover {
+            color: #ff00ff;
+            transform: scale(1.2);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .progress-bar input[type="range"] {
+            width: 100%;
+            height: 100%;
+            -webkit-appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .progress-bar input[type="range"]::-webkit-slider-runnable-track {
+            height: 10px;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff);
+            border-radius: 5px;
+        }
+
+        .progress-bar input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #00ff88;
+            border-radius: 50%;
+            margin-top: -3px;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .volume-control span {
+            font-size: 1rem;
+            color: #ccffff;
+        }
+
+        .volume-control input[type="range"] {
+            width: 100px;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            height: 8px;
+        }
+
+        .volume-control input[type="range"]::-webkit-slider-runnable-track {
+            height: 8px;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff);
+            border-radius: 5px;
+        }
+
+        .volume-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #00ff88;
+            border-radius: 50%;
+            margin-top: -3px;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .track-list {
+            max-height: 100px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 0.5rem;
+        }
+
+        .track-list .track-item {
+            padding: 0.5rem;
+            font-size: 1rem;
+            color: #ccffff;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .track-list .track-item:hover {
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        .track-list .track-item.active {
+            color: #00ff88;
+            background: rgba(0, 255, 255, 0.2);
         }
 
         @media (max-width: 768px) {
@@ -421,7 +547,11 @@
             .countdown { font-size: 1.6rem; }
             .logo { width: 160px; }
             .container { padding: 3rem 1.5rem; }
-            .faq h2, .preview-chat h2 { font-size: 2rem; }
+            .faq h2 { font-size: 2rem; }
+            .popup h3 { font-size: 1.8rem; }
+            .popup .time { font-size: 2rem; }
+            .music-player h3 { font-size: 1.5rem; }
+            .player-controls button { font-size: 1.5rem; }
         }
 
         @media (max-width: 480px) {
@@ -431,9 +561,14 @@
             .logo { width: 140px; }
             .container { padding: 2rem 1rem; }
             .feature-grid { grid-template-columns: 1fr; }
-            .faq h2, .preview-chat h2 { font-size: 1.8rem; }
-            .chat-input { flex-direction: column; }
-            .chat-input button { width: 100%; }
+            .faq h2 { font-size: 1.8rem; }
+            .popup h3 { font-size: 1.5rem; }
+            .popup .time { font-size: 1.8rem; }
+            .popup { padding: 1.5rem; }
+            .music-player { padding: 1rem; }
+            .player-controls { flex-wrap: wrap; }
+            .player-controls button { font-size: 1.3rem; }
+            .volume-control input[type="range"] { width: 80px; }
         }
     </style>
 </head>
@@ -456,8 +591,29 @@
             <div class="feature-item" data-translate="features.3">Diseño Futurista</div>
         </div>
         <button class="notify-button" data-translate="notifyButton" data-gsap="fade-up" data-delay="1.4" aria-label="Activar notificación de lanzamiento">Notificarme</button>
-        <button class="push-notify" data-gsap="fade-up" data-delay="1.5" aria-label="Activar notificaciones push">Activar Notificaciones Push</button>
-        <p class="contact" data-gsap="fade-up" data-delay="1.6" data-translate="contact">¿Dudas? Escríbenos a <a href="mailto:garbot@garbotgpt.com" data-translate="contactLink">soporte@garbotgpt.com</a></p>
+        <button class="push-notify" data-translate="pushNotify" data-gsap="fade-up" data-delay="1.5" aria-label="Activar notificaciones push">Activar Notificaciones Push</button>
+        <div class="music-player" data-gsap="fade-up" data-delay="1.6">
+            <h3 data-translate="musicPlayerTitle">Reproductor de Música</h3>
+            <div class="track-title" id="trackTitle">Track 1</div>
+            <div class="player-controls">
+                <button id="prevTrack" aria-label="Pista anterior"><i class="fas fa-backward"></i></button>
+                <button id="playPause" aria-label="Reproducir pista"><i class="fas fa-play"></i></button>
+                <button id="nextTrack" aria-label="Siguiente pista"><i class="fas fa-forward"></i></button>
+            </div>
+            <div class="progress-bar">
+                <input type="range" id="trackProgress" min="0" max="100" value="0" aria-label="Progreso de la pista">
+            </div>
+            <div class="volume-control">
+                <span data-translate="volume">Volumen:</span>
+                <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5" aria-label="Control de volumen">
+            </div>
+            <div class="track-list" id="trackList">
+                <div class="track-item active" data-index="0">Track 1</div>
+                <div class="track-item" data-index="1">Track 2</div>
+                <div class="track-item" data-index="2">Track 3</div>
+            </div>
+        </div>
+        <p class="contact" data-gsap="fade-up" data-delay="1.7" data-translate="contact">¿Dudas? Escríbenos a <a href="mailto:garbot@garbotgpt.com" data-translate="contactLink">soporte@garbotgpt.com</a></p>
         <div class="social-links" data-gsap="fade-up" data-delay="1.8">
             <a href="https://twitter.com" target="_blank" data-tooltip="Twitter" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
             <a href="https://www.linkedin.com/in/ferran-garola-bonilla-4b275a337/" target="_blank" data-tooltip="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
@@ -468,23 +624,27 @@
             <h2 data-translate="faqTitle">Preguntas Frecuentes</h2>
             <div class="faq-item">
                 <h3 data-translate="faq.0.question">¿Qué es GarBotGPT?</h3>
-                <p data-translate="faq.0.answer">GarBotGPT es una IA avanzada en desarrollo para ofrecer interacciones multimodales y precisas.</p>
+                <p data-translate="faq.0.answer">GarBotGPT es una IA avanzada en desarrollo para ofrecer interacciones multimodales y precises.</p>
             </div>
             <div class="faq-item">
                 <h3 data-translate="faq.1.question">¿Cuándo estará disponible?</h3>
                 <p data-translate="faq.1.answer">Estamos trabajando en la evolución, ¡sigue el temporizador para saber más!</p>
             </div>
         </div>
-        <div class="preview-chat" data-gsap="fade-up" data-delay="2.2">
-            <h2 data-translate="previewTitle">Prueba GarBotGPT</h2>
-            <div class="chat-history" id="chatHistory"></div>
-            <div class="chat-input">
-                <input type="text" id="chatInput" placeholder="Escribe un mensaje..." aria-label="Mensaje para GarBotGPT">
-                <button onclick="sendChatMessage()" data-translate="chatButton">Enviar</button>
-            </div>
-        </div>
     </div>
 
+    <div class="popup-overlay" id="popupOverlay"></div>
+    <div class="popup" id="popup">
+        <h3 id="popupTitle"></h3>
+        <div class="time" id="popupTime"></div>
+        <p class="message" id="popupMessage"></p>
+        <div class="progress-container" id="popupProgressContainer">
+            <div class="progress" id="popupProgress"></div>
+        </div>
+        <button class="close-button" data-translate="closeButton">Cerrar</button>
+    </div>
+
+    <audio id="musicPlayer"></audio>
     <audio id="clickSound" src="https://example.com/click.mp3"></audio>
     <audio id="completeSound" src="https://example.com/complete.mp3"></audio>
 
@@ -522,6 +682,7 @@
                     "Diseño Futurista"
                 ],
                 notifyButton: "Notificarme",
+                pushNotify: "Activar Notificaciones Push",
                 contact: "¿Dudas? Escríbenos a ",
                 contactLink: "soporte@garbotgpt.com",
                 faqTitle: "Preguntas Frecuentes",
@@ -529,13 +690,24 @@
                     { question: "¿Qué es GarBotGPT?", answer: "GarBotGPT es una IA avanzada en desarrollo para ofrecer interacciones multimodales y precisas." },
                     { question: "¿Cuándo estará disponible?", answer: "Estamos trabajando en la evolución, ¡sigue el temporizador para saber más!" }
                 ],
-                previewTitle: "Prueba GarBotGPT",
-                chatButton: "Enviar",
-                chatResponses: [
-                    "¡Hola! Estoy en evolución, pero pronto seré una IA increíble.",
-                    "Pregúntame cualquier cosa, aunque por ahora mis respuestas son limitadas.",
-                    "GarBotGPT: ¡Preparándome para revolucionar el mundo de la IA!"
-                ]
+                countdownPopupTitle: "Estado de la Evolución",
+                countdownPopupMessages: [
+                    "¡La revolución está cerca!",
+                    "Cada segundo nos acerca a la IA del futuro.",
+                    "GarBotGPT: Preparándose para sorprenderte."
+                ],
+                notifyPopupTitle: "Notificaciones",
+                notifyPopupMessages: {
+                    granted: "¡Notificaciones activadas! Te avisaremos al lanzamiento.",
+                    denied: "Permiso para notificaciones denegado.",
+                    error: "No se pudo activar las notificaciones. Intenta de nuevo.",
+                    unsupported: "Las notificaciones no son compatibles con este navegador."
+                },
+                closeButton: "Cerrar",
+                musicPlayerTitle: "Reproductor de Música",
+                playing: "Reproducir",
+                paused: "Pausar",
+                volume: "Volumen"
             },
             ca: {
                 title: "GarBotGPT en Evolució",
@@ -557,6 +729,7 @@
                     "Disseny Futurista"
                 ],
                 notifyButton: "Notifica'm",
+                pushNotify: "Activar Notificacions Push",
                 contact: "Dubtes? Escriu-nos a ",
                 contactLink: "suport@garbotgpt.com",
                 faqTitle: "Preguntes Freqüents",
@@ -564,18 +737,61 @@
                     { question: "Què és GarBotGPT?", answer: "GarBotGPT és una IA avançada en desenvolupament per oferir interaccions multimodals i precises." },
                     { question: "Quan estarà disponible?", answer: "Estem treballant en l'evolució, segueix el temporitzador per saber-ne més!" }
                 ],
-                previewTitle: "Prova GarBotGPT",
-                chatButton: "Enviar",
-                chatResponses: [
-                    "Hola! Estic en evolució, però aviat seré una IA increïble.",
-                    "Pregunta'm qualsevol cosa, tot i que ara les meves respostes són limitades.",
-                    "GarBotGPT: Preparant-me per revolucionar el món de la IA!"
-                ]
+                countdownPopupTitle: "Estat de l'Evolució",
+                countdownPopupMessages: [
+                    "La revolució és a prop!",
+                    "Cada segon ens apropa a la IA del futur.",
+                    "GarBotGPT: Preparant-se per sorprendre't."
+                ],
+                notifyPopupTitle: "Notificacions",
+                notifyPopupMessages: {
+                    granted: "Notificacions activades! T'avisarem al llançament.",
+                    denied: "Permís per a notificacions denegat.",
+                    error: "No s'ha pogut activar les notificacions. Torna a intentar-ho.",
+                    unsupported: "Les notificacions no són compatibles amb aquest navegador."
+                },
+                closeButton: "Tancar",
+                musicPlayerTitle: "Reproductor de Música",
+                playing: "Reproduir",
+                paused: "Pausa",
+                volume: "Volum"
             }
         };
 
+        // Lista de pistas de música
+        const tracks = [
+            { title: "Billie Jean - Michael Jackson", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Michael-Jackson-Billie-Jean-Official-Video.mp3" },
+            { title: "You Rock My World - Michael Jackson", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Michael-Jackson-–-You-Rock-My-World-Lyrics_Sub-espanol.mp3" },
+            { title: "Track 3", src: "https://example.com/track3.mp3" }
+        ];
+
+        // DOM Elements for Music Player
+        const musicPlayer = document.getElementById('musicPlayer');
+        const playPauseButton = document.getElementById('playPause');
+        const prevTrackButton = document.getElementById('prevTrack');
+        const nextTrackButton = document.getElementById('nextTrack');
+        const trackProgress = document.getElementById('trackProgress');
+        const volumeControl = document.getElementById('volumeControl');
+        const trackTitle = document.getElementById('trackTitle');
+        const trackList = document.getElementById('trackList');
+
+        // Other DOM Elements
+        const statusElement = document.querySelector('.status');
+        const countdownElement = document.querySelector('#countdown');
+        const clickSound = document.getElementById('clickSound');
+        const completeSound = document.getElementById('completeSound');
+        const popup = document.getElementById('popup');
+        const popupOverlay = document.getElementById('popupOverlay');
+        const popupTitle = document.getElementById('popupTitle');
+        const popupTime = document.getElementById('popupTime');
+        const popupMessage = document.getElementById('popupMessage');
+        const popupProgressContainer = document.getElementById('popupProgressContainer');
+        const popupProgress = document.getElementById('popupProgress');
+        const closeButton = popup.querySelector('.close-button');
+
         // Variable para rastrear el idioma actual
         let currentLang = 'es';
+        let currentTrackIndex = 0;
 
         // Función para obtener el valor de una clave de traducción anidada
         function getTranslation(lang, key) {
@@ -602,6 +818,12 @@
                 }
             });
             document.querySelector('.logo').setAttribute('alt', `GarBotGPT Logo (${lang === 'es' ? 'Español' : 'Català'})`);
+
+            // Actualizar estado del botón de reproducir/pausar
+            if (playPauseButton) {
+                const isPlaying = !musicPlayer.paused;
+                playPauseButton.setAttribute('aria-label', getTranslation(lang, isPlaying ? 'paused' : 'playing'));
+            }
         }
 
         // Initialize Lenis for smooth scrolling
@@ -653,7 +875,6 @@
 
         // Dynamic Status Messages
         let currentMessageIndex = 0;
-        const statusElement = document.querySelector('.status');
 
         function updateStatus() {
             gsap.to(statusElement, {
@@ -689,15 +910,13 @@
         setInterval(toggleLanguage, 6000);
 
         // Countdown Timer
-        const countdownElement = document.querySelector('#countdown');
         let endTime;
-        const clickSound = document.getElementById('clickSound');
-        const completeSound = document.getElementById('completeSound');
+        const totalDuration = 20 * 60 * 1000; // 20 minutos en milisegundos
 
         if (localStorage.getItem('countdownEndTime')) {
             endTime = new Date(parseInt(localStorage.getItem('countdownEndTime')));
         } else {
-            endTime = new Date(Date.now() + 20 * 60 * 1000);
+            endTime = new Date(Date.now() + totalDuration);
             localStorage.setItem('countdownEndTime', endTime.getTime());
         }
 
@@ -726,37 +945,170 @@
             countdownElement.textContent = `${getTranslation(currentLang, 'countdown')}${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
 
-        // Temporizador interactivo
+        // Popup para countdown y notificaciones
+        function showPopup(title, message, time = null, progressPercent = null) {
+            popupTitle.textContent = title;
+            popupMessage.textContent = message;
+            popupTime.style.display = time ? 'block' : 'none';
+            popupProgressContainer.style.display = progressPercent !== null ? 'block' : 'none';
+            if (time) popupTime.textContent = time;
+            if (progressPercent !== null) popupProgress.style.width = `${progressPercent}%`;
+
+            popup.classList.add('show');
+            popupOverlay.classList.add('show');
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function hidePopup() {
+            popup.classList.remove('show');
+            popupOverlay.classList.remove('show');
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        // Countdown Popup
         countdownElement.addEventListener('click', () => {
             const now = new Date();
             const timeLeft = endTime - now;
             if (timeLeft <= 0) return;
-            const minutes = Math.floor(timeLeft / (1000 * 60));
+
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-            const message = currentLang === 'es'
-                ? `Tiempo restante: ${minutes} minutos y ${seconds} segundos`
-                : `Temps restant: ${minutes} minuts i ${seconds} segons`;
-            alert(message);
+            const timeStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            const messages = getTranslation(currentLang, 'countdownPopupMessages');
+            const message = messages[Math.floor(Math.random() * messages.length)];
+            const progressPercent = ((totalDuration - timeLeft) / totalDuration) * 100;
+
+            showPopup(
+                getTranslation(currentLang, 'countdownPopupTitle'),
+                message,
+                timeStr,
+                progressPercent
+            );
             gtag('event', 'timer_clicked', { event_category: 'Timer', event_label: 'Time Remaining' });
-            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
         });
+
+        // Notify Button
+        document.querySelector('.notify-button').addEventListener('click', async () => {
+            const result = await requestPushPermission('notify');
+            const messages = getTranslation(currentLang, 'notifyPopupMessages');
+            showPopup(
+                getTranslation(currentLang, 'notifyPopupTitle'),
+                messages[result]
+            );
+            gtag('event', 'notify_clicked', { event_category: 'Button', event_label: 'Notify Me' });
+        });
+
+        // Push Notify Button
+        document.querySelector('.push-notify').addEventListener('click', async () => {
+            const result = await requestPushPermission('push');
+            const messages = getTranslation(currentLang, 'notifyPopupMessages');
+            showPopup(
+                getTranslation(currentLang, 'notifyPopupTitle'),
+                messages[result]
+            );
+            gtag('event', 'push_clicked', { event_category: 'Button', event_label: 'Push Notify' });
+        });
+
+        closeButton.addEventListener('click', hidePopup);
+        popupOverlay.addEventListener('click', hidePopup);
 
         updateCountdown();
         setInterval(updateCountdown, 1000);
 
-        // Efectos de sonido y partículas para botones
-        document.querySelector('.notify-button').addEventListener('click', () => {
+        // Music Player Functions
+        function loadTrack(index) {
+            musicPlayer.src = tracks[index].src;
+            trackTitle.textContent = tracks[index].title;
+            trackList.querySelectorAll('.track-item').forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+            musicPlayer.play().then(() => {
+                playPauseButton.querySelector('i').classList.remove('fa-play');
+                playPauseButton.querySelector('i').classList.add('fa-pause');
+                playPauseButton.setAttribute('aria-label', getTranslation(currentLang, 'paused'));
+                gtag('event', 'music_play', { event_category: 'Music', event_label: tracks[index].title });
+            }).catch(() => console.log('Error al reproducir pista'));
+        }
+
+        function playPause() {
+            if (musicPlayer.paused) {
+                musicPlayer.play().then(() => {
+                    playPauseButton.querySelector('i').classList.remove('fa-play');
+                    playPauseButton.querySelector('i').classList.add('fa-pause');
+                    playPauseButton.setAttribute('aria-label', getTranslation(currentLang, 'paused'));
+                    gtag('event', 'music_play', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
+                }).catch(() => console.log('Error al reproducir pista'));
+            } else {
+                musicPlayer.pause();
+                playPauseButton.querySelector('i').classList.remove('fa-pause');
+                playPauseButton.querySelector('i').classList.add('fa-play');
+                playPauseButton.setAttribute('aria-label', getTranslation(currentLang, 'playing'));
+                gtag('event', 'music_pause', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
+            }
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
             clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
-            alert('¡Notificación activada! Te avisaremos al lanzamiento.');
-            gtag('event', 'notify_clicked', { event_category: 'Button', event_label: 'Notify Me' });
-            spawnParticles(event.clientX, event.clientY);
+        }
+
+        function previousTrack() {
+            currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+            loadTrack(currentTrackIndex);
+            gtag('event', 'music_change_track', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function nextTrack() {
+            currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+            loadTrack(currentTrackIndex);
+            gtag('event', 'music_change_track', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function updateProgress() {
+            if (musicPlayer.duration) {
+                const progressPercent = (musicPlayer.currentTime / musicPlayer.duration) * 100;
+                trackProgress.value = progressPercent;
+            }
+        }
+
+        function setProgress() {
+            if (musicPlayer.duration) {
+                musicPlayer.currentTime = (trackProgress.value / 100) * musicPlayer.duration;
+                gtag('event', 'music_seek', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
+            }
+        }
+
+        function setVolume() {
+            musicPlayer.volume = volumeControl.value;
+            gtag('event', 'music_volume', { event_category: 'Music', event_label: `Volume ${volumeControl.value}` });
+        }
+
+        // Music Player Event Listeners
+        playPauseButton.addEventListener('click', playPause);
+        prevTrackButton.addEventListener('click', previousTrack);
+        nextTrackButton.addEventListener('click', nextTrack);
+        trackProgress.addEventListener('input', setProgress);
+        volumeControl.addEventListener('input', setVolume);
+
+        trackList.querySelectorAll('.track-item').forEach((item, index) => {
+            item.addEventListener('click', () => {
+                currentTrackIndex = index;
+                loadTrack(currentTrackIndex);
+                gtag('event', 'music_select_track', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
+                spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+                clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+            });
         });
 
-        document.querySelector('.push-notify').addEventListener('click', () => {
-            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
-            requestPushPermission();
-            spawnParticles(event.clientX, event.clientY);
-        });
+        musicPlayer.addEventListener('timeupdate', updateProgress);
+        musicPlayer.addEventListener('ended', nextTrack);
+
+        // Cargar la primera pista
+        loadTrack(currentTrackIndex);
 
         // Función para generar partículas al hacer clic
         function spawnParticles(x, y) {
@@ -795,36 +1147,28 @@
             setTimeout(() => particleDiv.remove(), 1000);
         }
 
-        // Modo de vista previa de GarBotGPT
-        function sendChatMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            if (!message) return;
-
-            const history = document.getElementById('chatHistory');
-            const userMessage = document.createElement('div');
-            userMessage.className = 'chat-message user';
-            userMessage.textContent = message;
-            history.appendChild(userMessage);
-
-            const responses = getTranslation(currentLang, 'chatResponses');
-            const botResponse = responses[Math.floor(Math.random() * responses.length)];
-            const botMessage = document.createElement('div');
-            botMessage.className = 'chat-message bot';
-            botMessage.textContent = botResponse;
-            history.appendChild(botMessage);
-
-            history.scrollTop = history.scrollHeight;
-            input.value = '';
-            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
-            gtag('event', 'chat_message_sent', { event_category: 'Chat', event_label: message });
-        }
-
-        document.getElementById('chatInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendChatMessage();
+        // Push Notification Permission
+        async function requestPushPermission(type) {
+            if (!('Notification' in window)) {
+                gtag('event', `${type}_permission_unsupported`, { event_category: 'Notifications', event_label: 'Push Unsupported' });
+                return 'unsupported';
             }
-        });
+
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    gtag('event', `${type}_permission_granted`, { event_category: 'Notifications', event_label: 'Push Enabled' });
+                    return 'granted';
+                } else {
+                    gtag('event', `${type}_permission_denied`, { event_category: 'Notifications', event_label: 'Push Denied' });
+                    return 'denied';
+                }
+            } catch (error) {
+                console.error('Error al solicitar permiso de notificaciones:', error);
+                gtag('event', `${type}_permission_error`, { event_category: 'Notifications', event_label: 'Push Error' });
+                return 'error';
+            }
+        }
 
         // Three.js Scene
         const scene = new THREE.Scene();
@@ -946,27 +1290,6 @@
                 });
             }
         });
-
-        // Push Notification Permission
-        async function requestPushPermission() {
-            if ('Notification' in window) {
-                try {
-                    const permission = await Notification.requestPermission();
-                    if (permission === 'granted') {
-                        alert('¡Notificaciones push activadas! Te avisaremos cuando GarBotGPT esté listo.');
-                        gtag('event', 'push_permission_granted', { event_category: 'Notifications', event_label: 'Push Enabled' });
-                    } else {
-                        alert('Permiso para notificaciones denegado.');
-                        gtag('event', 'push_permission_denied', { event_category: 'Notifications', event_label: 'Push Denied' });
-                    }
-                } catch (error) {
-                    console.error('Error al solicitar permiso de notificaciones:', error);
-                    alert('No se pudo activar las notificaciones push. Por favor, intenta de nuevo.');
-                }
-            } else {
-                alert('Las notificaciones push no son compatibles con este navegador.');
-            }
-        }
     </script>
 </body>
 </html>
