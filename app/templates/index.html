@@ -1,720 +1,1731 @@
 <!DOCTYPE html>
-<html lang="{{ current_user.language if current_user.is_authenticated else 'es' }}">
+<html lang="{% if current_user.is_authenticated %}{{ current_user.language }}{% else %}es{% endif %}" id="html-root" data-theme="{% if current_user.is_authenticated %}{{ current_user.theme }}{% else %}light{% endif %}">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GarBotGPT - Inteligencia Artificial de GarolaCorp</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
-  <style>
-    html.lenis, html.lenis body {
-      height: auto;
-    }
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6269718356198501"
+     crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GarBotGPT: El chatbot de IA definitivo impulsado por GarolaCorp. Conversa, aprende, crea y descubre con inteligencia artificial avanzada.">
+    <meta name="keywords" content="GarBotGPT, GarolaCorp, inteligencia artificial, chatbot, IA conversacional, aprendizaje, productividad">
+    <meta name="author" content="GarolaCorp">
+    <meta property="og:title" content="GarBotGPT - El Futuro de la IA Conversacional">
+    <meta property="og:description" content="Explora GarBotGPT, el compañero de IA definitivo para aprendizaje, productividad y creatividad. Impulsado por GarolaCorp.">
+    <meta property="og:image" content="{{ url_for('static', filename='img/garbotgpt-og.jpg') }}">
+    <meta property="og:url" content="{{ url_for('index', _external=True) }}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>GarBotGPT - El Futuro de la IA Conversacional</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #00d4ff;
+            --gradient: linear-gradient(135deg, #007bff, #00d4ff);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-color: #1a1a1a;
+            --bg-color: #f8fafc;
+            --shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --accent-color: #007bff;
+            --high-contrast-bg: #000;
+            --high-contrast-text: #fff;
+        }
 
-    .lenis.lenis-smooth {
-      scroll-behavior: auto !important;
-    }
+        [data-theme="dark"] {
+            --primary-color: #00d4ff;
+            --secondary-color: #007bff;
+            --gradient: linear-gradient(135deg, #00d4ff, #007bff);
+            --glass-bg: rgba(0, 0, 0, 0.3);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-color: #e9ecef;
+            --bg-color: #0f172a;
+            --shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            --card-bg: rgba(0, 0, 0, 0.5);
+            --accent-color: #00d4ff;
+        }
 
-    .lenis.lenis-smooth [data-lenis-prevent] {
-      overscroll-behavior: contain;
-    }
+        [data-contrast="high"] {
+            --bg-color: var(--high-contrast-bg);
+            --text-color: var(--high-contrast-text);
+            --card-bg: #333;
+            --glass-bg: rgba(0, 0, 0, 0.7);
+            --primary-color: #00d4ff;
+        }
 
-    .lenis.lenis-stopped {
-      overflow: hidden;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #0A0F1C; /* Dark blue from pptx.py */
-      color: #E8EBFC; /* Light gray from pptx.py */
-      overflow-x: hidden;
-    }
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.4s ease;
+            overflow-x: hidden;
+        }
 
-    .hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      background: linear-gradient(135deg, #0A0F1C 0%, #7B2CBF 100%); /* Gradient from pptx.py */
-      overflow: hidden;
-    }
+        /* Simplified Navigation Bar */
+        .navbar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: background 0.4s ease;
+        }
 
-    .canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      opacity: 0.4;
-    }
+        .navbar.scrolled {
+            background: var(--card-bg);
+        }
 
-    .feature-card, .arch-card, .settings-card {
-      background: #1A1F2C; /* Slightly lighter than body bg */
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 4px 20px rgba(0, 228, 255, 0.1); /* Cyan shadow */
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+        .navbar.scrolled .nav-link {
+            color: #000 !important; /* Black text in light theme when scrolled */
+        }
 
-    .feature-card:hover, .arch-card:hover, .settings-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 8px 30px rgba(0, 228, 255, 0.2);
-    }
+        [data-theme="dark"] .navbar.scrolled .nav-link {
+            color: #fff !important; /* White text in dark theme when scrolled */
+        }
 
-    .cta-button {
-      background: #00E4FF; /* Cyan from pptx.py */
-      color: #0A0F1C;
-      padding: 0.75rem 2rem;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-    }
+        .navbar-brand {
+            font-weight: 700;
+            color: #fff !important;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s ease, opacity 0.3s ease;
+        }
 
-    .cta-button:hover {
-      background: #7B2CBF; /* Purple from pptx.py */
-      transform: scale(1.05);
-    }
+        .navbar-brand:hover {
+            color: var(--primary-color) !important;
+            opacity: 0.9;
+        }
 
-    .theme-toggle i {
-      color: #E8EBFC;
-      transition: color 0.3s ease;
-    }
+        .navbar-brand img {
+            height: 36px;
+            margin-right: 0.8rem;
+            transition: transform 0.4s ease;
+        }
 
-    .theme-toggle:hover i {
-      color: #00E4FF;
-    }
+        .navbar-brand:hover img {
+            transform: rotate(180deg);
+        }
 
-    .chat-preview {
-      background: #1A1F2C;
-      border-radius: 12px;
-      padding: 1rem;
-      max-height: 400px;
-      overflow-y: auto;
-    }
+        .nav-link {
+            color: #fff !important;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            position: relative;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
 
-    .chat-message {
-      margin-bottom: 1rem;
-      padding: 1rem;
-      border-radius: 8px;
-    }
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            transform: translateY(-2px);
+        }
 
-    .chat-message.user {
-      background: #00E4FF;
-      color: #0A0F1C;
-      margin-left: 2rem;
-    }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease, left 0.3s ease;
+        }
 
-    .chat-message.bot {
-      background: #7B2CBF;
-      color: #E8EBFC;
-      margin-right: 2rem;
-    }
+        .nav-link:hover::after {
+            width: 100%;
+            left: 0;
+        }
 
-    .chat-input {
-      background: #2A2F3C;
-      border: 1px solid #00E4FF;
-      border-radius: 8px;
-      padding: 0.5rem;
-      color: #E8EBFC;
-    }
+        /* Simplified Mega Menu */
+        .mega-menu {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 800px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            position: absolute;
+            top: 100%;
+            z-index: 1000;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
 
-    .chat-input::placeholder {
-      color: #A0A8C0;
-    }
+        .nav-item:hover .mega-menu,
+        .mega-menu:hover {
+            display: block;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
 
-    .screenshot-placeholder {
-      background: #2A2F3C;
-      border: 2px solid #00E4FF;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #E8EBFC;
-      font-size: 1.2rem;
-    }
-  </style>
+        .mega-menu a {
+            color: #ddd;
+            text-decoration: none;
+            display: block;
+            padding: 0.4rem 0;
+            font-size: 0.9rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .mega-menu a:hover {
+            color: var(--primary-color);
+            transform: translateX(4px);
+        }
+
+        .search-bar {
+            position: relative;
+            max-width: 220px;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input {
+            border-radius: 50px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-color);
+            padding: 0.6rem 2.5rem 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            box-shadow: 0 0 12px var(--primary-color);
+        }
+
+        .search-bar button {
+            position: absolute;
+            right: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        .search-bar button:hover {
+            color: var(--primary-color);
+        }
+
+        /* API Disponible Próximamente Effect */
+        .api-block, .disabled-link {
+            position: relative;
+        }
+
+        .api-block:hover::after, .disabled-link:hover::after {
+            content: 'Disponible Próximamente';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: center;
+            border-radius: inherit;
+            z-index: 10;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .api-block::before, .disabled-link::before {
+            content: '\f023';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 1.5rem;
+            z-index: 11;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .api-block:hover::before, .disabled-link:hover::before {
+            opacity: 1;
+        }
+
+        .disabled-link {
+            color: #aaa !important;
+            cursor: not-allowed;
+            pointer-events: auto;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            background: var(--gradient);
+            color: #fff;
+            padding: 10rem 1.5rem 8rem;
+            text-align: center;
+            overflow: hidden;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            transition: background 0.5s ease;
+        }
+
+        #webgl-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-content h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            line-height: 1.1;
+            transition: opacity 0.4s ease;
+        }
+
+        .hero-content h1:hover {
+            opacity: 0.9;
+        }
+
+        .hero-content p {
+            font-size: 1.8rem;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            transition: transform 0.4s ease;
+        }
+
+        .hero-content p:hover {
+            transform: translateY(-3px);
+        }
+
+        .btn-gradient {
+            background: var(--gradient);
+            color: #fff;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-gradient:hover::before {
+            left: 100%;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-demo {
+            max-width: 800px;
+            margin: 4rem auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .chat-demo:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .chat-demo .message {
+            margin-bottom: 1.5rem;
+            padding: 1.2rem;
+            border-radius: 12px;
+            position: relative;
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .chat-demo .message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .chat-demo .user-message {
+            background: #e3f2fd;
+            margin-left: 20%;
+            transform: translateY(20px);
+        }
+
+        .chat-demo .ai-message {
+            background: #f5f5f5;
+            margin-right: 20%;
+            transform: translateY(20px);
+        }
+
+        [data-theme="dark"] .chat-demo .user-message {
+            background: #1e3a8a;
+        }
+
+        [data-theme="dark"] .chat-demo .ai-message {
+            background: #2d2d2d;
+        }
+
+        .features-section, .pricing-section, .blog-section, .success-stories-section, .resources-section, .integrations-section, .case-studies-section {
+            padding: 6rem 1.5rem;
+            background: var(--bg-color);
+            position: relative;
+            transition: background 0.5s ease;
+        }
+
+        .feature-carousel {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card, .pricing-card, .blog-card, .success-story-card, .resource-card, .integration-card, .case-study-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .feature-card:hover, .pricing-card:hover, .blog-card:hover, .success-story-card:hover, .resource-card:hover, .integration-card:hover, .case-study-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-card i, .pricing-card i, .success-story-card i, .resource-card i, .integration-card i, .case-study-card i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .feature-card:hover i, .pricing-card:hover i, .success-story-card:hover i, .resource-card:hover i, .integration-card:hover i, .case-study-card:hover i {
+            color: var(--secondary-color);
+        }
+
+        .feature-card h3, .pricing-card h3, .blog-card h3, .success-story-card h3, .resource-card h3, .integration-card h3, .case-study-card h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .feature-card:hover h3, .pricing-card:hover h3, .blog-card:hover h3, .success-story-card:hover h3, .resource-card:hover h3, .integration-card:hover h3, .case-study-card:hover h3 {
+            color: var(--primary-color);
+        }
+
+        .use-cases-section {
+            padding: 6rem 1.5rem;
+            background: var(--gradient);
+            color: #fff;
+            position: relative;
+            transition: background 0.5s ease;
+        }
+
+        .use-case-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            z-index: 1;
+        }
+
+        .use-case-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-section {
+            padding: 5rem 1.5rem;
+            background: var(--bg-color);
+            text-align: center;
+            position: relative;
+            transition: background 0.5s ease;
+        }
+
+        .stat-item {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            transition: color 0.4s ease;
+        }
+
+        .stat-item:hover {
+            color: var(--secondary-color);
+        }
+
+        .testimonials-section {
+            padding: 6rem 1.5rem;
+            background: var(--bg-color);
+            position: relative;
+            transition: background 0.5s ease;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            height: 100%;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            z-index: 1;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .timeline-section {
+            padding: 6rem 1.5rem;
+            background: var(--gradient);
+            color: #fff;
+            position: relative;
+            transition: background 0.5s ease;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: var(--primary-color);
+            transform: translateX(-50%);
+            transition: background 0.5s ease;
+        }
+
+        .timeline-item {
+            margin-bottom: 3rem;
+            position: relative;
+            width: 50%;
+            padding: 1.5rem;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            opacity: 0;
+        }
+
+        .timeline-item.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item.left {
+            left: 0;
+            text-align: right;
+            transform: translateX(-20px);
+        }
+
+        .timeline-item.right {
+            left: 50%;
+            text-align: left;
+            transform: translateX(20px);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 1.5rem;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            z-index: 1;
+            transition: background 0.3s ease;
+        }
+
+        .timeline-item:hover::before {
+            background: var(--secondary-color);
+        }
+
+        .timeline-item.left::before {
+            right: -10px;
+        }
+
+        .timeline-item.right::before {
+            left: -10px;
+        }
+
+        .faq-section {
+            padding: 6rem 1.5rem;
+            background: var(--bg-color);
+            position: relative;
+            transition: background 0.5s ease;
+        }
+
+        .accordion-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .accordion-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .accordion-button {
+            background: transparent;
+            color: var(--text-color);
+            font-weight: 500;
+            font-size: 1rem;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .accordion-button:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .newsletter-section {
+            padding: 5rem 1.5rem;
+            background: var(--gradient);
+            color: #fff;
+            text-align: center;
+            position: relative;
+            transition: background 0.5s ease;
+        }
+
+        .newsletter-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .newsletter-form .form-control {
+            border-radius: 50px 0 0 50px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text-color);
+            font-size: 0.9rem;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .newsletter-form .form-control:focus {
+            box-shadow: 0 0 12px var(--primary-color);
+        }
+
+        .newsletter-form .btn {
+            border-radius: 0 50px 50px 0;
+            font-size: 0.9rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .newsletter-form .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .community-section {
+            padding: 6rem 1.5rem;
+            background: var(--bg-color);
+            position: relative;
+            transition: background 0.5s ease;
+        }
+
+        .community-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            z-index: 1;
+        }
+
+        .community-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .sticky-sidebar {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1rem;
+            z-index: 1000;
+            transition: opacity 0.4s ease;
+        }
+
+        .sticky-sidebar:hover {
+            opacity: 0.95;
+        }
+
+        .sticky-sidebar button, .sticky-sidebar a {
+            display: block;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .sticky-sidebar button:hover, .sticky-sidebar a:hover {
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        footer {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            padding: 4rem 1.5rem;
+            border-top: 1px solid var(--glass-border);
+            position: relative;
+            transition: background 0.5s ease;
+        }
+
+        .footer-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin: 0 1rem;
+            font-size: 0.9rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .social-icons a {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin: 0 0.8rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 1200px) {
+            .hero-content h1 {
+                font-size: 3.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1.5rem;
+            }
+
+            .sticky-sidebar {
+                display: none;
+            }
+
+            .search-bar {
+                max-width: 180px;
+            }
+
+            .mega-menu {
+                max-width: 90%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+
+            .nav-link {
+                font-size: 0.85rem;
+                padding: 0.5rem 0.8rem;
+            }
+
+            .mega-menu {
+                display: none !important;
+            }
+
+            .feature-card, .use-case-card, .testimonial-card, .pricing-card, .blog-card, .success-story-card, .resource-card, .integration-card, .case-study-card {
+                margin-bottom: 2rem;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                text-align: left;
+                padding-left: 40px;
+            }
+
+            .timeline-item::before {
+                left: 10px !important;
+            }
+
+            .search-bar {
+                display: none;
+            }
+
+            .chat-demo .user-message {
+                margin-left: 10%;
+            }
+
+            .chat-demo .ai-message {
+                margin-right: 10%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-section {
+                padding: 8rem 1rem 6rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .btn-gradient {
+                padding: 0.8rem 2rem;
+                font-size: 0.9rem;
+            }
+
+            .features-section, .pricing-section, .blog-section, .use-cases-section, .stats-section, .testimonials-section, .timeline-section, .faq-section, .community-section, .newsletter-section, .success-stories-section, .resources-section, .integrations-section, .case-studies-section {
+                padding: 4rem 1rem;
+            }
+
+            .feature-card h3, .pricing-card h3, .blog-card h3, .success-story-card h3, .resource-card h3, .integration-card h3, .case-study-card h3 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
-<body class="{{ current_user.theme if current_user.is_authenticated else 'dark' }}">
-  <!-- Hero Section -->
-  <section class="hero">
-    <canvas class="canvas"></canvas>
-    <div class="max-w-5xl mx-auto px-4">
-      <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT Logo" class="h-16 mb-6 mx-auto opacity-0" id="hero-logo" onerror="this.style.display='none'; document.getElementById('logo-placeholder').style.display='block';">
-      <div id="logo-placeholder" class="hidden text-center text-#E8EBFC mb-6">[Logo Placeholder]</div>
-      {% if current_user.is_authenticated %}
-        <h1 class="text-5xl md:text-7xl font-bold mb-6 opacity-0" id="hero-title">¡Bienvenid@, {{ current_user.username }}!</h1>
-        <p class="text-xl md:text-2xl mb-8 opacity-0" id="hero-text">Interactúa con GarBotGPT, tu asistente de IA avanzado creado por GarolaCorp.</p>
-        <a href="{{ url_for('chat') }}" class="cta-button inline-block opacity-0" id="hero-cta">Ir al Chat</a>
-      {% else %}
-        <h1 class="text-5xl md:text-7xl font-bold mb-6 opacity-0" id="hero-title">GarBotGPT</h1>
-        <p class="text-xl md:text-2xl mb-8 opacity-0" id="hero-text">Potencia tu productividad con la inteligencia artificial de GarolaCorp.</p>
-        <div class="space-x-4">
-          <a href="{{ url_for('login') }}" class="cta-button inline-block opacity-0" id="hero-cta-login">Iniciar Sesión</a>
-          <a href="{{ url_for('register') }}" class="cta-button inline-block opacity-0" id="hero-cta-register">Registrarse</a>
+<body data-authenticated="{{ authenticated | lower }}">
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT Logo">
+                GarBotGPT
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Características</a>
+                        <div class="mega-menu">
+                            <a href="#features">IA Avanzada</a>
+                            <a href="#features">Personalización</a>
+                            <a href="#features">Seguridad</a>
+                            <a href="#features">Interacción por Voz</a>
+                            <a href="#features">Análisis en Tiempo Real</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#use-cases">Casos de Uso</a>
+                        <div class="mega-menu">
+                            <a href="#use-cases">Educación</a>
+                            <a href="#use-cases">Productividad</a>
+                            <a href="#use-cases">Creatividad</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pricing">Precios</a>
+                        <div class="mega-menu">
+                            <a href="#pricing">Gratuito</a>
+                            <a href="#pricing">SuperGarBotGPT</a>
+                            <a href="#pricing">Empresarial</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#community">Comunidad</a>
+                        <div class="mega-menu">
+                            <a href="#community">Foros</a>
+                            <a href="#community">Eventos</a>
+                            <a href="#blog">Blog</a>
+                        </div>
+                    </li>
+                    <li class="nav-item search-bar">
+                        <input type="text" class="form-control" placeholder="Buscar..." aria-label="Buscar">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </li>
+                    <li class="nav-item">
+                        <select id="language-select" class="form-select form-select-sm" aria-label="Seleccionar idioma">
+                            <option value="es" {% if current_user.language == 'es' %}selected{% endif %}>Español</option>
+                            <option value="en" {% if current_user.language == 'en' %}selected{% endif %}>English</option>
+                            <option value="ca" {% if current_user.language == 'ca' %}selected{% endif %}>Català</option>
+                        </select>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <span class="nav-link user-welcome animate__animated animate__fadeIn">
+                                <i class="bi bi-person-circle me-2"></i>Hola, {{ current_user.username }}
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('chat') }}">Chat</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('settings') }}">Configuración</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">Cerrar Sesión</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">Iniciar Sesión</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-gradient btn-sm" href="{{ url_for('register') }}">Regístrate</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-      {% endif %}
-    </div>
-    <!-- Theme Toggle -->
-    <button class="theme-toggle fixed top-4 right-4 text-2xl opacity-0" id="theme-toggle">
-      <i class="fas {{ 'fa-moon' if current_user.theme == 'light' else 'fa-sun' if current_user.is_authenticated else 'fa-moon' }}"></i>
-    </button>
-    <!-- Language Selector -->
-    <div class="fixed top-4 left-4 opacity-0" id="lang-selector">
-      <select id="language" class="bg-#1A1F2C text-#E8EBFC border border-#00E4FF rounded px-2 py-1">
-        <option value="es" {% if current_user.language == 'es' or not current_user.is_authenticated %}selected{% endif %}>Español</option>
-        <option value="en" {% if current_user.language == 'en' %}selected{% endif %}>English</option>
-        <option value="ca" {% if current_user.language == 'ca' %}selected{% endif %}>Català</option>
-      </select>
-    </div>
-  </section>
+    </nav>
 
-  <!-- Features Section -->
-  <section class="section py-16">
-    <h2 class="text-4xl font-bold mb-12 text-center opacity-0" id="features-title">Características de GarBotGPT</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto px-4">
-      <div class="feature-card opacity-0" id="feature-1">
-        <i class="fas fa-globe text-3xl text-#00E4FF mb-4"></i>
-        <h3 class="text-2xl font-semibold mb-4">Soporte Multilingüe</h3>
-        <p class="text-#E8EBFC">Interactúa en Español, Inglés o Catalán, con respuestas personalizadas según tu idioma.</p>
-      </div>
-      <div class="feature-card opacity-0" id="feature-2">
-        <i class="fas fa-microphone text-3xl text-#00E4FF mb-4"></i>
-        <h3 class="text-2xl font-semibold mb-4">Entrada por Voz</h3>
-        <p class="text-#E8EBFC">Usa Webkit Speech Recognition para enviar mensajes por voz, simplificando la interacción.</p>
-      </div>
-      <div class="feature-card opacity-0" id="feature-3">
-        <i class="fas fa-cog text-3xl text-#00E4FF mb-4"></i>
-        <h3 class="text-2xl font-semibold mb-4">Personalización Avanzada</h3>
-        <p class="text-#E8EBFC">Configura modelos de IA, temperatura y temas visuales para una experiencia única.</p>
-      </div>
+    <!-- Sticky Sidebar -->
+    <div class="sticky-sidebar">
+        <button id="theme-toggle" aria-label="Alternar tema"><i class="bi bi-moon-stars-fill"></i> Tema</button>
+        <button id="contrast-toggle" aria-label="Alternar alto contraste"><i class="bi bi-eye-fill"></i> Contraste</button>
+        <a href="{{ url_for('chat') }}" aria-label="Ir al chat"><i class="bi bi-chat-left-text"></i> Chat</a>
+        <a href="#pricing" aria-label="Precios"><i class="bi bi-wallet2"></i> Precios</a>
+        <a href="#faq" aria-label="Preguntas frecuentes"><i class="bi bi-question-circle"></i> FAQ</a>
     </div>
-  </section>
 
-  <!-- Architecture Section -->
-  <section class="section py-16 bg-#1A1F2C">
-    <h2 class="text-4xl font-bold mb-12 text-center opacity-0" id="arch-title">Arquitectura del Sistema</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto px-4">
-      <div class="arch-card opacity-0" id="arch-1">
-        <i class="fas fa-server text-3xl text-#00E4FF mb-4"></i>
-        <h3 class="text-2xl font-semibold mb-4">Backend con Flask</h3>
-        <p class="text-#E8EBFC">API RESTful con Flask y autenticación segura mediante Flask-Login y bcrypt.</p>
-      </div>
-      <div class="arch-card opacity-0" id="arch-2">
-        <i class="fas fa-database text-3xl text-#00E4FF mb-4"></i>
-        <h3 class="text-2xl font-semibold mb-4">PostgreSQL</h3>
-        <p class="text-#E8EBFC">Base de datos robusta para gestionar usuarios, configuraciones y historial de chats.</p>
-      </div>
-      <div class="arch-card opacity-0" id="arch-3">
-        <i class="fas fa-box text-3xl text-#00E4FF mb-4"></i>
-        <h3 class="text-2xl font-semibold mb-4">Docker</h3>
-        <p class="text-#E8EBFC">Contenedores con python:3.9-slim para consistencia y despliegue escalable.</p>
-      </div>
-    </div>
-    <div class="mt-8 text-center">
-      <img src="{{ url_for('static', filename='screenshots/arch_diagram.png') }}" alt="Diagrama de Arquitectura" class="max-w-full h-auto mx-auto opacity-0" id="arch-diagram" onerror="this.style.display='none'; document.getElementById('arch-placeholder').style.display='flex';">
-      <div id="arch-placeholder" class="screenshot-placeholder h-64 max-w-md mx-auto hidden">[Diagrama de Arquitectura]</div>
-    </div>
-  </section>
+    <!-- Main Content -->
+    <main>
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show animate__animated animate__fadeIn" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
-  <!-- Chat Preview Section -->
-  <section class="section py-16">
-    <h2 class="text-4xl font-bold mb-12 text-center opacity-0" id="chat-title">Prueba GarBotGPT</h2>
-    <div class="chat-preview max-w-2xl mx-auto opacity-0" id="chat-preview">
-      <div class="chat-message user">Hola, ¿cómo puede ayudarme GarBotGPT?</div>
-      <div class="chat-message bot">¡Hola! Soy GarBotGPT, creado por GarolaCorp. Puedo responder en Español, Inglés o Catalán. Prueba a preguntarme algo o usa la entrada por voz.</div>
-      <div class="chat-message user">¿Qué tecnologías usas?</div>
-      <div class="chat-message bot">Estoy construido con Flask, PostgreSQL, y Docker, con integración de OpenAI y Gemini para respuestas inteligentes.</div>
-    </div>
-    <div class="mt-4 max-w-2xl mx-auto flex space-x-2">
-      <input type="text" class="chat-input flex-grow" placeholder="Escribe un mensaje (demostración)..." readonly>
-      <button class="cta-button"><i class="fas fa-microphone"></i></button>
-    </div>
-    <p class="text-center mt-4 text-#E8EBFC opacity-0" id="chat-note">Inicia sesión para usar el chat completo con entrada por voz.</p>
-  </section>
+        <!-- Hero Section -->
+        <section class="hero-section" id="hero">
+            <canvas id="webgl-bg"></canvas>
+            <div class="hero-content animate__animated animate__fadeIn">
+                <h1>GarBotGPT: Redefiniendo la IA</h1>
+                <p>Conversa, aprende y crea con el poder de la inteligencia artificial avanzada de GarolaCorp. Tu compañero para el futuro, hoy.</p>
+                <div class="d-flex justify-content-center gap-3">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('chat') }}" class="btn btn-gradient btn-lg animate__animated animate__pulse" data-bs-toggle="tooltip" title="Comienza a chatear ahora">
+                            <i class="bi bi-chat-left-text me-2"></i>Iniciar Chat
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('register') }}" class="btn btn-gradient btn-lg animate__animated animate__pulse" data-bs-toggle="tooltip" title="Crea una cuenta nueva">
+                            <i class="bi bi-person-plus me-2"></i>Regístrate Gratis
+                        </a>
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg" data-bs-toggle="tooltip" title="Accede a tu cuenta">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
 
-  <!-- Settings Preview Section -->
-  <section class="section py-16 bg-#1A1F2C">
-    <h2 class="text-4xl font-bold mb-12 text-center opacity-0" id="settings-title">Personaliza tu Experiencia</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto px-4">
-      <div class="settings-card opacity-0" id="settings-1">
-        <i class="fas fa-robot text-3xl text-#00E4FF mb-4"></i>
-        <h3 class="text-2xl font-semibold mb-4">Modelos de IA</h3>
-        <p class="text-#E8EBFC">Elige entre modelos como gpt-3.5-turbo o Gemini para respuestas optimizadas.</p>
-      </div>
-      <div class="settings-card opacity-0" id="settings-2">
-        <i class="fas fa-sliders-h text-3xl text-#00E4FF mb-4"></i>
-        <h3 class="text-2xl font-semibold mb-4">Ajustes de Chat</h3>
-        <p class="text-#E8EBFC">Configura temperatura y tokens máximos para controlar la creatividad de las respuestas.</p>
-      </div>
-    </div>
-    {% if current_user.is_authenticated %}
-      <div class="text-center mt-8">
-        <a href="{{ url_for('settings') }}" class="cta-button inline-block opacity-0" id="settings-cta">Configurar Ahora</a>
-      </div>
-    {% endif %}
-  </section>
+        <!-- Chat Demo Section -->
+        <section class="chat-demo">
+            <h3 class="text-center mb-4">Experimenta GarBotGPT en Tiempo Real</h3>
+            <div id="chat-demo-messages">
+                <div class="message user-message">Hola, ¿puedes ayudarme con una pregunta sobre física?</div>
+                <div class="message ai-message">¡Por supuesto! Pregúntame cualquier cosa sobre física, desde mecánica clásica hasta cuántica. 😊</div>
+                <div class="message user-message">Explica la teoría de la relatividad.</div>
+                <div class="message ai-message">La teoría de la relatividad de Einstein incluye la relatividad especial y general. La especial aborda cómo el espacio y el tiempo se entrelazan, mientras que la general explica la gravedad como la curvatura del espacio-tiempo. ¿Quieres un ejemplo práctico?</div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="{{ url_for('chat') }}" class="btn btn-gradient btn-lg">Probar Chat Ahora</a>
+            </div>
+        </section>
 
-  <!-- Deployment Section -->
-  <section class="section py-16">
-    <h2 class="text-4xl font-bold mb-12 text-center opacity-0" id="deploy-title">Desplegado en Render</h2>
-    <div class="max-w-3xl mx-auto px-4 opacity-0" id="deploy-text">
-      <p class="text-xl mb-4 text-#E8EBFC">GarBotGPT está alojado en Render con despliegue automático desde GitHub, usando Docker y PostgreSQL para máxima fiabilidad.</p>
-      <p class="text-xl mb-8 text-#E8EBFC">Configuración segura con variables de entorno y certificado SSL en garbotgpt.com.</p>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <img src="{{ url_for('static', filename='screenshots/render_dashboard_app.png') }}" alt="Render Dashboard App" class="max-w-full h-auto opacity-0" id="deploy-img-app" onerror="this.style.display='none'; document.getElementById('deploy-placeholder-app').style.display='flex';">
-          <div id="deploy-placeholder-app" class="screenshot-placeholder h-48 max-w-sm mx-auto hidden">[Render Dashboard App]</div>
+        <!-- Features Section -->
+        <section class="features-section" id="features">
+            <div class="container">
+                <h2 class="text-center mb-4">Por Qué GarBotGPT es Único</h2>
+                <div id="feature-carousel" class="carousel slide feature-carousel" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="row g-4">
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-robot"></i>
+                                        <h3>IA Avanzada</h3>
+                                        <p>Conversa con modelos de vanguardia como GPT-4 para respuestas precisas y contextuales.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-gear-fill"></i>
+                                        <h3>Personalización</h3>
+                                        <p>Configura el modelo, temperatura y tokens para una experiencia a medida.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-display"></i>
+                                        <h3>Diseño Moderno</h3>
+                                        <p>Interfaz fluida con modo claro/oscuro y animaciones dinámicas.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="row g-4">
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-shield-lock"></i>
+                                        <h3>Seguridad</h3>
+                                        <p>Datos protegidos con cifrado de punta a punta y políticas estrictas.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-globe"></i>
+                                        <h3>Multilingüe</h3>
+                                        <p>Soporte para múltiples idiomas con traducción en tiempo real.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-lightning-fill"></i>
+                                        <h3>Rápido</h3>
+                                        <p>Respuestas instantáneas gracias a la infraestructura optimizada de GarolaCorp.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="row g-4">
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-mic-fill"></i>
+                                        <h3>Interacción por Voz</h3>
+                                        <p>Controla GarBotGPT con comandos de voz para una experiencia manos libres.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-graph-up"></i>
+                                        <h3>Análisis en Tiempo Real</h3>
+                                        <p>Obtén estadísticas y métricas instantáneas sobre tus interacciones.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-cloud-arrow-up"></i>
+                                        <h3>Sincronización Multiplataforma</h3>
+                                        <p>Accede a tus datos desde cualquier dispositivo con sincronización en la nube.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="row g-4">
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-kanban"></i>
+                                        <h3>Flujos de Trabajo Personalizados</h3>
+                                        <p>Automatiza tareas complejas con flujos de trabajo diseñados a medida.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-lightbulb"></i>
+                                        <h3>Insights Impulsados por IA</h3>
+                                        <p>Recibe recomendaciones inteligentes basadas en tus patrones de uso.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-card">
+                                        <i class="bi bi-hdd-stack"></i>
+                                        <h3>Infraestructura Escalable</h3>
+                                        <p>Soporta cargas de trabajo masivas con un rendimiento consistente.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#feature-carousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Anterior</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#feature-carousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Siguiente</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Integrations Section -->
+        <section class="integrations-section" id="integrations">
+            <div class="container">
+                <h2 class="text-center mb-4">Integraciones Potentes</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="integration-card">
+                            <i class="bi bi-slack"></i>
+                            <h3>Slack</h3>
+                            <p>Integra GarBotGPT en Slack para respuestas instantáneas en tus canales de equipo.</p>
+                            <a href="https://tecnofgb.com" class="btn btn-gradient btn-sm">Configurar Integración</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="integration-card">
+                            <i class="bi bi-journal-text"></i>
+                            <h3>Notion</h3>
+                            <p>Usa GarBotGPT para generar contenido directamente en tus páginas de Notion.</p>
+                            <a href="https://tecnofgb.com" class="btn btn-gradient btn-sm">Configurar Integración</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="integration-card">
+                            <i class="bi bi-plug"></i>
+                            <h3>Zapier</h3>
+                            <p>Conecta GarBotGPT con miles de aplicaciones a través de Zapier para automatización sin límites.</p>
+                            <a href="https://tecnofgb.com" class="btn btn-gradient btn-sm">Configurar Integración</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="pricing-section" id="pricing">
+            <div class="container">
+                <h2 class="text-center mb-4">Elige tu Plan</h2>
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="pricing-card">
+                            <i class="bi bi-rocket"></i>
+                            <h3>Gratuito</h3>
+                            <p>Perfecto para probar GarBotGPT con funciones básicas.</p>
+                            <ul class="list-unstyled">
+                                <li>Acceso limitado a GPT-4</li>
+                                <li>100 mensajes/día</li>
+                                <li>Soporte básico</li>
+                            </ul>
+                            <a href="{{ url_for('register') }}" class="btn btn-gradient mt-3">Comenzar Gratis</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="pricing-card">
+                            <i class="bi bi-star-fill"></i>
+                            <h3>SuperGarBotGPT</h3>
+                            <p>Ideal para usuarios frecuentes con mayores cuotas.</p>
+                            <ul class="list-unstyled">
+                                <li>Acceso completo a GPT-4</li>
+                                <li>1000 mensajes/día</li>
+                                <li>Soporte prioritario</li>
+                            </ul>
+                            <a href="https://garbotgpt.com" class="btn btn-gradient mt-3">Ver Detalles</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="pricing-card api-block">
+                            <i class="bi bi-briefcase-fill"></i>
+                            <h3>Empresarial</h3>
+                            <p>Diseñado para equipos con necesidades avanzadas.</p>
+                            <ul class="list-unstyled">
+                                <li>Mensajes ilimitados</li>
+                                <li>Soporte dedicado</li>
+                            </ul>
+                            <a href="https://garbotgpt.com/api" class="btn btn-gradient mt-3 disabled-link">Contactar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Use Cases Section -->
+        <section class="use-cases-section" id="use-cases">
+            <div class="container">
+                <h2 class="text-center mb-4">Cómo GarBotGPT Transforma tu Día</h2>
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="use-case-card">
+                            <h3>Educación</h3>
+                            <p>Explicaciones claras para matemáticas, ciencias, historia y más.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="use-case-card">
+                            <h3>Productividad</h3>
+                            <p>Automatiza tareas, escribe correos y genera ideas rápidamente.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="use-case-card">
+                            <h3>Creatividad</h3>
+                            <p>Crea historias, poemas o conceptos visuales con facilidad.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="container">
+                <h2 class="text-center mb-4">Nuestro Impacto Global</h2>
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <div class="stat-item" data-count="150000">0</div>
+                        <p>Usuarios Activos</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-item" data-count="750000">0</div>
+                        <p>Conversaciones</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-item" data-count="99.99">0</div>
+                        <p>% de Tiempo Activo</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section">
+            <div class="container">
+                <h2 class="text-center mb-4">Historias de Éxito</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="testimonial-card">
+                            <video src="https://tecnofgb.com/wp-content/uploads/2025/05/GarBotGPT.mp4" controls poster="https://tecnofgb.com/wp-content/uploads/2025/05/ChatGPT-Image-6-may-2025-09_30_41.png" class="img-fluid mb-3"></video>
+                            <p>"GarBotGPT me ayudó a aprobar mis exámenes de física con explicaciones claras."</p>
+                            <h4>Lucía M.</h4>
+                            <p>Estudiante</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="testimonial-card">
+                            <video src="https://tecnofgb.com/wp-content/uploads/2025/05/GarBotGPT.mp4" controls poster="https://tecnofgb.com/wp-content/uploads/2025/05/ChatGPT-Image-6-may-2025-09_30_41.png" class="img-fluid mb-3"></video>
+                            <p>"Un cambio de juego para mi equipo de desarrollo. ¡Rápido y preciso!"</p>
+                            <h4>Javier T.</h4>
+                            <p>Desarrollador</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="testimonial-card">
+                            <video src="https://tecnofgb.com/wp-content/uploads/2025/05/GarBotGPT.mp4" controls poster="https://tecnofgb.com/wp-content/uploads/2025/05/ChatGPT-Image-6-may-2025-09_30_41.png" class="img-fluid mb-3"></video>
+                            <p>"Escribir contenido nunca fue tan fácil. GarBotGPT es mi musa."</p>
+                            <h4>Sofía R.</h4>
+                            <p>Escritora</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Success Stories Section -->
+        <section class="success-stories-section" id="success-stories">
+            <div class="container">
+                <h2 class="text-center mb-4">Casos de Éxito Detallados</h2>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="success-story-card">
+                            <i class="bi bi-book"></i>
+                            <h3>Revolucionando la Educación</h3>
+                            <p>Una universidad implementó GarBotGPT para asistir a estudiantes en cursos de ciencias, logrando un aumento del 30% en las tasas de aprobación gracias a explicaciones personalizadas y tutorías en tiempo real.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Leer Historia Completa</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="success-story-card">
+                            <i class="bi bi-briefcase"></i>
+                            <h3>Optimizando Equipos Empresariales</h3>
+                            <p>Una startup tecnológica integró GarBotGPT en su flujo de trabajo, reduciendo el tiempo de redacción de propuestas en un 50% y mejorando la colaboración en equipo con ideas generadas por IA.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Leer Historia Completa</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Studies Section -->
+        <section class="case-studies-section" id="case-studies">
+            <div class="container">
+                <h2 class="text-center mb-4">Estudios de Caso</h2>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="case-study-card">
+                            <i class="bi bi-heart-pulse"></i>
+                            <h3>Transformando la Atención Médica</h3>
+                            <p>Un proveedor de atención médica utilizó GarBotGPT para analizar registros de pacientes y generar resúmenes, reduciendo el tiempo de documentación en un 40% y mejorando la precisión diagnóstica.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Leer Estudio Completo</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="case-study-card">
+                            <i class="bi bi-megaphone"></i>
+                            <h3>Impulsando Campañas de Marketing</h3>
+                            <p>Una agencia de marketing integró GarBotGPT para generar contenido publicitario, aumentando las tasas de conversión en un 25% con textos personalizados generados por IA.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Leer Estudio Completo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Highlights Section -->
+        <section class="blog-section" id="blog">
+            <div class="container">
+                <h2 class="text-center mb-4">Últimas Publicaciones del Blog</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="blog-card">
+                            <img src="https://via.placeholder.com/300x200" alt="Blog post 1" class="img-fluid mb-3">
+                            <h3>El Futuro de la IA Conversacional</h3>
+                            <p>Explora cómo GarBotGPT está liderando la próxima generación de chatbots de IA.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="blog-card">
+                            <img src="https://via.placeholder.com/300x200" alt="Blog post 2" class="img-fluid mb-3">
+                            <h3>5 Consejos para Maximizar tu Productividad con IA</h3>
+                            <p>Aprende a usar GarBotGPT para optimizar tu flujo de trabajo diario.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="blog-card">
+                            <img src="https://via.placeholder.com/300x200" alt="Blog post 3" class="img-fluid mb-3">
+                            <h3>IA y Educación: Transformando el Aprendizaje</h3>
+                            <p>Descubre cómo GarBotGPT está revolucionando la educación.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="blog-card">
+                            <img src="https://via.placeholder.com/300x200" alt="Blog post 4" class="img-fluid mb-3">
+                            <h3>IA Ética: Construyendo un Futuro Responsable</h3>
+                            <p>Explora cómo GarolaCorp asegura que GarBotGPT sea ético y confiable.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="blog-card">
+                            <img src="https://via.placeholder.com/300x200" alt="Blog post 5" class="img-fluid mb-3">
+                            <h3>GarBotGPT para Desarrolladores</h3>
+                            <p>Consejos y trucos para integrar GarBotGPT en tus aplicaciones.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Leer Más</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section class="resources-section" id="resources">
+            <div class="container">
+                <h2 class="text-center mb-4">Recursos para Empezar</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="resource-card">
+                            <i class="bi bi-file-text"></i>
+                            <h3>Guías de Uso</h3>
+                            <p>Aprende a sacar el máximo provecho de GarBotGPT con nuestras guías detalladas.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Explorar Guías</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="resource-card">
+                            <i class="bi bi-play-circle"></i>
+                            <h3>Tutoriales en Video</h3>
+                            <p>Mira nuestros tutoriales en video para dominar las funciones de GarBotGPT.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Ver Tutoriales</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="resource-card api-block">
+                            <i class="bi bi-code-slash"></i>
+                            <h3>Documentación GarBotGPT API Disponible Próximamente</h3>
+                            <p>Prepárate para integrar GarBotGPT con nuestra documentación de API.</p>
+                            <a href="https://garbotgpt.com/api" class="btn btn-gradient btn-sm disabled-link">Ver Documentación</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section class="timeline-section" id="timeline">
+            <div class="container">
+                <h2 class="text-center mb-4">Nuestra Historia</h2>
+                <div class="timeline">
+                    <div class="timeline-item left">
+                        <h3>Enero 2024</h3>
+                        <p>Inicio del proyecto GarBotGPT por GarolaCorp.</p>
+                    </div>
+                    <div class="timeline-item right">
+                        <h3>Julio 2024</h3>
+                        <p>Lanzamiento de la versión beta con soporte para GPT-3.5.</p>
+                    </div>
+                    <div class="timeline-item left">
+                        <h3>Abril 2025</h3>
+                        <p>Lanzamiento oficial de GarBotGPT v2.0 con GPT-4 y multilingüismo.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section" id="faq">
+            <div class="container">
+                <h2 class="text-center mb-4">Preguntas Frecuentes</h2>
+                <div class="accordion" id="faq-accordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq1">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                                ¿Qué es GarBotGPT?
+                            </button>
+                        </h2>
+                        <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="faq1" data-bs-parent="#faq-accordion">
+                            <div class="accordion-body">
+                                GarBotGPT es un chatbot de IA avanzado impulsado por GarolaCorp, diseñado para asistir en tareas educativas, creativas y profesionales.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq2">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                                ¿Es gratuito?
+                            </button>
+                        </h2>
+                        <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faq-accordion">
+                            <div class="accordion-body">
+                                Ofrecemos un plan gratuito con cuotas limitadas. Visita <a href="https://garbotgpt.com">garbotgpt.com</a> para más detalles sobre planes premium.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq3">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                                ¿Cómo protege mis datos?
+                            </button>
+                        </h2>
+                        <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#faq-accordion">
+                            <div class="accordion-body">
+                                Usamos cifrado de punta a punta y seguimos estrictas políticas de privacidad para proteger tus datos.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq4">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+                                ¿Puedo usar GarBotGPT en varios idiomas?
+                            </button>
+                        </h2>
+                        <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="faq4" data-bs-parent="#faq-accordion">
+                            <div class="accordion-body">
+                                Sí, GarBotGPT soporta múltiples idiomas con traducción en tiempo real, ideal para usuarios globales.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq5">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
+                                ¿Qué tipo de soporte ofrecen?
+                            </button>
+                        </h2>
+                        <div id="collapse5" class="accordion-collapse collapse" aria-labelledby="faq5" data-bs-parent="#faq-accordion">
+                            <div class="accordion-body">
+                                Ofrecemos soporte básico para usuarios gratuitos y soporte prioritario para planes premium, incluyendo asistencia por correo y chat.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq6">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
+                                ¿Cuándo estará disponible la GarBotGPT API?
+                            </button>
+                        </h2>
+                        <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="faq6" data-bs-parent="#faq-accordion">
+                            <div class="accordion-body">
+                                La GarBotGPT API estará disponible próximamente. Visita <a href="https://garbotgpt.com/api" class="disabled-link">garbotgpt.com/api</a> para más información.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Section -->
+        <section class="community-section" id="community">
+            <div class="container">
+                <h2 class="text-center mb-4">Únete a Nuestra Comunidad</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="community-card">
+                            <h3>Foros</h3>
+                            <p>Conecta con otros usuarios, comparte ideas y aprende juntos.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Visitar Foro</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="community-card">
+                            <h3>Eventos</h3>
+                            <p>Participa en webinars y talleres sobre IA y GarBotGPT.</p>
+                            <a href="#" class="btn btn-gradient btn-sm">Ver Eventos</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="community-card">
+                            <h3>API</h3>
+                            <p>Explora nuestra GarBotGPT API para integraciones personalizadas.</p>
+                            <a href="https://garbotgpt.com/api" class="btn btn-gradient btn-sm">Documentación GarBotGPT API</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section class="newsletter-section">
+            <div class="container">
+                <h2>Recibe las Últimas Novedades</h2>
+                <p class="lead mb-3">Suscríbete para actualizaciones exclusivas, consejos y noticias de GarBotGPT.</p>
+                <div class="newsletter-form d-flex">
+                    <input type="email" class="form-control" placeholder="Tu correo electrónico" aria-label="Correo electrónico">
+                    <button type="submit" class="btn btn-gradient">Suscribirse</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>GarBotGPT</h5>
+                    <p>Impulsado por GarolaCorp, GarBotGPT es tu compañero de IA para el aprendizaje, la productividad y la creatividad.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Enlaces Rápidos</h5>
+                    <div class="footer-links">
+                        <a href="{{ url_for('index') }}">Inicio</a>
+                        <a href="{{ url_for('chat') }}">Chat</a>
+                        <a href="{{ url_for('settings') }}">Configuración</a>
+                        <a href="https://garbotgpt.com/api" class="disabled-link">GarBotGPT API Disponible Próximamente</a>
+                        <a href="#faq">FAQ</a>
+                        <a href="#pricing">Precios</a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Síguenos</h5>
+                    <div class="social-icons">
+                        <a href="https://x.com" aria-label="X"><i class="bi bi-twitter-x"></i></a>
+                        <a href="https://linkedin.com" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                        <a href="https://github.com" aria-label="GitHub"><i class="bi bi-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center mt-4">© 2025 GarBotGPT. Desarrollado por GarolaCorp.</p>
         </div>
-        <div>
-          <img src="{{ url_for('static', filename='screenshots/render_dashboard_db.png') }}" alt="Render Dashboard DB" class="max-w-full h-auto opacity-0" id="deploy-img-db" onerror="this.style.display='none'; document.getElementById('deploy-placeholder-db').style.display='flex';">
-          <div id="deploy-placeholder-db" class="screenshot-placeholder h-48 max-w-sm mx-auto hidden">[Render Dashboard DB]</div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </footer>
 
-  <!-- Future Plans Section -->
-  <section class="section py-16 bg-#1A1F2C">
-    <h2 class="text-4xl font-bold mb-12 text-center opacity-0" id="future-title">Futuro de GarBotGPT</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto px-4">
-      <div class="feature-card opacity-0" id="future-1">
-        <i class="fas fa-image text-3xl text-#00E4FF mb-4"></i>
-        <h3 class="text-2xl font-semibold mb-4">IA Multimodal</h3>
-        <p class="text-#E8EBFC">Soporte para procesar imágenes y texto combinados para interacciones más ricas.</p>
-      </div>
-      <div class="feature-card opacity-0" id="future-2">
-        <i class="fas fa-plug text-3xl text-#00E4FF mb-4"></i>
-        <h3 class="text-2xl font-semibold mb-4">Integraciones</h3>
-        <p class="text-#E8EBFC">Conexión con herramientas como Slack para flujos de trabajo colaborativos.</p>
-      </div>
-      <div class="feature-card opacity-0" id="future-3">
-        <i class="fas fa-users text-3xl text-#00E4FF mb-4"></i>
-        <h3 class="text-2xl font-semibold mb-4">Escalabilidad</h3>
-        <p class="text-#E8EBFC">Preparado para soportar millones de usuarios con un rendimiento óptimo.</p>
-      </div>
-    </div>
-  </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize tooltips
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
-  <!-- Call to Action Section -->
-  <section class="section py-16">
-    <h2 class="text-4xl font-bold mb-12 text-center opacity-0" id="cta-title">Únete al Futur con GarBotGPT</h2>
-    <p class="text-xl max-w-2xl mx-auto mb-8 text-center opacity-0" id="cta-text">Transforma tu productividad con la IA de GarolaCorp. ¡Regístrate o inicia sesión ahora!</p>
-    <div class="text-center">
-      {% if current_user.is_authenticated %}
-        <a href="{{ url_for('chat') }}" class="cta-button inline-block opacity-0" id="cta-button">Empezar a Chatear</a>
-      {% else %}
-        <a href="{{ url_for('register') }}" class="cta-button inline-block opacity-0" id="cta-button">Comenzar Ahora</a>
-      {% endif %}
-    </div>
-  </section>
+            // Theme and contrast toggle
+            const html = document.getElementById('html-root');
+            const themeToggle = document.getElementById('theme-toggle');
+            const contrastToggle = document.getElementById('contrast-toggle');
+            themeToggle.addEventListener('click', () => {
+                html.dataset.theme = html.dataset.theme === 'light' ? 'dark' : 'light';
+            });
+            contrastToggle.addEventListener('click', () => {
+                html.dataset.contrast = html.dataset.contrast === 'high' ? 'normal' : 'high';
+            });
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-  <script>
-    // Initialize Lenis for smooth scrolling
-    const lenis = new Lenis({
-      duration: 1.5,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true
-    });
+            // Navbar scroll effect
+            window.addEventListener('scroll', () => {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
 
-    function raf(time) {
-      lenis.raf(time);
-      ScrollTrigger.update();
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
+            // Chat demo animation
+            const messages = document.querySelectorAll('#chat-demo-messages .message');
+            messages.forEach((msg, index) => {
+                gsap.fromTo(msg, { opacity: 0, y: 30 }, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    delay: index * 0.4,
+                    ease: 'power2.out',
+                    onComplete: () => msg.classList.add('show')
+                });
+            });
 
-    // GSAP Animations
-    gsap.registerPlugin(ScrollTrigger);
+            // Stats counter
+            const stats = document.querySelectorAll('.stat-item');
+            stats.forEach(stat => {
+                const target = parseFloat(stat.dataset.count);
+                let current = 0;
+                const increment = target / 100;
+                const updateCount = () => {
+                    current += increment;
+                    stat.textContent = Math.round(current).toLocaleString();
+                    if (current < target) requestAnimationFrame(updateCount);
+                    else stat.textContent = target.toLocaleString();
+                };
+                updateCount();
+            });
 
-    // Hero Section Timeline
-    const heroTl = gsap.timeline();
-    heroTl
-      .fromTo("#hero-logo, #logo-placeholder", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 1, ease: "power3.out" })
-      .fromTo("#hero-title", { opacity: 0, y: 100 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, "-=0.5")
-      .fromTo("#hero-text", { opacity: 0, y: 100 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, "-=0.5")
-      .fromTo("#hero-cta, #hero-cta-login, #hero-cta-register", { opacity: 0, y: 100 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, "-=0.5")
-      .fromTo("#theme-toggle, #lang-selector", { opacity: 0, x: -50 }, { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" }, "-=0.5");
+            // Scroll animations with GSAP
+            gsap.registerPlugin(ScrollTrigger);
+            document.querySelectorAll('section').forEach(section => {
+                gsap.from(section.children, {
+                    opacity: 0,
+                    y: 50,
+                    duration: 0.8,
+                    stagger: 0.1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top 85%',
+                        end: 'bottom 20%',
+                        toggleActions: 'play none none reverse'
+                    }
+                });
+            });
 
-    // Particle Background Effect
-    const canvas = document.querySelector(".canvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+            // Timeline animations
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            timelineItems.forEach(item => {
+                gsap.fromTo(item, { opacity: 0, x: item.classList.contains('left') ? -30 : 30 }, {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.8,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 85%',
+                        toggleActions: 'play none none reverse',
+                        onEnter: () => item.classList.add('show')
+                    }
+                });
+            });
 
-    const particlesArray = [];
-    const numberOfParticles = 60;
-
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 4 + 2;
-        this.speedX = Math.random() * 0.4 - 0.2;
-        this.speedY = Math.random() * 0.4 - 0.2;
-        this.color = '#00E4FF'; // Cyan from pptx.py
-      }
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if (this.size > 0.2) this.size -= 0.01;
-        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-      }
-      draw() {
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    function initParticles() {
-      for (let i = 0; i < numberOfParticles; i++) {
-        particlesArray.push(new Particle());
-      }
-    }
-
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update();
-        particlesArray[i].draw();
-        if (particlesArray[i].size <= 0.2) {
-          particlesArray.splice(i, 1);
-          particlesArray.push(new Particle());
-          i--;
-        }
-      }
-      requestAnimationFrame(animateParticles);
-    }
-
-    initParticles();
-    animateParticles();
-
-    window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-
-    // Features Section Animation
-    gsap.fromTo("#features-title", 
-      { opacity: 0, y: 50 },
-      { 
-        opacity: 1, 
-        y: 0, 
-        duration: 1, 
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: "#features-title",
-          start: "top 80%",
-          end: "top 20%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
-    gsap.utils.toArray(".feature-card").forEach((card, i) => {
-      gsap.fromTo(card, 
-        { opacity: 0, y: 50 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          duration: 1, 
-          delay: i * 0.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 80%",
-            end: "top 20%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-    });
-
-    // Architecture Section Animation
-    gsap.fromTo("#arch-title", 
-      { opacity: 0, y: 50 },
-      { 
-        opacity: 1, 
-        y: 0, 
-        duration: 1, 
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: "#arch-title",
-          start: "top 80%",
-          end: "top 20%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
-    gsap.utils.toArray(".arch-card").forEach((card, i) => {
-      gsap.fromTo(card, 
-        { opacity: 0, y: 50 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          duration: 1, 
-          delay: i * 0.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 80%",
-            end: "top 20%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-    });
-
-    gsap.fromTo("#arch-diagram, #arch-placeholder", 
-      { opacity: 0, scale: 0.9 },
-      { 
-        opacity: 1, 
-        scale: 1, 
-        duration: 1, 
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: "#arch-diagram, #arch-placeholder",
-          start: "top 80%",
-          end: "top 20%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
-    // Chat Preview Animation
-    gsap.fromTo("#chat-title", 
-      { opacity: 0, y: 50 },
-      { 
-        opacity: 1, 
-        y: 0, 
-        duration: 1, 
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: "#chat-title",
-          start: "top 80%",
-          end: "top 20%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
-    gsap.fromTo("#chat-preview, .chat-input, .cta-button, #chat-note", 
-      { opacity: 0, y: 50 },
-      { 
-        opacity: 1, 
-        y: 0, 
-        duration: 1, 
-        delay: 0.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: "#chat-preview",
-          start: "top 80%",
-          end: "top 20%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
-    // Settings Preview Animation
-    gsap.fromTo("#settings-title", 
-      { opacity: 0, y: 50 },
-      { 
-        opacity: 1, 
-        y: 0, 
-        duration: 1, 
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: "#settings-title",
-          start: "top 80%",
-          end: "top 20%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
-    gsap.utils.toArray(".settings-card").forEach((card, i) => {
-      gsap.fromTo(card, 
-        { opacity: 0, y: 50 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          duration: 1, 
-          delay: i * 0.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 80%",
-            end: "top 20%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-    });
-
-    gsap.fromTo("#settings-cta", 
-      { opacity: 0, y: 50 },
-      { 
-        opacity: 1, 
-        y: 0, 
-        duration: 1, 
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: "#settings-cta",
-          start: "top 80%",
-          end: "top 20%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
-    // Deployment Section Animation
-    gsap.fromTo("#deploy-title", 
-      { opacity: 0, y: 50 },
-      { 
-        opacity: 1, 
-        y: 0, 
-        duration: 1, 
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: "#deploy-title",
-          start: "top 80%",
-          end: "top 20%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
-    gsap.fromTo("#deploy-text, #deploy-img-app, #deploy-img-db, #deploy-placeholder-app, #deploy-placeholder-db", 
-      { opacity: 0, y: 50 },
-      { 
-        opacity: 1, 
-        y: 0, 
-        duration: 1, 
-        delay: 0.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: "#deploy-text",
-          start: "top 80%",
-          end: "top 20%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
-    // Future Plans Animation
-    gsap.fromTo("#future-title", 
-      { opacity: 0, y: 50 },
-      { 
-        opacity: 1, 
-        y: 0, 
-        duration: 1, 
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: "#future-title",
-          start: "top 80%",
-          end: "top 20%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
-    gsap.utils.toArray("#future-1, #future-2, #future-3").forEach((card, i) => {
-      gsap.fromTo(card, 
-        { opacity: 0, y: 50 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          duration: 1, 
-          delay: i * 0.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 80%",
-            end: "top 20%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-    });
-
-    // CTA Section Animation
-    gsap.fromTo("#cta-title", 
-      { opacity: 0, y: 50 },
-      { 
-        opacity: 1, 
-        y: 0, 
-        duration: 1, 
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: "#cta-title",
-          start: "top 80%",
-          end: "top 20%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
-    gsap.fromTo("#cta-text, #cta-button", 
-      { opacity: 0, y: 50 },
-      { 
-        opacity: 1, 
-        y: 0, 
-        duration: 1, 
-        delay: 0.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: "#cta-text",
-          start: "top 80%",
-          end: "top 20%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-
-    // Theme Toggle
-    document.querySelector('#theme-toggle').addEventListener('click', () => {
-      const theme = document.body.classList.contains('dark') ? 'light' : 'dark';
-      document.body.classList.toggle('dark');
-      document.body.classList.toggle('light');
-      fetch('/update_theme', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ theme: theme })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          const icon = document.querySelector('#theme-toggle i');
-          icon.classList.toggle('fa-moon');
-          icon.classList.toggle('fa-sun');
-        }
-      });
-    });
-
-    // Language Selector
-    document.querySelector('#language').addEventListener('change', (e) => {
-      const language = e.target.value;
-      fetch('/update_language', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ language: language })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          window.location.reload();
-        }
-      });
-    });
-  </script>
+            // Placeholder for WebGL background
+            const canvas = document.getElementById('webgl-bg');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        });
+    </script>
 </body>
 </html>
