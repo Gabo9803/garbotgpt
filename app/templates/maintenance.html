@@ -309,7 +309,7 @@
             color: #ccffff;
         }
 
-        .popup {
+        .popup, .welcome-popup {
             display: none;
             position: fixed;
             top: 50%;
@@ -328,13 +328,13 @@
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        .popup.show {
+        .popup.show, .welcome-popup.show {
             display: block;
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
         }
 
-        .popup h3 {
+        .popup h3, .welcome-popup h3 {
             font-family: 'Oxanium', sans-serif;
             font-size: 2rem;
             background: linear-gradient(90deg, #00f7ff, #ff00ff);
@@ -343,7 +343,7 @@
             margin-bottom: 1rem;
         }
 
-        .popup .time {
+        .popup .time, .welcome-popup .time {
             font-size: 2.5rem;
             font-weight: 700;
             color: #00ff88;
@@ -351,7 +351,7 @@
             text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
 
-        .popup .message {
+        .popup .message, .welcome-popup .message {
             font-size: 1.2rem;
             color: #ccffff;
             margin-bottom: 1.5rem;
@@ -363,7 +363,7 @@
             margin: 1rem auto;
         }
 
-        .popup .close-button {
+        .popup .close-button, .welcome-popup .close-button {
             padding: 0.8rem 2rem;
             font-size: 1rem;
             font-weight: 700;
@@ -375,11 +375,11 @@
             transition: transform 0.3s ease;
         }
 
-        .popup .close-button:hover {
+        .popup .close-button:hover, .welcome-popup .close-button:hover {
             transform: scale(1.1);
         }
 
-        .popup-overlay {
+        .popup-overlay, .welcome-popup-overlay {
             display: none;
             position: fixed;
             top: 0;
@@ -392,7 +392,7 @@
             transition: opacity 0.3s ease;
         }
 
-        .popup-overlay.show {
+        .popup-overlay.show, .welcome-popup-overlay.show {
             display: block;
             opacity: 1;
         }
@@ -403,8 +403,8 @@
             border: 1px solid rgba(0, 255, 255, 0.3);
             border-radius: 15px;
             padding: 1.5rem;
-            max-width: 500px;
-            text-align: left;
+            max-width: 600px;
+            text-align: center;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
         }
 
@@ -415,14 +415,12 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 1rem;
-            text-align: center;
         }
 
-        .music-player .track-title {
+        .track-title {
             font-size: 1.2rem;
             color: #00ff88;
             margin-bottom: 1rem;
-            text-align: center;
             text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
         }
 
@@ -431,6 +429,7 @@
             justify-content: center;
             gap: 1rem;
             margin-bottom: 1rem;
+            flex-wrap: wrap;
         }
 
         .player-controls button {
@@ -440,6 +439,7 @@
             font-size: 1.8rem;
             cursor: pointer;
             transition: transform 0.3s ease, color 0.3s ease;
+            position: relative;
         }
 
         .player-controls button:hover {
@@ -447,12 +447,37 @@
             transform: scale(1.2);
         }
 
+        .player-controls button::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #00f7ff;
+            color: #05051a;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s ease, bottom 0.3s ease;
+            pointer-events: none;
+        }
+
+        .player-controls button:hover::after {
+            opacity: 1;
+            bottom: -40px;
+        }
+
+        .player-controls button.active {
+            color: #00ff88;
+        }
+
         .progress-bar {
             width: 100%;
             height: 10px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 5px;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             overflow: hidden;
         }
 
@@ -480,11 +505,20 @@
             box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
 
+        .track-time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #ccffff;
+            margin-bottom: 1rem;
+        }
+
         .volume-control {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             margin-bottom: 1rem;
+            justify-content: center;
         }
 
         .volume-control span {
@@ -517,11 +551,17 @@
         }
 
         .track-list {
-            max-height: 100px;
+            max-height: 200px;
             overflow-y: auto;
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             padding: 0.5rem;
+            transition: max-height 0.3s ease;
+        }
+
+        .track-list.hidden {
+            max-height: 0;
+            padding: 0;
         }
 
         .track-list .track-item {
@@ -548,10 +588,12 @@
             .logo { width: 160px; }
             .container { padding: 3rem 1.5rem; }
             .faq h2 { font-size: 2rem; }
-            .popup h3 { font-size: 1.8rem; }
-            .popup .time { font-size: 2rem; }
+            .popup h3, .welcome-popup h3 { font-size: 1.8rem; }
+            .popup .time, .welcome-popup .time { font-size: 2rem; }
+            .music-player { max-width: 100%; }
             .music-player h3 { font-size: 1.5rem; }
             .player-controls button { font-size: 1.5rem; }
+            .track-list { max-height: 150px; }
         }
 
         @media (max-width: 480px) {
@@ -562,13 +604,14 @@
             .container { padding: 2rem 1rem; }
             .feature-grid { grid-template-columns: 1fr; }
             .faq h2 { font-size: 1.8rem; }
-            .popup h3 { font-size: 1.5rem; }
-            .popup .time { font-size: 1.8rem; }
-            .popup { padding: 1.5rem; }
+            .popup h3, .welcome-popup h3 { font-size: 1.5rem; }
+            .popup .time, .welcome-popup .time { font-size: 1.8rem; }
+            .popup, .welcome-popup { padding: 1.5rem; }
             .music-player { padding: 1rem; }
-            .player-controls { flex-wrap: wrap; }
+            .player-controls { gap: 0.8rem; }
             .player-controls button { font-size: 1.3rem; }
             .volume-control input[type="range"] { width: 80px; }
+            .track-list { max-height: 120px; }
         }
     </style>
 </head>
@@ -596,12 +639,19 @@
             <h3 data-translate="musicPlayerTitle">Reproductor de Música</h3>
             <div class="track-title" id="trackTitle">Billie Jean - Michael Jackson</div>
             <div class="player-controls">
-                <button id="prevTrack" aria-label="Pista anterior"><i class="fas fa-backward"></i></button>
-                <button id="playPause" aria-label="Reproducir pista"><i class="fas fa-play"></i></button>
-                <button id="nextTrack" aria-label="Siguiente pista"><i class="fas fa-forward"></i></button>
+                <button id="shuffleTrack" aria-label="Mezclar pistas" data-tooltip="Mezclar"><i class="fas fa-random"></i></button>
+                <button id="prevTrack" aria-label="Pista anterior" data-tooltip="Anterior"><i class="fas fa-backward"></i></button>
+                <button id="playPause" aria-label="Reproducir pista" data-tooltip="Reproducir/Pausar"><i class="fas fa-play"></i></button>
+                <button id="nextTrack" aria-label="Siguiente pista" data-tooltip="Siguiente"><i class="fas fa-forward"></i></button>
+                <button id="repeatTrack" aria-label="Repetir desactivado" data-tooltip="Repetir"><i class="fas fa-redo"></i></button>
+                <button id="toggleTrackList" aria-label="Mostrar lista de pistas" data-tooltip="Lista de pistas"><i class="fas fa-list"></i></button>
             </div>
             <div class="progress-bar">
                 <input type="range" id="trackProgress" min="0" max="100" value="0" aria-label="Progreso de la pista">
+            </div>
+            <div class="track-time">
+                <span id="currentTime">0:00</span>
+                <span id="totalDuration">0:00</span>
             </div>
             <div class="volume-control">
                 <span data-translate="volume">Volumen:</span>
@@ -610,7 +660,17 @@
             <div class="track-list" id="trackList">
                 <div class="track-item active" data-index="0">Billie Jean - Michael Jackson</div>
                 <div class="track-item" data-index="1">You Rock My World - Michael Jackson</div>
-                <div class="track-item" data-index="2">Track 3</div>
+                <div class="track-item" data-index="2">Sweet Child O' Mine - Guns N' Roses</div>
+                <div class="track-item" data-index="3">Bohemian Rhapsody - Queen</div>
+                <div class="track-item" data-index="4">Smells Like Teen Spirit - Nirvana</div>
+                <div class="track-item" data-index="5">Hotel California - Eagles</div>
+                <div class="track-item" data-index="6">Imagine - John Lennon</div>
+                <div class="track-item" data-index="7">Rolling in the Deep - Adele</div>
+                <div class="track-item" data-index="8">Shape of You - Ed Sheeran</div>
+                <div class="track-item" data-index="9">Viva La Vida - Coldplay</div>
+                <div class="track-item" data-index="10">Uptown Funk - Mark Ronson ft. Bruno Mars</div>
+                <div class="track-item" data-index="11">Blinding Lights - The Weeknd</div>
+                <div class="track-item" data-index="12">Lose Yourself - Eminem</div>
             </div>
         </div>
         <p class="contact" data-gsap="fade-up" data-delay="1.7" data-translate="contact">¿Dudas? Escríbenos a <a href="mailto:garbot@garbotgpt.com" data-translate="contactLink">soporte@garbotgpt.com</a></p>
@@ -641,6 +701,13 @@
         <div class="progress-container" id="popupProgressContainer">
             <div class="progress" id="popupProgress"></div>
         </div>
+        <button class="close-button" data-translate="closeButton">Cerrar</button>
+    </div>
+
+    <div class="welcome-popup-overlay" id="welcomePopupOverlay"></div>
+    <div class="welcome-popup" id="welcomePopup">
+        <h3 data-translate="welcomePopupTitle">¡Bienvenido!</h3>
+        <p class="message" data-translate="welcomePopupMessage">¡Hola! soy GarBotGPT. Enhorabuena al Barça, el nuevo campeón de liga. Te dejo una canción que te gustará.</p>
         <button class="close-button" data-translate="closeButton">Cerrar</button>
     </div>
 
@@ -707,7 +774,15 @@
                 musicPlayerTitle: "Reproductor de Música",
                 playing: "Reproducir",
                 paused: "Pausar",
-                volume: "Volumen"
+                volume: "Volumen",
+                shuffle: "Mezclar",
+                repeatOff: "Repetir desactivado",
+                repeatOne: "Repetir una pista",
+                repeatAll: "Repetir todas",
+                showTrackList: "Mostrar lista de pistas",
+                hideTrackList: "Ocultar lista de pistas",
+                welcomePopupTitle: "¡Bienvenido!",
+                welcomePopupMessage: "¡Hola! Soy Enorabhuna. Enhorabuena al Barça, el nuevo campeón de liga. Te dejo una canción que te gustará."
             },
             ca: {
                 title: "GarBotGPT en Evolució",
@@ -754,7 +829,15 @@
                 musicPlayerTitle: "Reproductor de Música",
                 playing: "Reproduir",
                 paused: "Pausa",
-                volume: "Volum"
+                volume: "Volum",
+                shuffle: "Barrejar",
+                repeatOff: "Repetir desactivat",
+                repeatOne: "Repetir una pista",
+                repeatAll: "Repetir totes",
+                showTrackList: "Mostrar llista de pistes",
+                hideTrackList: "Amagar llista de pistes",
+                welcomePopupTitle: "Benvingut!",
+                welcomePopupMessage: "Hola! Sóc Enorabhuna. Felicitats al Barça, el nou campió de lliga. Et deixo una cançó que t'agradarà."
             }
         };
 
@@ -762,7 +845,17 @@
         const tracks = [
             { title: "Billie Jean - Michael Jackson", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Michael-Jackson-Billie-Jean-Official-Video.mp3" },
             { title: "You Rock My World - Michael Jackson", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Michael-Jackson-–-You-Rock-My-World-Lyrics_Sub-espanol.mp3" },
-            { title: "Track 3", src: "https://example.com/track3.mp3" }
+            { title: "Simon & Garfunkel - Kodachrome / Mabellene", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Simon-Garfunkel-Kodachrome-Mabellene-from-The-Concert-in-Central-Park.mp3" },
+            { title: "Bohemian Rhapsody - Queen", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Queen-Bohemian-Rhapsody-Official-Video-Remastered.mp3" },
+            { title: "Simon & Garfunkel - Mrs Robinson", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Simon-Garfunkel-Mrs-Robinson-Lyrics.mp3" },
+            { title: "Hotel California - Eagles", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Eagles-Hotel-California-Official-Audio.mp3" },
+            { title: "Imagine - John Lennon", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Imagine-John-Lennon-The-Plastic-Ono-Band-w-The-Flux-Fiddlers-Ultimate-Mix-2018-4K-REMASTER.mp3" },
+            { title: "Creedence Clearwater Revival - Fortunate Son", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Creedence-Clearwater-Revival-Fortunate-Son-Official-Music-Video.mp3" },
+            { title: "Dire Straits - Sultans Of Swing", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Dire-Straits-Sultans-Of-Swing-Official-Music-Video.mp3" },
+            { title: "Viva La Vida - Coldplay", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Coldplay-Viva-la-Vida-Lyrics.mp3" },
+            { title: "Elvis Presley - If I Can Dream", src: "https://tecnofgb.com/wp-content/uploads/2025/05/La-cancion-de-protesta-de-ELVIS-If-I-Can-Dream-Elvis-Presley-Subtitulada-Espanol-Lyrics.mp3" },
+            { title: "Aretha Franklin - Think", src: "https://tecnofgb.com/wp-content/uploads/2025/05/The-Blues-Brothers-Aretha-Franklin-Think-Official-Audio.mp3" },
+            { title: "Lose Yourself - Eminem", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Eminem-Lose-Yourself-Lyrics.mp3" }
         ];
 
         // DOM Elements for Music Player
@@ -770,10 +863,15 @@
         const playPauseButton = document.getElementById('playPause');
         const prevTrackButton = document.getElementById('prevTrack');
         const nextTrackButton = document.getElementById('nextTrack');
+        const shuffleButton = document.getElementById('shuffleTrack');
+        const repeatButton = document.getElementById('repeatTrack');
+        const toggleTrackListButton = document.getElementById('toggleTrackList');
         const trackProgress = document.getElementById('trackProgress');
         const volumeControl = document.getElementById('volumeControl');
         const trackTitle = document.getElementById('trackTitle');
         const trackList = document.getElementById('trackList');
+        const currentTimeDisplay = document.getElementById('currentTime');
+        const totalDurationDisplay = document.getElementById('totalDuration');
 
         // Other DOM Elements
         const statusElement = document.querySelector('.status');
@@ -787,13 +885,28 @@
         const popupMessage = document.getElementById('popupMessage');
         const popupProgressContainer = document.getElementById('popupProgressContainer');
         const popupProgress = document.getElementById('popupProgress');
-        const closeButton = popup.querySelector('.close-button');
+        const popupCloseButton = popup.querySelector('.close-button');
 
-        // Variable para rastrear el idioma actual
+        // Welcome Popup Elements
+        const welcomePopup = document.getElementById('welcomePopup');
+        const welcomePopupOverlay = document.getElementById('welcomePopupOverlay');
+        const welcomePopupCloseButton = welcomePopup.querySelector('.close-button');
+
+        // Music Player State
         let currentLang = 'es';
         let currentTrackIndex = 0;
+        let isShuffling = false;
+        let repeatMode = 'off'; // 'off', 'one', 'all'
+        let isTrackListVisible = true;
+        let trackHistory = [];
 
-        // Función para obtener el valor de una clave de traducción anidada
+        // Utility Functions
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            seconds = Math.floor(seconds % 60);
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
         function getTranslation(lang, key) {
             const keys = key.split('.');
             let value = translations[lang];
@@ -803,13 +916,11 @@
             return value;
         }
 
-        // Función para actualizar todos los textos según el idioma
         function updateLanguage(lang) {
             document.querySelectorAll('[data-translate]').forEach(element => {
                 const key = element.getAttribute('data-translate');
-                if (key === 'status') {
-                    return;
-                } else if (key === 'countdown') {
+                if (key === 'status') return;
+                if (key === 'countdown') {
                     const currentText = element.textContent;
                     const timePart = currentText.match(/\d{2}:\d{2}:\d{2}/) || ['Calculando...'];
                     element.textContent = `${getTranslation(lang, key)}${timePart[0]}`;
@@ -818,13 +929,257 @@
                 }
             });
             document.querySelector('.logo').setAttribute('alt', `GarBotGPT Logo (${lang === 'es' ? 'Español' : 'Català'})`);
+            updatePlayerLabels();
+        }
 
-            // Actualizar estado del botón de reproducir/pausar
-            if (playPauseButton) {
-                const isPlaying = !musicPlayer.paused;
-                playPauseButton.setAttribute('aria-label', getTranslation(lang, isPlaying ? 'paused' : 'playing'));
+        function updatePlayerLabels() {
+            const isPlaying = !musicPlayer.paused;
+            playPauseButton.setAttribute('aria-label', getTranslation(currentLang, isPlaying ? 'paused' : 'playing'));
+            playPauseButton.setAttribute('data-tooltip', getTranslation(currentLang, isPlaying ? 'paused' : 'playing'));
+            shuffleButton.setAttribute('data-tooltip', getTranslation(currentLang, 'shuffle'));
+            repeatButton.setAttribute('aria-label', getTranslation(currentLang, `repeat${repeatMode.charAt(0).toUpperCase() + repeatMode.slice(1)}`));
+            repeatButton.setAttribute('data-tooltip', getTranslation(currentLang, `repeat${repeatMode.charAt(0).toUpperCase() + repeatMode.slice(1)}`));
+            toggleTrackListButton.setAttribute('aria-label', getTranslation(currentLang, isTrackListVisible ? 'hideTrackList' : 'showTrackList'));
+            toggleTrackListButton.setAttribute('data-tooltip', getTranslation(currentLang, isTrackListVisible ? 'hideTrackList' : 'showTrackList'));
+        }
+
+        // Popup Functions
+        function showPopup(title, message, time = null, progressPercent = null) {
+            popupTitle.textContent = title;
+            popupMessage.textContent = message;
+            popupTime.style.display = time ? 'block' : 'none';
+            popupProgressContainer.style.display = progressPercent !== null ? 'block' : 'none';
+            if (time) popupTime.textContent = time;
+            if (progressPercent !== null) popupProgress.style.width = `${progressPercent}%`;
+
+            popup.classList.add('show');
+            popupOverlay.classList.add('show');
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function hidePopup() {
+            popup.classList.remove('show');
+            popupOverlay.classList.remove('show');
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function showWelcomePopup() {
+            welcomePopup.classList.add('show');
+            welcomePopupOverlay.classList.add('show');
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            gtag('event', 'welcome_popup_shown', { event_category: 'Popup', event_label: 'Welcome Popup' });
+        }
+
+        function hideWelcomePopup() {
+            welcomePopup.classList.remove('show');
+            welcomePopupOverlay.classList.remove('show');
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+            playVivaLaVida();
+            gtag('event', 'welcome_popup_closed', { event_category: 'Popup', event_label: 'Welcome Popup Closed' });
+        }
+
+        // Music Player Functions
+        function loadTrack(index) {
+            if (index < 0 || index >= tracks.length) return;
+            musicPlayer.src = tracks[index].src;
+            trackTitle.textContent = tracks[index].title;
+            trackList.querySelectorAll('.track-item').forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+            currentTrackIndex = index;
+            musicPlayer.play().then(() => {
+                playPauseButton.querySelector('i').classList.remove('fa-play');
+                playPauseButton.querySelector('i').classList.add('fa-pause');
+                updatePlayerLabels();
+                gtag('event', 'music_play', { event_category: 'Music', event_label: tracks[index].title });
+            }).catch(err => {
+                console.error('Error al reproducir pista:', err);
+                showPopup('Error', 'No se pudo reproducir la pista. Verifica la URL del audio.');
+            });
+            updateTrackDuration();
+        }
+
+        function playVivaLaVida() {
+            const vivaLaVidaIndex = tracks.findIndex(track => track.title === "Viva La Vida - Coldplay");
+            if (vivaLaVidaIndex !== -1) {
+                currentTrackIndex = vivaLaVidaIndex;
+                trackHistory.push(currentTrackIndex);
+                loadTrack(currentTrackIndex);
             }
         }
+
+        function playPause() {
+            if (musicPlayer.paused) {
+                musicPlayer.play().then(() => {
+                    playPauseButton.querySelector('i').classList.remove('fa-play');
+                    playPauseButton.querySelector('i').classList.add('fa-pause');
+                    updatePlayerLabels();
+                    gtag('event', 'music_play', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
+                }).catch(err => console.error('Error al reproducir pista:', err));
+            } else {
+                musicPlayer.pause();
+                playPauseButton.querySelector('i').classList.remove('fa-pause');
+                playPauseButton.querySelector('i').classList.add('fa-play');
+                updatePlayerLabels();
+                gtag('event', 'music_pause', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
+            }
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function previousTrack() {
+            let nextIndex;
+            if (isShuffling && trackHistory.length > 1) {
+                trackHistory.pop();
+                nextIndex = trackHistory[trackHistory.length - 1];
+            } else {
+                nextIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+            }
+            loadTrack(nextIndex);
+            gtag('event', 'music_change_track', { event_category: 'Music', event_label: tracks[nextIndex].title });
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function nextTrack() {
+            let nextIndex;
+            if (isShuffling) {
+                nextIndex = Math.floor(Math.random() * tracks.length);
+                while (nextIndex === currentTrackIndex && tracks.length > 1) {
+                    nextIndex = Math.floor(Math.random() * tracks.length);
+                }
+                trackHistory.push(currentTrackIndex);
+            } else {
+                nextIndex = (currentTrackIndex + 1) % tracks.length;
+            }
+            loadTrack(nextIndex);
+            gtag('event', 'music_change_track', { event_category: 'Music', event_label: tracks[nextIndex].title });
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function toggleShuffle() {
+            isShuffling = !isShuffling;
+            shuffleButton.classList.toggle('active', isShuffling);
+            trackHistory = [currentTrackIndex];
+            updatePlayerLabels();
+            gtag('event', 'music_shuffle', { event_category: 'Music', event_label: isShuffling ? 'Enabled' : 'Disabled' });
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function toggleRepeat() {
+            if (repeatMode === 'off') {
+                repeatMode = 'all';
+            } else if (repeatMode === 'all') {
+                repeatMode = 'one';
+            } else {
+                repeatMode = 'off';
+            }
+            repeatButton.classList.toggle('active', repeatMode !== 'off');
+            updatePlayerLabels();
+            gtag('event', 'music_repeat', { event_category: 'Music', event_label: repeatMode });
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function toggleTrackList() {
+            isTrackListVisible = !isTrackListVisible;
+            trackList.classList.toggle('hidden', !isTrackListVisible);
+            toggleTrackListButton.querySelector('i').classList.toggle('fa-list', isTrackListVisible);
+            toggleTrackListButton.querySelector('i').classList.toggle('fa-list-alt', !isTrackListVisible);
+            updatePlayerLabels();
+            gtag('event', 'music_toggle_tracklist', { event_category: 'Music', event_label: isTrackListVisible ? 'Show' : 'Hide' });
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function updateProgress() {
+            if (musicPlayer.duration) {
+                const progressPercent = (musicPlayer.currentTime / musicPlayer.duration) * 100;
+                trackProgress.value = progressPercent;
+                currentTimeDisplay.textContent = formatTime(musicPlayer.currentTime);
+            }
+        }
+
+        function setProgress() {
+            if (musicPlayer.duration) {
+                musicPlayer.currentTime = (trackProgress.value / 100) * musicPlayer.duration;
+                gtag('event', 'music_seek', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
+            }
+        }
+
+        function updateTrackDuration() {
+            musicPlayer.onloadedmetadata = () => {
+                totalDurationDisplay.textContent = formatTime(musicPlayer.duration);
+            };
+        }
+
+        function setVolume() {
+            musicPlayer.volume = volumeControl.value;
+            gtag('event', 'music_volume', { event_category: 'Music', event_label: `Volume ${volumeControl.value}` });
+        }
+
+        function handleTrackEnd() {
+            if (repeatMode === 'one') {
+                loadTrack(currentTrackIndex);
+            } else if (repeatMode === 'all' || tracks.length === 1) {
+                nextTrack();
+            } else {
+                if (currentTrackIndex < tracks.length - 1) {
+                    nextTrack();
+                } else {
+                    musicPlayer.pause();
+                    playPauseButton.querySelector('i').classList.remove('fa-pause');
+                    playPauseButton.querySelector('i').classList.add('fa-play');
+                    updatePlayerLabels();
+                }
+            }
+        }
+
+        // Music Player Event Listeners
+        playPauseButton.addEventListener('click', playPause);
+        prevTrackButton.addEventListener('click', previousTrack);
+        nextTrackButton.addEventListener('click', nextTrack);
+        shuffleButton.addEventListener('click', toggleShuffle);
+        repeatButton.addEventListener('click', toggleRepeat);
+        toggleTrackListButton.addEventListener('click', toggleTrackList);
+        trackProgress.addEventListener('input', setProgress);
+        volumeControl.addEventListener('input', setVolume);
+
+        trackList.querySelectorAll('.track-item').forEach((item, index) => {
+            item.addEventListener('click', () => {
+                currentTrackIndex = index;
+                trackHistory.push(currentTrackIndex);
+                loadTrack(currentTrackIndex);
+                gtag('event', 'music_select_track', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
+                spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+                clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+            });
+        });
+
+        musicPlayer.addEventListener('timeupdate', updateProgress);
+        musicPlayer.addEventListener('ended', handleTrackEnd);
+        musicPlayer.addEventListener('error', () => {
+            showPopup('Error', 'No se pudo cargar la pista. Verifica la URL del audio.');
+        });
+
+        // Popup Event Listeners
+        popupCloseButton.addEventListener('click', hidePopup);
+        popupOverlay.addEventListener('click', hidePopup);
+        welcomePopupCloseButton.addEventListener('click', hideWelcomePopup);
+        welcomePopupOverlay.addEventListener('click', hideWelcomePopup);
+
+        // Initialize Music Player
+        loadTrack(currentTrackIndex);
+
+        // Initialize Welcome Popup
+        window.addEventListener('load', () => {
+            showWelcomePopup();
+        });
 
         // Initialize Lenis for smooth scrolling
         const lenis = new Lenis({
@@ -945,28 +1300,6 @@
             countdownElement.textContent = `${getTranslation(currentLang, 'countdown')}${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
 
-        // Popup para countdown y notificaciones
-        function showPopup(title, message, time = null, progressPercent = null) {
-            popupTitle.textContent = title;
-            popupMessage.textContent = message;
-            popupTime.style.display = time ? 'block' : 'none';
-            popupProgressContainer.style.display = progressPercent !== null ? 'block' : 'none';
-            if (time) popupTime.textContent = time;
-            if (progressPercent !== null) popupProgress.style.width = `${progressPercent}%`;
-
-            popup.classList.add('show');
-            popupOverlay.classList.add('show');
-            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
-            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
-        }
-
-        function hidePopup() {
-            popup.classList.remove('show');
-            popupOverlay.classList.remove('show');
-            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
-            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
-        }
-
         // Countdown Popup
         countdownElement.addEventListener('click', () => {
             const now = new Date();
@@ -1012,103 +1345,8 @@
             gtag('event', 'push_clicked', { event_category: 'Button', event_label: 'Push Notify' });
         });
 
-        closeButton.addEventListener('click', hidePopup);
-        popupOverlay.addEventListener('click', hidePopup);
-
         updateCountdown();
         setInterval(updateCountdown, 1000);
-
-        // Music Player Functions
-        function loadTrack(index) {
-            musicPlayer.src = tracks[index].src;
-            trackTitle.textContent = tracks[index].title;
-            trackList.querySelectorAll('.track-item').forEach((item, i) => {
-                item.classList.toggle('active', i === index);
-            });
-            musicPlayer.play().then(() => {
-                playPauseButton.querySelector('i').classList.remove('fa-play');
-                playPauseButton.querySelector('i').classList.add('fa-pause');
-                playPauseButton.setAttribute('aria-label', getTranslation(currentLang, 'paused'));
-                gtag('event', 'music_play', { event_category: 'Music', event_label: tracks[index].title });
-            }).catch(() => console.log('Error al reproducir pista'));
-        }
-
-        function playPause() {
-            if (musicPlayer.paused) {
-                musicPlayer.play().then(() => {
-                    playPauseButton.querySelector('i').classList.remove('fa-play');
-                    playPauseButton.querySelector('i').classList.add('fa-pause');
-                    playPauseButton.setAttribute('aria-label', getTranslation(currentLang, 'paused'));
-                    gtag('event', 'music_play', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
-                }).catch(() => console.log('Error al reproducir pista'));
-            } else {
-                musicPlayer.pause();
-                playPauseButton.querySelector('i').classList.remove('fa-pause');
-                playPauseButton.querySelector('i').classList.add('fa-play');
-                playPauseButton.setAttribute('aria-label', getTranslation(currentLang, 'playing'));
-                gtag('event', 'music_pause', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
-            }
-            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
-            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
-        }
-
-        function previousTrack() {
-            currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
-            loadTrack(currentTrackIndex);
-            gtag('event', 'music_change_track', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
-            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
-            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
-        }
-
-        function nextTrack() {
-            currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
-            loadTrack(currentTrackIndex);
-            gtag('event', 'music_change_track', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
-            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
-            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
-        }
-
-        function updateProgress() {
-            if (musicPlayer.duration) {
-                const progressPercent = (musicPlayer.currentTime / musicPlayer.duration) * 100;
-                trackProgress.value = progressPercent;
-            }
-        }
-
-        function setProgress() {
-            if (musicPlayer.duration) {
-                musicPlayer.currentTime = (trackProgress.value / 100) * musicPlayer.duration;
-                gtag('event', 'music_seek', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
-            }
-        }
-
-        function setVolume() {
-            musicPlayer.volume = volumeControl.value;
-            gtag('event', 'music_volume', { event_category: 'Music', event_label: `Volume ${volumeControl.value}` });
-        }
-
-        // Music Player Event Listeners
-        playPauseButton.addEventListener('click', playPause);
-        prevTrackButton.addEventListener('click', previousTrack);
-        nextTrackButton.addEventListener('click', nextTrack);
-        trackProgress.addEventListener('input', setProgress);
-        volumeControl.addEventListener('input', setVolume);
-
-        trackList.querySelectorAll('.track-item').forEach((item, index) => {
-            item.addEventListener('click', () => {
-                currentTrackIndex = index;
-                loadTrack(currentTrackIndex);
-                gtag('event', 'music_select_track', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
-                spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
-                clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
-            });
-        });
-
-        musicPlayer.addEventListener('timeupdate', updateProgress);
-        musicPlayer.addEventListener('ended', nextTrack);
-
-        // Cargar la primera pista
-        loadTrack(currentTrackIndex);
 
         // Función para generar partículas al hacer clic
         function spawnParticles(x, y) {
