@@ -7,20 +7,618 @@
     <meta name="keywords" content="GarBotGPT, IA, inteligencia artificial, tecnología futurista">
     <meta name="robots" content="index, follow">
     <title>GarBotGPT - Evolución en Progreso</title>
-    <link rel="icon" type="image/png" href="https://tecnofgb.com/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;600;800&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            background: #05051a;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .scene {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 30, 0.5);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.1);
+        }
+
+        .logo {
+            width: 200px;
+            margin-bottom: 2.5rem;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.6));
+            transition: transform 0.4s ease, filter 0.4s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.15) rotateY(15deg);
+            filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.8));
+        }
+
+        h1 {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 5rem;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff, #00ff88, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            position: relative;
+            animation: glitch 3s linear infinite;
+        }
+
+        @keyframes glitch {
+            2%, 64% { transform: translate(2px, 0) skew(0deg); }
+            4%, 60% { transform: translate(-2px, 0) skew(0deg); }
+            62% { transform: translate(0, 0) skew(5deg); }
+            0%, 5%, 65%, 100% { transform: translate(0, 0) skew(0deg); }
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+            opacity: 0.85;
+            color: #ccffff;
+        }
+
+        .status {
+            font-size: 1.3rem;
+            color: #00ff88;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 2.5rem;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+        }
+
+        .progress-container {
+            width: 70%;
+            height: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin: 2.5rem auto;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .progress {
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff, #00ff88);
+            background-size: 300%;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: width 0.3s ease;
+        }
+
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.3) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0.3) 75%,
+                transparent 75%,
+                transparent
+            );
+            background-size: 50px 50px;
+            animation: move 0.7s linear infinite;
+        }
+
+        @keyframes move {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        .countdown {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, rgba(0, 255, 255, 0.2), rgba(255, 0, 255, 0.2));
+            padding: 1.2rem 2.5rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 2.5rem 0;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .countdown:hover {
+            transform: scale(1.05);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2.5rem 0;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-item::before {
+            content: '⚡️';
+            margin-right: 0.5rem;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .social-links a {
+            color: #00f7ff;
+            font-size: 2.2rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        .social-links a:hover {
+            color: #ff00ff;
+            transform: scale(1.2) translateY(-8px);
+        }
+
+        .social-links a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #00f7ff;
+            color: #05051a;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 0.3s ease, bottom 0.3s ease;
+            pointer-events: none;
+        }
+
+        .social-links a:hover::after {
+            opacity: 1;
+            bottom: -50px;
+        }
+
+        .notify-button, .push-notify {
+            padding: 1.2rem 3rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff, #00ff88);
+            background-size: 300%;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 1.5rem;
+            transition: background-position 0.5s ease, transform 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .notify-button:hover, .push-notify:hover {
+            background-position: 100%;
+            transform: scale(1.1);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .contact {
+            margin-top: 2.5rem;
+            font-size: 1.2rem;
+        }
+
+        .contact a {
+            color: #00ff88;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        .contact a:hover {
+            color: #ff00ff;
+        }
+
+        .faq {
+            margin-top: 3rem;
+            text-align: left;
+        }
+
+        .faq h2 {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .faq-item h3 {
+            font-size: 1.3rem;
+            color: #00ff88;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-item p {
+            font-size: 1.1rem;
+            color: #ccffff;
+        }
+
+        .popup, .welcome-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: rgba(10, 10, 30, 0.9);
+            border: 2px solid #00f7ff;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            z-index: 1000;
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.4);
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .popup.show, .welcome-popup.show {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .popup h3, .welcome-popup h3 {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 2rem;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .popup .time, .welcome-popup .time {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00ff88;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .popup .message, .welcome-popup .message {
+            font-size: 1.2rem;
+            color: #ccffff;
+            margin-bottom: 1.5rem;
+        }
+
+        .popup .progress-container {
+            width: 80%;
+            height: 15px;
+            margin: 1rem auto;
+        }
+
+        .popup .close-button, .welcome-popup .close-button {
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ffffff;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .popup .close-button:hover, .welcome-popup .close-button:hover {
+            transform: scale(1.1);
+        }
+
+        .popup-overlay, .welcome-popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .popup-overlay.show, .welcome-popup-overlay.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .music-player {
+            margin: 2.5rem auto;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .music-player h3 {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .track-title {
+            font-size: 1.2rem;
+            color: #00ff88;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .player-controls button {
+            background: none;
+            border: none;
+            color: #00f7ff;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        .player-controls button:hover {
+            color: #ff00ff;
+            transform: scale(1.2);
+        }
+
+        .player-controls button::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #00f7ff;
+            color: #05051a;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s ease, bottom 0.3s ease;
+            pointer-events: none;
+        }
+
+        .player-controls button:hover::after {
+            opacity: 1;
+            bottom: -40px;
+        }
+
+        .player-controls button.active {
+            color: #00ff88;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-bar input[type="range"] {
+            width: 100%;
+            height: 100%;
+            -webkit-appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .progress-bar input[type="range"]::-webkit-slider-runnable-track {
+            height: 10px;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff);
+            border-radius: 5px;
+        }
+
+        .progress-bar input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #00ff88;
+            border-radius: 50%;
+            margin-top: -3px;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .track-time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #ccffff;
+            margin-bottom: 1rem;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            justify-content: center;
+        }
+
+        .volume-control span {
+            font-size: 1rem;
+            color: #ccffff;
+        }
+
+        .volume-control input[type="range"] {
+            width: 100px;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            height: 8px;
+        }
+
+        .volume-control input[type="range"]::-webkit-slider-runnable-track {
+            height: 8px;
+            background: linear-gradient(90deg, #00f7ff, #ff00ff);
+            border-radius: 5px;
+        }
+
+        .volume-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #00ff88;
+            border-radius: 50%;
+            margin-top: -3px;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .track-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 0.5rem;
+            transition: max-height 0.3s ease;
+        }
+
+        .track-list.hidden {
+            max-height: 0;
+            padding: 0;
+        }
+
+        .track-list .track-item {
+            padding: 0.5rem;
+            font-size: 1rem;
+            color: #ccffff;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .track-list .track-item:hover {
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        .track-list .track-item.active {
+            color: #00ff88;
+            background: rgba(0, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            .subtitle { font-size: 1.2rem; }
+            .countdown { font-size: 1.6rem; }
+            .logo { width: 160px; }
+            .container { padding: 3rem 1.5rem; }
+            .faq h2 { font-size: 2rem; }
+            .popup h3, .welcome-popup h3 { font-size: 1.8rem; }
+            .popup .time, .welcome-popup .time { font-size: 2rem; }
+            .music-player { max-width: 100%; }
+            .music-player h3 { font-size: 1.5rem; }
+            .player-controls button { font-size: 1.5rem; }
+            .track-list { max-height: 150px; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2.8rem; }
+            .subtitle { font-size: 1rem; }
+            .countdown { font-size: 1.4rem; }
+            .logo { width: 140px; }
+            .container { padding: 2rem 1rem; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .faq h2 { font-size: 1.8rem; }
+            .popup h3, .welcome-popup h3 { font-size: 1.5rem; }
+            .popup .time, .welcome-popup .time { font-size: 1.8rem; }
+            .popup, .welcome-popup { padding: 1.5rem; }
+            .music-player { padding: 1rem; }
+            .player-controls { gap: 0.8rem; }
+            .player-controls button { font-size: 1.3rem; }
+            .volume-control input[type="range"] { width: 80px; }
+            .track-list { max-height: 120px; }
+        }
+    </style>
 </head>
 <body>
     <div class="scene" id="scene" aria-hidden="true"></div>
     <div class="sr-only">Fondo animado decorativo con partículas</div>
-    <nav class="accessibility-controls" aria-label="Controles de accesibilidad">
-        <button id="toggleTheme" aria-label="Cambiar tema (claro/oscuro)">Tema</button>
-        <button id="toggleContrast" aria-label="Activar modo de alto contraste">Contraste</button>
-        <button id="toggleLanguage" aria-label="Cambiar idioma (Español/Catalán)">Idioma</button>
-    </nav>
-    <main class="container" role="main">
+    <div class="container">
         <img src="https://tecnofgb.com/wp-content/uploads/2025/05/ChatGPT-Image-7-may-2025-15_43_29.png" alt="GarBotGPT Logo" class="logo" data-gsap="fade-up" loading="lazy">
         <h1 data-translate="title" data-gsap="fade-up" data-delay="0.2">GarBotGPT en Evolución</h1>
         <p class="subtitle" data-translate="subtitle" data-gsap="fade-up" data-delay="0.4">Estamos reconstruyendo el núcleo de nuestra IA para ofrecer una experiencia revolucionaria. ¡Prepárate para el futuro!</p>
@@ -29,18 +627,18 @@
             <div class="progress" id="progress"></div>
         </div>
         <p class="countdown" id="countdown" data-translate="countdown" data-gsap="fade-up" data-delay="1" role="status">Tiempo estimado: Calculando...</p>
-        <section class="feature-grid" data-gsap="fade-up" data-delay="1.2" aria-label="Características principales">
+        <div class="feature-grid" data-gsap="fade-up" data-delay="1.2">
             <div class="feature-item" data-translate="features.0">Procesamiento Ultrarrápido</div>
             <div class="feature-item" data-translate="features.1">Interacciones Multimodales</div>
             <div class="feature-item" data-translate="features.2">Precisión Avanzada</div>
             <div class="feature-item" data-translate="features.3">Diseño Futurista</div>
-        </section>
+        </div>
         <button class="notify-button" data-translate="notifyButton" data-gsap="fade-up" data-delay="1.4" aria-label="Activar notificación de lanzamiento">Notificarme</button>
         <button class="push-notify" data-translate="pushNotify" data-gsap="fade-up" data-delay="1.5" aria-label="Activar notificaciones push">Activar Notificaciones Push</button>
-        <section class="music-player" data-gsap="fade-up" data-delay="1.6" aria-label="Reproductor de música">
+        <div class="music-player" data-gsap="fade-up" data-delay="1.6">
             <h3 data-translate="musicPlayerTitle">Reproductor de Música</h3>
             <div class="track-title" id="trackTitle">Billie Jean - Michael Jackson</div>
-            <div class="player-controls" role="toolbar">
+            <div class="player-controls">
                 <button id="shuffleTrack" aria-label="Mezclar pistas" data-tooltip="Mezclar"><i class="fas fa-random"></i></button>
                 <button id="prevTrack" aria-label="Pista anterior" data-tooltip="Anterior"><i class="fas fa-backward"></i></button>
                 <button id="playPause" aria-label="Reproducir pista" data-tooltip="Reproducir/Pausar"><i class="fas fa-play"></i></button>
@@ -59,63 +657,63 @@
                 <span data-translate="volume">Volumen:</span>
                 <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5" aria-label="Control de volumen">
             </div>
-            <div class="track-list" id="trackList" role="listbox">
-                <div class="track-item active" data-index="0" role="option" aria-selected="true">Billie Jean - Michael Jackson</div>
-                <div class="track-item" data-index="1" role="option">You Rock My World - Michael Jackson</div>
-                <div class="track-item" data-index="2" role="option">Simon & Garfunkel - Kodachrome / Mabellene</div>
-                <div class="track-item" data-index="3" role="option">Bohemian Rhapsody - Queen</div>
-                <div class="track-item" data-index="4" role="option">Simon & Garfunkel - Mrs Robinson</div>
-                <div class="track-item" data-index="5" role="option">Hotel California - Eagles</div>
-                <div class="track-item" data-index="6" role="option">Imagine - John Lennon</div>
-                <div class="track-item" data-index="7" role="option">Creedence Clearwater Revival - Fortunate Son</div>
-                <div class="track-item" data-index="8" role="option">Dire Straits - Sultans Of Swing</div>
-                <div class="track-item" data-index="9" role="option">Viva La Vida - Coldplay</div>
-                <div class="track-item" data-index="10" role="option">Elvis Presley - If I Can Dream</div>
-                <div class="track-item" data-index="11" role="option">Aretha Franklin - Think</div>
-                <div class="track-item" data-index="12" role="option">Lose Yourself - Eminem</div>
+            <div class="track-list" id="trackList">
+                <div class="track-item active" data-index="0">Billie Jean - Michael Jackson</div>
+                <div class="track-item" data-index="1">You Rock My World - Michael Jackson</div>
+                <div class="track-item" data-index="2">Simon & Garfunkel - Kodachrome / Mabellene</div>
+                <div class="track-item" data-index="3">Bohemian Rhapsody - Queen</div>
+                <div class="track-item" data-index="4">Simon & Garfunkel - Mrs Robinson</div>
+                <div class="track-item" data-index="5">Hotel California - Eagles</div>
+                <div class="track-item" data-index="6">Imagine - John Lennon</div>
+                <div class="track-item" data-index="7">Creedence Clearwater Revival - Fortunate Son</div>
+                <div class="track-item" data-index="8">Dire Straits - Sultans Of Swing</div>
+                <div class="track-item" data-index="9">Viva La Vida - Coldplay</div>
+                <div class="track-item" data-index="10">Elvis Presley - If I Can Dream</div>
+                <div class="track-item" data-index="11">Aretha Franklin - Think</div>
+                <div class="track-item" data-index="12">Lose Yourself - Eminem</div>
             </div>
-        </section>
+        </div>
         <p class="contact" data-gsap="fade-up" data-delay="1.7" data-translate="contact">¿Dudas? Escríbenos a <a href="mailto:garbot@garbotgpt.com" data-translate="contactLink">soporte@garbotgpt.com</a></p>
-        <nav class="social-links" data-gsap="fade-up" data-delay="1.8" aria-label="Enlaces a redes sociales">
+        <div class="social-links" data-gsap="fade-up" data-delay="1.8">
             <a href="https://twitter.com" target="_blank" data-tooltip="Twitter" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
             <a href="https://www.linkedin.com/in/ferran-garola-bonilla-4b275a337/" target="_blank" data-tooltip="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
             <a href="https://github.com" target="_blank" data-tooltip="GitHub" aria-label="GitHub"><i class="fab fa-github"></i></a>
             <a href="https://discord.com" target="_blank" data-tooltip="Discord" aria-label="Discord"><i class="fab fa-discord"></i></a>
-        </nav>
-        <section class="faq" data-gsap="fade-up" data-delay="2" aria-label="Preguntas frecuentes">
+        </div>
+        <div class="faq" data-gsap="fade-up" data-delay="2">
             <h2 data-translate="faqTitle">Preguntas Frecuentes</h2>
-            <div class="faq-item" aria-expanded="false">
+            <div class="faq-item">
                 <h3 data-translate="faq.0.question">¿Qué es GarBotGPT?</h3>
-                <p data-translate="faq.0.answer">GarBotGPT es una IA avanzada en desarrollo para ofrecer interacciones multimodales y precisas.</p>
+                <p data-translate="faq.0.answer">GarBotGPT es una IA avanzada en desarrollo para ofrecer interacciones multimodales y precises.</p>
             </div>
-            <div class="faq-item" aria-expanded="false">
+            <div class="faq-item">
                 <h3 data-translate="faq.1.question">¿Cuándo estará disponible?</h3>
                 <p data-translate="faq.1.answer">Estamos trabajando en la evolución, ¡sigue el temporizador para saber más!</p>
             </div>
-        </section>
-    </main>
+        </div>
+    </div>
 
-    <div class="popup-overlay" id="popupOverlay" role="presentation"></div>
-    <dialog class="popup" id="popup" aria-labelledby="popupTitle">
+    <div class="popup-overlay" id="popupOverlay"></div>
+    <div class="popup" id="popup">
         <h3 id="popupTitle"></h3>
         <div class="time" id="popupTime"></div>
         <p class="message" id="popupMessage"></p>
         <div class="progress-container" id="popupProgressContainer">
             <div class="progress" id="popupProgress"></div>
         </div>
-        <button class="close-button" data-translate="closeButton" aria-label="Cerrar diálogo">Cerrar</button>
-    </dialog>
+        <button class="close-button" data-translate="closeButton">Cerrar</button>
+    </div>
 
-    <div class="welcome-popup-overlay" id="welcomePopupOverlay" role="presentation"></div>
-    <dialog class="welcome-popup" id="welcomePopup" aria-labelledby="welcomePopupTitle">
-        <h3 id="welcomePopupTitle" data-translate="welcomePopupTitle">¡Bienvenido!</h3>
-        <p class="message" data-translate="welcomePopupMessage">¡Hola! Soy GarBotGPT. Enhorabuena al Barça, el nuevo campeón de liga. Te dejo una canción que te gustará.</p>
-        <button class="close-button" data-translate="closeButton" aria-label="Cerrar diálogo">Cerrar</button>
-    </dialog>
+    <div class="welcome-popup-overlay" id="welcomePopupOverlay"></div>
+    <div class="welcome-popup" id="welcomePopup">
+        <h3 data-translate="welcomePopupTitle">¡Bienvenido!</h3>
+        <p class="message" data-translate="welcomePopupMessage">GarBotGPT: ¡Felicidades al Barça, flamante campeón de liga! 🏆 Aquí tienes una canción que te hará vibrar.</p>
+        <button class="close-button" data-translate="closeButton">Cerrar</button>
+    </div>
 
-    <audio id="musicPlayer" preload="metadata"></audio>
-    <audio id="clickSound" src="https://tecnofgb.com/click.mp3" preload="auto"></audio>
-    <audio id="completeSound" src="https://tecnofgb.com/complete.mp3" preload="auto"></audio>
+    <audio id="musicPlayer"></audio>
+    <audio id="clickSound" src="https://example.com/click.mp3"></audio>
+    <audio id="completeSound" src="https://example.com/complete.mp3"></audio>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-608TQ0BE6H"></script>
     <script>
@@ -124,10 +722,812 @@
         gtag('js', new Date());
         gtag('config', 'G-608TQ0BE6H');
     </script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" integrity="sha512-3ds3kP1gU8L3TKI17c9nV5rW5rK9MVGVI5D7Pw0DAWLzL62oYrLNAo+44bQtWjJ2W6nSGl3xD4iQN+UAm53uReg==" crossorigin="anonymous"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf+eoHOKxZ71NPbElQ8E97XX6I6yB0hKpEFi4tS/bQ==></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <script defer src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        // Traducciones para español y catalán
+        const translations = {
+            es: {
+                title: "GarBotGPT en Evolución",
+                subtitle: "Estamos reconstruyendo el núcleo de nuestra IA para ofrecer una experiencia revolucionaria. ¡Prepárate para el futuro!",
+                status: [
+                    "Recalibrando sistemas...",
+                    "Optimizando algoritmos...",
+                    "Entrenando redes neuronales...",
+                    "Sincronizando clústeres...",
+                    "Actualizando protocolos...",
+                    "Reforzando seguridad...",
+                    "Integrando módulos..."
+                ],
+                countdown: "Tiempo estimado: ",
+                features: [
+                    "Procesamiento Ultrarrápido",
+                    "Interacciones Multimodales",
+                    "Precisión Avanzada",
+                    "Diseño Futurista"
+                ],
+                notifyButton: "Notificarme",
+                pushNotify: "Activar Notificaciones Push",
+                contact: "¿Dudas? Escríbenos a ",
+                contactLink: "soporte@garbotgpt.com",
+                faqTitle: "Preguntas Frecuentes",
+                faq: [
+                    { question: "¿Qué es GarBotGPT?", answer: "GarBotGPT es una IA avanzada en desarrollo para ofrecer interacciones multimodales y precisas." },
+                    { question: "¿Cuándo estará disponible?", answer: "Estamos trabajando en la evolución, ¡sigue el temporizador para saber más!" }
+                ],
+                countdownPopupTitle: "Estado de la Evolución",
+                countdownPopupMessages: [
+                    "¡La revolución está cerca!",
+                    "Cada segundo nos acerca a la IA del futuro.",
+                    "GarBotGPT: Preparándose para sorprenderte."
+                ],
+                notifyPopupTitle: "Notificaciones",
+                notifyPopupMessages: {
+                    granted: "¡Notificaciones activadas! Te avisaremos al lanzamiento.",
+                    denied: "Permiso para notificaciones denegado.",
+                    error: "No se pudo activar las notificaciones. Intenta de nuevo.",
+                    unsupported: "Las notificaciones no son compatibles con este navegador."
+                },
+                closeButton: "Cerrar",
+                musicPlayerTitle: "Reproductor de Música",
+                playing: "Reproducir",
+                paused: "Pausar",
+                volume: "Volumen",
+                shuffle: "Mezclar",
+                repeatOff: "Repetir desactivado",
+                repeatOne: "Repetir una pista",
+                repeatAll: "Repetir todas",
+                showTrackList: "Mostrar lista de pistas",
+                hideTrackList: "Ocultar lista de pistas",
+                welcomePopupTitle: "¡Bienvenido!",
+                welcomePopupMessage: "GarBotGPT: ¡Felicidades al Barça, flamante campeón de liga! 🏆 Aquí tienes una canción que te hará vibrar."
+            },
+            ca: {
+                title: "GarBotGPT en Evolució",
+                subtitle: "Estem reconstruint el nucli de la nostra IA per oferir una experiència revolucionària. Prepara't per al futur!",
+                status: [
+                    "Recalibrant sistemes...",
+                    "Optimitzant algoritmes...",
+                    "Entrenant xarxes neuronals...",
+                    "Sincronitzant clústers...",
+                    "Actualitzant protocols...",
+                    "Reforçant la seguretat...",
+                    "Integrant mòduls..."
+                ],
+                countdown: "Temps estimat: ",
+                features: [
+                    "Processament Ultraràpid",
+                    "Interaccions Multimodals",
+                    "Precisió Avançada",
+                    "Disseny Futurista"
+                ],
+                notifyButton: "Notifica'm",
+                pushNotify: "Activar Notificacions Push",
+                contact: "Dubtes? Escriu-nos a ",
+                contactLink: "suport@garbotgpt.com",
+                faqTitle: "Preguntes Freqüents",
+                faq: [
+                    { question: "Què és GarBotGPT?", answer: "GarBotGPT és una IA avançada en desenvolupament per oferir interaccions multimodals i precises." },
+                    { question: "Quan estarà disponible?", answer: "Estem treballant en l'evolució, segueix el temporitzador per saber-ne més!" }
+                ],
+                countdownPopupTitle: "Estat de l'Evolució",
+                countdownPopupMessages: [
+                    "La revolució és a prop!",
+                    "Cada segon ens apropa a la IA del futur.",
+                    "GarBotGPT: Preparant-se per sorprendre't."
+                ],
+                notifyPopupTitle: "Notificacions",
+                notifyPopupMessages: {
+                    granted: "Notificacions activades! T'avisarem al llançament.",
+                    denied: "Permís per a notificacions denegat.",
+                    error: "No s'ha pogut activar les notificacions. Torna a intentar-ho.",
+                    unsupported: "Les notificacions no són compatibles amb aquest navegador."
+                },
+                closeButton: "Tancar",
+                musicPlayerTitle: "Reproductor de Música",
+                playing: "Reproduir",
+                paused: "Pausa",
+                volume: "Volum",
+                shuffle: "Barrejar",
+                repeatOff: "Repetir desactivat",
+                repeatOne: "Repetir una pista",
+                repeatAll: "Repetir totes",
+                showTrackList: "Mostrar llista de pistes",
+                hideTrackList: "Amagar llista de pistes",
+                welcomePopupTitle: "Benvingut!",
+                welcomePopupMessage: "GarBotGPT: Felicitats al Barça, flamant campió de lliga! 🏆 Aquí tens una cançó que et farà vibrar!"
+            }
+        };
+
+        // Lista de pistas de música
+        const tracks = [
+            { title: "Billie Jean - Michael Jackson", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Michael-Jackson-Billie-Jean-Official-Video.mp3" },
+            { title: "You Rock My World - Michael Jackson", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Michael-Jackson-–-You-Rock-My-World-Lyrics_Sub-espanol.mp3" },
+            { title: "Simon & Garfunkel - Kodachrome / Mabellene", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Simon-Garfunkel-Kodachrome-Mabellene-from-The-Concert-in-Central-Park.mp3" },
+            { title: "Bohemian Rhapsody - Queen", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Queen-Bohemian-Rhapsody-Official-Video-Remastered.mp3" },
+            { title: "Simon & Garfunkel - Mrs Robinson", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Simon-Garfunkel-Mrs-Robinson-Lyrics.mp3" },
+            { title: "Hotel California - Eagles", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Eagles-Hotel-California-Official-Audio.mp3" },
+            { title: "Imagine - John Lennon", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Imagine-John-Lennon-The-Plastic-Ono-Band-w-The-Flux-Fiddlers-Ultimate-Mix-2018-4K-REMASTER.mp3" },
+            { title: "Creedence Clearwater Revival - Fortunate Son", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Creedence-Clearwater-Revival-Fortunate-Son-Official-Music-Video.mp3" },
+            { title: "Dire Straits - Sultans Of Swing", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Dire-Straits-Sultans-Of-Swing-Official-Music-Video.mp3" },
+            { title: "Viva La Vida - Coldplay", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Coldplay-Viva-la-Vida-Lyrics.mp3" },
+            { title: "Elvis Presley - If I Can Dream", src: "https://tecnofgb.com/wp-content/uploads/2025/05/La-cancion-de-protesta-de-ELVIS-If-I-Can-Dream-Elvis-Presley-Subtitulada-Espanol-Lyrics.mp3" },
+            { title: "Aretha Franklin - Think", src: "https://tecnofgb.com/wp-content/uploads/2025/05/The-Blues-Brothers-Aretha-Franklin-Think-Official-Audio.mp3" },
+            { title: "Lose Yourself - Eminem", src: "https://tecnofgb.com/wp-content/uploads/2025/05/Eminem-Lose-Yourself-Lyrics.mp3" }
+        ];
+
+        // DOM Elements for Music Player
+        const musicPlayer = document.getElementById('musicPlayer');
+        const playPauseButton = document.getElementById('playPause');
+        const prevTrackButton = document.getElementById('prevTrack');
+        const nextTrackButton = document.getElementById('nextTrack');
+        const shuffleButton = document.getElementById('shuffleTrack');
+        const repeatButton = document.getElementById('repeatTrack');
+        const toggleTrackListButton = document.getElementById('toggleTrackList');
+        const trackProgress = document.getElementById('trackProgress');
+        const volumeControl = document.getElementById('volumeControl');
+        const trackTitle = document.getElementById('trackTitle');
+        const trackList = document.getElementById('trackList');
+        const currentTimeDisplay = document.getElementById('currentTime');
+        const totalDurationDisplay = document.getElementById('totalDuration');
+
+        // Other DOM Elements
+        const statusElement = document.querySelector('.status');
+        const countdownElement = document.querySelector('#countdown');
+        const clickSound = document.getElementById('clickSound');
+        const completeSound = document.getElementById('completeSound');
+        const popup = document.getElementById('popup');
+        const popupOverlay = document.getElementById('popupOverlay');
+        const popupTitle = document.getElementById('popupTitle');
+        const popupTime = document.getElementById('popupTime');
+        const popupMessage = document.getElementById('popupMessage');
+        const popupProgressContainer = document.getElementById('popupProgressContainer');
+        const popupProgress = document.getElementById('popupProgress');
+        const popupCloseButton = popup.querySelector('.close-button');
+
+        // Welcome Popup Elements
+        const welcomePopup = document.getElementById('welcomePopup');
+        const welcomePopupOverlay = document.getElementById('welcomePopupOverlay');
+        const welcomePopupCloseButton = welcomePopup.querySelector('.close-button');
+
+        // Music Player State
+        let currentLang = 'es';
+        let currentTrackIndex = 0;
+        let isShuffling = false;
+        let repeatMode = 'off'; // 'off', 'one', 'all'
+        let isTrackListVisible = true;
+        let trackHistory = [];
+
+        // Utility Functions
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            seconds = Math.floor(seconds % 60);
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function getTranslation(lang, key) {
+            const keys = key.split('.');
+            let value = translations[lang];
+            for (const k of keys) {
+                value = value[k];
+            }
+            return value;
+        }
+
+        function updateLanguage(lang) {
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (key === 'status') return;
+                if (key === 'countdown') {
+                    const currentText = element.textContent;
+                    const timePart = currentText.match(/\d{2}:\d{2}:\d{2}/) || ['Calculando...'];
+                    element.textContent = `${getTranslation(lang, key)}${timePart[0]}`;
+                } else {
+                    element.textContent = getTranslation(lang, key);
+                }
+            });
+            document.querySelector('.logo').setAttribute('alt', `GarBotGPT Logo (${lang === 'es' ? 'Español' : 'Català'})`);
+            updatePlayerLabels();
+        }
+
+        function updatePlayerLabels() {
+            const isPlaying = !musicPlayer.paused;
+            playPauseButton.setAttribute('aria-label', getTranslation(currentLang, isPlaying ? 'paused' : 'playing'));
+            playPauseButton.setAttribute('data-tooltip', getTranslation(currentLang, isPlaying ? 'paused' : 'playing'));
+            shuffleButton.setAttribute('data-tooltip', getTranslation(currentLang, 'shuffle'));
+            repeatButton.setAttribute('aria-label', getTranslation(currentLang, `repeat${repeatMode.charAt(0).toUpperCase() + repeatMode.slice(1)}`));
+            repeatButton.setAttribute('data-tooltip', getTranslation(currentLang, `repeat${repeatMode.charAt(0).toUpperCase() + repeatMode.slice(1)}`));
+            toggleTrackListButton.setAttribute('aria-label', getTranslation(currentLang, isTrackListVisible ? 'hideTrackList' : 'showTrackList'));
+            toggleTrackListButton.setAttribute('data-tooltip', getTranslation(currentLang, isTrackListVisible ? 'hideTrackList' : 'showTrackList'));
+        }
+
+        // Popup Functions
+        function showPopup(title, message, time = null, progressPercent = null) {
+            popupTitle.textContent = title;
+            popupMessage.textContent = message;
+            popupTime.style.display = time ? 'block' : 'none';
+            popupProgressContainer.style.display = progressPercent !== null ? 'block' : 'none';
+            if (time) popupTime.textContent = time;
+            if (progressPercent !== null) popupProgress.style.width = `${progressPercent}%`;
+
+            popup.classList.add('show');
+            popupOverlay.classList.add('show');
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function hidePopup() {
+            popup.classList.remove('show');
+            popupOverlay.classList.remove('show');
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function showWelcomePopup() {
+            welcomePopup.classList.add('show');
+            welcomePopupOverlay.classList.add('show');
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            gtag('event', 'welcome_popup_shown', { event_category: 'Popup', event_label: 'Welcome Popup' });
+        }
+
+        function hideWelcomePopup() {
+            welcomePopup.classList.remove('show');
+            welcomePopupOverlay.classList.remove('show');
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+            playVivaLaVida();
+            gtag('event', 'welcome_popup_closed', { event_category: 'Popup', event_label: 'Welcome Popup Closed' });
+        }
+
+        // Music Player Functions
+        function loadTrack(index) {
+            if (index < 0 || index >= tracks.length) return;
+            musicPlayer.src = tracks[index].src;
+            trackTitle.textContent = tracks[index].title;
+            trackList.querySelectorAll('.track-item').forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+            currentTrackIndex = index;
+            musicPlayer.play().then(() => {
+                playPauseButton.querySelector('i').classList.remove('fa-play');
+                playPauseButton.querySelector('i').classList.add('fa-pause');
+                updatePlayerLabels();
+                gtag('event', 'music_play', { event_category: 'Music', event_label: tracks[index].title });
+            }).catch(err => {
+                console.error('Error al reproducir pista:', err);
+                showPopup('Error', 'No se pudo reproducir la pista. Verifica la URL del audio.');
+            });
+            updateTrackDuration();
+        }
+
+        function playVivaLaVida() {
+            const vivaLaVidaIndex = tracks.findIndex(track => track.title === "Viva La Vida - Coldplay");
+            if (vivaLaVidaIndex !== -1) {
+                currentTrackIndex = vivaLaVidaIndex;
+                trackHistory.push(currentTrackIndex);
+                loadTrack(currentTrackIndex);
+            }
+        }
+
+        function playPause() {
+            if (musicPlayer.paused) {
+                musicPlayer.play().then(() => {
+                    playPauseButton.querySelector('i').classList.remove('fa-play');
+                    playPauseButton.querySelector('i').classList.add('fa-pause');
+                    updatePlayerLabels();
+                    gtag('event', 'music_play', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
+                }).catch(err => console.error('Error al reproducir pista:', err));
+            } else {
+                musicPlayer.pause();
+                playPauseButton.querySelector('i').classList.remove('fa-pause');
+                playPauseButton.querySelector('i').classList.add('fa-play');
+                updatePlayerLabels();
+                gtag('event', 'music_pause', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
+            }
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function previousTrack() {
+            let nextIndex;
+            if (isShuffling && trackHistory.length > 1) {
+                trackHistory.pop();
+                nextIndex = trackHistory[trackHistory.length - 1];
+            } else {
+                nextIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+            }
+            loadTrack(nextIndex);
+            gtag('event', 'music_change_track', { event_category: 'Music', event_label: tracks[nextIndex].title });
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function nextTrack() {
+            let nextIndex;
+            if (isShuffling) {
+                nextIndex = Math.floor(Math.random() * tracks.length);
+                while (nextIndex === currentTrackIndex && tracks.length > 1) {
+                    nextIndex = Math.floor(Math.random() * tracks.length);
+                }
+                trackHistory.push(currentTrackIndex);
+            } else {
+                nextIndex = (currentTrackIndex + 1) % tracks.length;
+            }
+            loadTrack(nextIndex);
+            gtag('event', 'music_change_track', { event_category: 'Music', event_label: tracks[nextIndex].title });
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function toggleShuffle() {
+            isShuffling = !isShuffling;
+            shuffleButton.classList.toggle('active', isShuffling);
+            trackHistory = [currentTrackIndex];
+            updatePlayerLabels();
+            gtag('event', 'music_shuffle', { event_category: 'Music', event_label: isShuffling ? 'Enabled' : 'Disabled' });
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function toggleRepeat() {
+            if (repeatMode === 'off') {
+                repeatMode = 'all';
+            } else if (repeatMode === 'all') {
+                repeatMode = 'one';
+            } else {
+                repeatMode = 'off';
+            }
+            repeatButton.classList.toggle('active', repeatMode !== 'off');
+            updatePlayerLabels();
+            gtag('event', 'music_repeat', { event_category: 'Music', event_label: repeatMode });
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function toggleTrackList() {
+            isTrackListVisible = !isTrackListVisible;
+            trackList.classList.toggle('hidden', !isTrackListVisible);
+            toggleTrackListButton.querySelector('i').classList.toggle('fa-list', isTrackListVisible);
+            toggleTrackListButton.querySelector('i').classList.toggle('fa-list-alt', !isTrackListVisible);
+            updatePlayerLabels();
+            gtag('event', 'music_toggle_tracklist', { event_category: 'Music', event_label: isTrackListVisible ? 'Show' : 'Hide' });
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+            clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+        }
+
+        function updateProgress() {
+            if (musicPlayer.duration) {
+                const progressPercent = (musicPlayer.currentTime / musicPlayer.duration) * 100;
+                trackProgress.value = progressPercent;
+                currentTimeDisplay.textContent = formatTime(musicPlayer.currentTime);
+            }
+        }
+
+        function setProgress() {
+            if (musicPlayer.duration) {
+                musicPlayer.currentTime = (trackProgress.value / 100) * musicPlayer.duration;
+                gtag('event', 'music_seek', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
+            }
+        }
+
+        function updateTrackDuration() {
+            musicPlayer.onloadedmetadata = () => {
+                totalDurationDisplay.textContent = formatTime(musicPlayer.duration);
+            };
+        }
+
+        function setVolume() {
+            musicPlayer.volume = volumeControl.value;
+            gtag('event', 'music_volume', { event_category: 'Music', event_label: `Volume ${volumeControl.value}` });
+        }
+
+        function handleTrackEnd() {
+            if (repeatMode === 'one') {
+                loadTrack(currentTrackIndex);
+            } else if (repeatMode === 'all' || tracks.length === 1) {
+                nextTrack();
+            } else {
+                if (currentTrackIndex < tracks.length - 1) {
+                    nextTrack();
+                } else {
+                    musicPlayer.pause();
+                    playPauseButton.querySelector('i').classList.remove('fa-pause');
+                    playPauseButton.querySelector('i').classList.add('fa-play');
+                    updatePlayerLabels();
+                }
+            }
+        }
+
+        // Music Player Event Listeners
+        playPauseButton.addEventListener('click', playPause);
+        prevTrackButton.addEventListener('click', previousTrack);
+        nextTrackButton.addEventListener('click', nextTrack);
+        shuffleButton.addEventListener('click', toggleShuffle);
+        repeatButton.addEventListener('click', toggleRepeat);
+        toggleTrackListButton.addEventListener('click', toggleTrackList);
+        trackProgress.addEventListener('input', setProgress);
+        volumeControl.addEventListener('input', setVolume);
+
+        trackList.querySelectorAll('.track-item').forEach((item, index) => {
+            item.addEventListener('click', () => {
+                currentTrackIndex = index;
+                trackHistory.push(currentTrackIndex);
+                loadTrack(currentTrackIndex);
+                gtag('event', 'music_select_track', { event_category: 'Music', event_label: tracks[currentTrackIndex].title });
+                spawnParticles(window.innerWidth / 2, window.innerHeight / 2);
+                clickSound.play().catch(() => console.log('Error al reproducir sonido de clic'));
+            });
+        });
+
+        musicPlayer.addEventListener('timeupdate', updateProgress);
+        musicPlayer.addEventListener('ended', handleTrackEnd);
+        musicPlayer.addEventListener('error', () => {
+            showPopup('Error', 'No se pudo cargar la pista. Verifica la URL del audio.');
+        });
+
+        // Popup Event Listeners
+        popupCloseButton.addEventListener('click', hidePopup);
+        popupOverlay.addEventListener('click', hidePopup);
+        welcomePopupCloseButton.addEventListener('click', hideWelcomePopup);
+        welcomePopupOverlay.addEventListener('click', hideWelcomePopup);
+
+        // Initialize Music Player
+        loadTrack(currentTrackIndex);
+
+        // Initialize Welcome Popup
+        window.addEventListener('load', () => {
+            showWelcomePopup();
+        });
+
+        // Initialize Lenis for smooth scrolling
+        const lenis = new Lenis({
+            duration: 1.5,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smooth: true,
+            smoothTouch: true,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+
+        requestAnimationFrame(raf);
+
+        // GSAP Animations
+        document.querySelectorAll('[data-gsap="fade-up"]').forEach((element) => {
+            gsap.fromTo(
+                element,
+                { opacity: 0, y: 60 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.2,
+                    ease: 'power4.out',
+                    delay: parseFloat(element.dataset.delay || 0),
+                    scrollTrigger: {
+                        trigger: element,
+                        start: 'top 85%',
+                    },
+                }
+            );
+        });
+
+        // Progress Bar Animation
+        gsap.to('#progress', {
+            width: '100%',
+            duration: 4,
+            ease: 'power2.inOut',
+            repeat: -1,
+            yoyo: true,
+            onUpdate: function () {
+                const progress = this.progress();
+                gsap.set('#progress', { backgroundPosition: `${progress * 300}% 0` });
+            },
+        });
+
+        // Dynamic Status Messages
+        let currentMessageIndex = 0;
+
+        function updateStatus() {
+            gsap.to(statusElement, {
+                opacity: 0,
+                y: 30,
+                duration: 0.6,
+                ease: 'power2.in',
+                onComplete: () => {
+                    statusElement.textContent = translations[currentLang].status[currentMessageIndex];
+                    gsap.to(statusElement, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.6,
+                        ease: 'power2.out',
+                    });
+                    currentMessageIndex = (currentMessageIndex + 1) % translations[currentLang].status.length;
+                },
+            });
+        }
+
+        // Función para alternar idioma
+        function toggleLanguage() {
+            currentLang = currentLang === 'es' ? 'ca' : 'es';
+            updateLanguage(currentLang);
+            updateStatus();
+        }
+
+        // Actualizar idioma y estado inicialmente
+        updateLanguage(currentLang);
+        updateStatus();
+
+        // Alternar idioma cada 6 segundos
+        setInterval(toggleLanguage, 6000);
+
+        // Countdown Timer
+        let endTime;
+        const totalDuration = 22 * 60 * 1000; // 20 minutos en milisegundos
+
+        if (localStorage.getItem('countdownEndTime')) {
+            endTime = new Date(parseInt(localStorage.getItem('countdownEndTime')));
+        } else {
+            endTime = new Date(Date.now() + totalDuration);
+            localStorage.setItem('countdownEndTime', endTime.getTime());
+        }
+
+        function updateCountdown() {
+            const now = new Date();
+            const timeLeft = endTime - now;
+            if (timeLeft <= 0) {
+                countdownElement.textContent = currentLang === 'es' ? '¡Evolución Completada!' : 'Evolució Completada!';
+                gsap.to(countdownElement, {
+                    scale: 1.1,
+                    duration: 0.3,
+                    yoyo: true,
+                    repeat: 3,
+                    onStart: () => {
+                        completeSound.play().catch(() => console.log('Error al reproducir sonido de completado'));
+                        gtag('event', 'timer_completed', { event_category: 'Timer', event_label: 'Evolution Completed' });
+                    },
+                });
+                localStorage.removeItem('countdownEndTime');
+                return;
+            }
+
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            countdownElement.textContent = `${getTranslation(currentLang, 'countdown')}${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Countdown Popup
+        countdownElement.addEventListener('click', () => {
+            const now = new Date();
+            const timeLeft = endTime - now;
+            if (timeLeft <= 0) return;
+
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            const timeStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            const messages = getTranslation(currentLang, 'countdownPopupMessages');
+            const message = messages[Math.floor(Math.random() * messages.length)];
+            const progressPercent = ((totalDuration - timeLeft) / totalDuration) * 100;
+
+            showPopup(
+                getTranslation(currentLang, 'countdownPopupTitle'),
+                message,
+                timeStr,
+                progressPercent
+            );
+            gtag('event', 'timer_clicked', { event_category: 'Timer', event_label: 'Time Remaining' });
+        });
+
+        // Notify Button
+        document.querySelector('.notify-button').addEventListener('click', async () => {
+            const result = await requestPushPermission('notify');
+            const messages = getTranslation(currentLang, 'notifyPopupMessages');
+            showPopup(
+                getTranslation(currentLang, 'notifyPopupTitle'),
+                messages[result]
+            );
+            gtag('event', 'notify_clicked', { event_category: 'Button', event_label: 'Notify Me' });
+        });
+
+        // Push Notify Button
+        document.querySelector('.push-notify').addEventListener('click', async () => {
+            const result = await requestPushPermission('push');
+            const messages = getTranslation(currentLang, 'notifyPopupMessages');
+            showPopup(
+                getTranslation(currentLang, 'notifyPopupTitle'),
+                messages[result]
+            );
+            gtag('event', 'push_clicked', { event_category: 'Button', event_label: 'Push Notify' });
+        });
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // Función para generar partículas al hacer clic
+        function spawnParticles(x, y) {
+            const particleDiv = document.createElement('div');
+            particleDiv.id = 'click-particles-' + Date.now();
+            particleDiv.style.position = 'absolute';
+            particleDiv.style.left = `${x}px`;
+            particleDiv.style.top = `${y}px`;
+            particleDiv.style.pointerEvents = 'none';
+            particleDiv.style.zIndex = '1000';
+            document.body.appendChild(particleDiv);
+
+            particlesJS(particleDiv.id, {
+                particles: {
+                    number: { value: 20, density: { enable: true, value_area: 800 } },
+                    color: { value: ['#00f7ff', '#ff00ff', '#00ff88'] },
+                    shape: { type: 'circle' },
+                    opacity: { value: 0.8, random: true },
+                    size: { value: 5, random: true },
+                    line_linked: { enable: false },
+                    move: {
+                        enable: true,
+                        speed: 6,
+                        direction: 'none',
+                        random: true,
+                        straight: false,
+                        out_mode: 'out',
+                        bounce: false,
+                        attract: { enable: false }
+                    }
+                },
+                interactivity: { detect_on: 'canvas', events: { onhover: { enable: false }, onclick: { enable: false } } },
+                retina_detect: true
+            });
+
+            setTimeout(() => particleDiv.remove(), 1000);
+        }
+
+        // Push Notification Permission
+        async function requestPushPermission(type) {
+            if (!('Notification' in window)) {
+                gtag('event', `${type}_permission_unsupported`, { event_category: 'Notifications', event_label: 'Push Unsupported' });
+                return 'unsupported';
+            }
+
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    gtag('event', `${type}_permission_granted`, { event_category: 'Notifications', event_label: 'Push Enabled' });
+                    return 'granted';
+                } else {
+                    gtag('event', `${type}_permission_denied`, { event_category: 'Notifications', event_label: 'Push Denied' });
+                    return 'denied';
+                }
+            } catch (error) {
+                console.error('Error al solicitar permiso de notificaciones:', error);
+                gtag('event', `${type}_permission_error`, { event_category: 'Notifications', event_label: 'Push Error' });
+                return 'error';
+            }
+        }
+
+        // Three.js Scene
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('scene').appendChild(renderer.domElement);
+
+        const particles = new THREE.Group();
+        const particleCount = 300;
+        const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
+
+        for (let i = 0; i < particleCount; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 100;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
+
+            const color = new THREE.Color().setHSL(Math.random(), 0.7, 0.7);
+            colors[i * 3] = color.r;
+            colors[i * 3 + 1] = color.g;
+            colors[i * 3 + 2] = color.b;
+        }
+
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        const material = new THREE.PointsMaterial({
+            size: 0.5,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8,
+        });
+
+        const particleSystem = new THREE.Points(geometry, material);
+        particles.add(particleSystem);
+        scene.add(particles);
+
+        camera.position.z = 50;
+
+        const lineGeometry = new THREE.BufferGeometry();
+        const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00f7ff, transparent: true, opacity: 0.3 });
+        const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+        scene.add(lines);
+
+        function updateLines() {
+            const positions = particleSystem.geometry.attributes.position.array;
+            const linePositions = [];
+
+            for (let i = 0; i < particleCount; i++) {
+                for (let j = i + 1; j < particleCount; j++) {
+                    const dx = positions[i * 3] - positions[j * 3];
+                    const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                    const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                    const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+                    if (distance < 20) {
+                        linePositions.push(
+                            positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2],
+                            positions[j * 3], positions[j * 3 + 1], positions[j * 3 + 2]
+                        );
+                    }
+                }
+            }
+
+            lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particles.rotation.y += 0.001;
+            particles.rotation.x += 0.0005;
+
+            const positions = particleSystem.geometry.attributes.position.array;
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3 + 1] += Math.sin(Date.now() * 0.001 + i) * 0.01;
+                positions[i * 3 + 2] += Math.cos(Date.now() * 0.001 + i) * 0.01;
+            }
+            particleSystem.geometry.attributes.position.needsUpdate = true;
+
+            updateLines();
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Mouse Interaction
+        const mouse = new THREE.Vector2();
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            gsap.to(particles.rotation, {
+                x: mouse.y * 0.1,
+                y: mouse.x * 0.1,
+                duration: 1,
+                ease: 'power2.out',
+            });
+        });
+
+        // Touch Interaction
+        window.addEventListener('touchmove', (event) => {
+            if (event.touches.length > 0) {
+                mouse.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
+
+                gsap.to(particles.rotation, {
+                    x: mouse.y * 0.1,
+                    y: mouse.x * 0.1,
+                    duration: 1,
+                    ease: 'power2.out',
+                });
+            }
+        });
+    </script>
 </body>
 </html>
