@@ -477,7 +477,7 @@
             height: 10px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 5px;
-            margin-bottom: 0.5rem;
+ snart-bottom: 0.5rem;
             overflow: hidden;
         }
 
@@ -684,7 +684,7 @@
             <h2 data-translate="faqTitle">Preguntas Frecuentes</h2>
             <div class="faq-item">
                 <h3 data-translate="faq.0.question">¿Qué es GarBotGPT?</h3>
-                <p data-translate="faq.0.answer">GarBotGPT es una IA avanzada en desarrollo para ofrecer interacciones multimodales y precises.</p>
+                <p data-translate="faq.0.answer">GarBotGPT es una IA avanzada en desarrollo para ofrecer interacciones multimodales y precisas.</p>
             </div>
             <div class="faq-item">
                 <h3 data-translate="faq.1.question">¿Cuándo estará disponible?</h3>
@@ -997,7 +997,6 @@
                 gtag('event', 'music_play', { event_category: 'Music', event_label: tracks[index].title });
             }).catch(err => {
                 console.error('Error al reproducir pista:', err);
-                showPopup('Error', 'No se pudo reproducir la pista. Verifica la URL del audio.');
             });
             updateTrackDuration();
         }
@@ -1164,7 +1163,7 @@
         musicPlayer.addEventListener('timeupdate', updateProgress);
         musicPlayer.addEventListener('ended', handleTrackEnd);
         musicPlayer.addEventListener('error', () => {
-            showPopup('Error', 'No se pudo cargar la pista. Verifica la URL del audio.');
+            console.error('Error al cargar la pista.');
         });
 
         // Popup Event Listeners
