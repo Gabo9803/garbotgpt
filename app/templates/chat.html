@@ -6,7 +6,7 @@
     <title data-i18n="title">Chatear con GarBotGPT</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link href="https Angebot anpassen://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #212121;
@@ -20,8 +20,6 @@
             --button-hover-bg: #039BE5;
             --accent-color: #0288D1;
             --modal-bg: rgba(0, 0, 0, 0.85);
-            --menu-button-bg: rgba(255, 255, 255, 0.1);
-            --menu-button-hover: rgba(2, 136, 209, 0.2);
         }
         [data-theme="light"] {
             --bg-color: #F5F5F5;
@@ -35,8 +33,6 @@
             --button-hover-bg: #039BE5;
             --accent-color: #0288D1;
             --modal-bg: rgba(255, 255, 255, 0.95);
-            --menu-button-bg: rgba(0, 0, 0, 0.05);
-            --menu-button-hover: rgba(2, 136, 209, 0.1);
         }
         * {
             margin: 0;
@@ -78,14 +74,6 @@
             padding: 30px 40px;
             overflow-y: auto;
             scroll-behavior: smooth;
-            background: linear-gradient(135deg, var(--bg-color) 0%, rgba(2, 136, 209, 0.1) 100%);
-            animation: gradientShift 15s ease infinite;
-            background-size: 200% 200%;
-        }
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
         @media (max-width: 768px) {
             .chat-body {
@@ -104,22 +92,16 @@
             overflow: hidden;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
             transition: box-shadow 0.2s ease;
-            position: relative;
         }
-        .input-group:focus-within {
-            box-shadow: 0 0 10px var(--accent-color);
+        .input-group:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
         .form-control {
             background: transparent;
             border: none;
             color: var(--text-color);
             font-size: 1rem;
-            padding: 10px 15px 10px 40px;
-            transition: padding 0.3s ease;
-        }
-        .form-control:not(:placeholder-shown) {
-            background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%230288D1" viewBox="0 0 16 16"%3E%3Cpath d="M2.7 1h10.6c1 0 1.8.8 1.8 1.8v8.4c0 1-.8 1.8-1.8 1.8H2.7c-1 0-1.8-.8-1.8-1.8V2.8C.9 1.8 1.7 1 2.7 1zm.9 1.8v8.4h9.8V2.8H3.6zM2 12.5h12v1H2v-1z"/%3E%3C/svg%3E') no-repeat 10px center;
-            background-size: 16px;
+            padding: 10px 15px;
         }
         .form-control:focus {
             box-shadow: none;
@@ -135,41 +117,14 @@
             transition: all 0.2s ease;
             font-weight: 500;
             font-size: 0.85rem;
-            position: relative;
-            overflow: hidden;
         }
         .btn-grok:hover {
             background: var(--button-hover-bg);
             box-shadow: 0 3px 8px rgba(2, 136, 209, 0.4);
             transform: translateY(-1px);
         }
-        .btn-grok::after {
-            content: '';
-            position: absolute;
-            background: rgba(255, 255, 255, 0.3);
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            transform: scale(0);
-            top: 50%;
-            left: 50%;
-            pointer-events: none;
-            transition: transform 0.3s ease;
-        }
-        .btn-grok:active::after {
-            transform: scale(2);
-            transition: transform 0.5s ease;
-        }
         #voice-btn.recording {
             background: #F57C00;
-        }
-        #voice-btn.recording i {
-            animation: pulse 1s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
         }
         #voice-btn[disabled] {
             background: #555;
@@ -187,24 +142,25 @@
             align-items: flex-start;
             gap: 12px;
             padding: 12px 16px;
-            border-radius: 12px;
+            border-radius: 10px;
             max-width: 85%;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         }
         .user-message {
-            background: linear-gradient(135deg, var(--message-user-bg), var(--button-hover-bg));
+            background: var(--message-user-bg);
             margin-left: auto;
-            border-top-right-radius: 4px;
-            border-bottom-left-radius: 12px;
+            border-top-right-radius: 3px;
+            border-bottom-left-radius: 10px;
         }
         .ai-message {
-            background: linear-gradient(135deg, var(--message-ai-bg), rgba(245, 124, 0, 0.2));
+            background: var(--message-ai-bg);
+            backdrop-filter: blur(8px);
             margin-right: auto;
-            border-top-left-radius: 4px;
-            border-bottom-right-radius: 12px;
+            border-top-left-radius: 3px;
+            border-bottom-right-radius: 10px;
         }
         .message:hover {
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
         }
         .avatar {
             width: 36px;
@@ -323,36 +279,11 @@
             padding: 15px;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .suggestion-card:hover {
-            transform: perspective(1000px) rotateY(5deg);
+            transform: translateY(-3px);
             box-shadow: 0 4px 12px rgba(2, 136, 209, 0.3);
-        }
-        .suggestion-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 40px;
-            height: 40px;
-            opacity: 0.2;
-            background-size: contain;
-            background-repeat: no-repeat;
-        }
-        .suggestion-card.ai::before {
-            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%230288D1" viewBox="0 0 24 24"%3E%3Cpath d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.22-1.79L9 14v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/%3E%3C/svg%3E');
-        }
-        .suggestion-card.story::before {
-            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%230288D1" viewBox="0 0 24 24"%3E%3Cpath d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/%3E%3C/svg%3E');
-        }
-        .suggestion-card.math::before {
-            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%230288D1" viewBox="0 0 24 24"%3E%3Cpath d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/%3E%3C/svg%3E');
-        }
-        .suggestion-card.code::before {
-            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%230288D1" viewBox="0 0 24 24"%3E%3Cpath d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/%3E%3C/svg%3E');
         }
         .suggestion-card h5 {
             font-size: 0.95rem;
@@ -369,92 +300,9 @@
             backdrop-filter: blur(12px);
             border: 1px solid var(--accent-color);
             color: var(--text-color);
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
         .modal-header, .modal-footer {
             border-color: var(--accent-color);
-        }
-        .modal.fade .modal-dialog {
-            transform: scale(0.9);
-            opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-        .modal.show .modal-dialog {
-            transform: scale(1);
-            opacity: 1;
-        }
-        .modal-title {
-            font-weight: 600;
-            font-size: 1.5rem;
-        }
-        .btn-close {
-            background: var(--menu-button-bg);
-            border-radius: 50%;
-            padding: 8px;
-            transition: transform 0.2s ease;
-            opacity: 0.8;
-        }
-        .btn-close:hover {
-            transform: rotate(90deg);
-            opacity: 1;
-        }
-        .menu-group {
-            margin-bottom: 20px;
-        }
-        .menu-group h6 {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--accent-color);
-            margin-bottom: 10px;
-            padding-left: 12px;
-        }
-        .menu-btn {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--menu-button-bg);
-            color: var(--text-color);
-            border: none;
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            text-align: left;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-        }
-        .menu-btn:hover {
-            background: var(--menu-button-hover);
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(2, 136, 209, 0.2);
-        }
-        .menu-btn:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(2, 136, 209, 0.3);
-        }
-        .menu-btn::after {
-            content: '';
-            position: absolute;
-            background: rgba(255, 255, 255, 0.3);
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            transform: scale(0);
-            top: 50%;
-            left: 50%;
-            pointer-events: none;
-            transition: transform 0.3s ease;
-        }
-        .menu-btn:active::after {
-            transform: scale(2);
-            transition: transform 0.5s ease;
-        }
-        .menu-btn i {
-            font-size: 1.2rem;
-            color: var(--accent-color);
         }
         .form-select {
             background: var(--input-bg);
@@ -463,7 +311,7 @@
             font-family: 'Inter', sans-serif;
             appearance: none;
             padding: 8px 32px 8px 12px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%230288D1' viewBox='0 0 16 16'% descartar3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%230288D1' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 12px center;
             cursor: pointer;
@@ -513,19 +361,6 @@
         .dropdown-submenu:hover .dropdown-menu {
             display: block;
         }
-        .toast-container {
-            z-index: 1055;
-        }
-        .toast {
-            background: var(--modal-bg);
-            color: var(--text-color);
-            border: 1px solid var(--accent-color);
-        }
-        .toast-header {
-            background: var(--input-bg);
-            color: var(--text-color);
-            border-bottom: 1px solid var(--accent-color);
-        }
     </style>
 </head>
 <body>
@@ -550,19 +385,19 @@
                 <div class="suggestions" role="region" aria-label="Sugerencias iniciales">
                     <h4 data-i18n="suggestions_title">¡Explora lo que GarBotGPT puede hacer!</h4>
                     <div class="suggestions-grid">
-                        <div class="suggestion-card ai" data-message="Explora cómo funciona la inteligencia artificial" aria-label="Explorar inteligencia artificial">
+                        <div class="suggestion-card" data-message="Explora cómo funciona la inteligencia artificial" aria-label="Explorar inteligencia artificial">
                             <h5 data-i18n="suggestion_ai_title">Inteligencia Artificial</h5>
                             <p data-i18n="suggestion_ai_desc">Descubre cómo la IA puede transformar el mundo.</p>
                         </div>
-                        <div class="suggestion-card story" data-message="Escribe un cuento corto sobre una aventura espacial" aria-label="Crear cuento corto">
+                        <div class="suggestion-card" data-message="Escribe un cuento corto sobre una aventura espacial" aria-label="Crear cuento corto">
                             <h5 data-i18n="suggestion_story_title">Cuento Corto</h5>
                             <p data-i18n="suggestion_story_desc">Crea una historia épica en pocos minutos.</p>
                         </div>
-                        <div class="suggestion-card math" data-message="Resuelve la ecuación 2x^2 + 5x - 3 = 0" aria-label="Resolver problema matemático">
+                        <div class="suggestion-card" data-message="Resuelve la ecuación 2x^2 + 5x - 3 = 0" aria-label="Resolver problema matemático">
                             <h5 data-i18n="suggestion_math_title">Matemáticas</h5>
                             <p data-i18n="suggestion_math_desc">Soluciona problemas complejos al instante.</p>
                         </div>
-                        <div class="suggestion-card code" data-message="Explica cómo programar en Python" aria-label="Aprender a programar">
+                        <div class="suggestion-card" data-message="Explica cómo programar en Python" aria-label="Aprender a programar">
                             <h5 data-i18n="suggestion_code_title">Programación</h5>
                             <p data-i18n="suggestion_code_desc">Aprende los fundamentos de la codificación.</p>
                         </div>
@@ -571,7 +406,7 @@
             {% endif %}
             {% for entry in history %}
                 <div class="message-container" data-message-id="{{ entry.id }}">
-                    <div class="message user-message" role="article" aria-label="Mensaje del usuario">
+                    <div class="message user-message" role="article">
                         <div class="avatar user-avatar">T</div>
                         <div class="message-content">
                             <strong data-i18n="user_label">Tú:</strong>
@@ -584,7 +419,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="message ai-message" role="article" aria-label="Respuesta de GarBotGPT">
+                    <div class="message ai-message" role="article">
                         <div class="avatar ai-avatar">G</div>
                         <div class="message-content">
                             <strong>GarBotGPT:</strong>
@@ -633,39 +468,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar menú" data-i18n="close_button"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="menu-group">
-                        <h6 data-i18n="menu_settings_group">Configuración</h6>
-                        <button class="menu-btn" data-bs-toggle="modal" data-bs-target="#settingsModal" data-bs-dismiss="modal" aria-label="Abrir configuración">
-                            <i class="bi bi-gear-fill"></i>
-                            <span data-i18n="settings_button">Configuración</span>
-                        </button>
-                        <button class="menu-btn" data-bs-toggle="modal" data-bs-target="#infoModal" data-bs-dismiss="modal" aria-label="Ver información">
-                            <i class="bi bi-info-circle-fill"></i>
-                            <span data-i18n="info_button">Información</span>
-                        </button>
-                    </div>
-                    <div class="menu-group">
-                        <h6 data-i18n="menu_history_group">Historial</h6>
-                        <button id="clear-history" class="menu-btn" aria-label="Borrar historial">
-                            <i class="bi bi-trash-fill"></i>
-                            <span data-i18n="clear_history_button">Borrar Historial</span>
-                        </button>
-                        <a href="{{ url_for('export_history') }}" class="menu-btn" aria-label="Exportar historial">
-                            <i class="bi bi-download"></i>
-                            <span data-i18n="export_history_button">Exportar Historial</span>
-                        </a>
-                        <a href="{{ url_for('export_settings') }}" class="menu-btn" aria-label="Exportar configuración">
-                            <i class="bi bi-file-earmark-arrow-down"></i>
-                            <span data-i18n="export_settings_button">Exportar Configuración</span>
-                        </a>
-                    </div>
-                    <div class="menu-group">
-                        <h6 data-i18n="menu_session_group">Sesión</h6>
-                        <a href="{{ url_for('logout') }}" class="menu-btn" aria-label="Cerrar sesión">
-                            <i class="bi bi-box-arrow-right"></i>
-                            <span data-i18n="logout_button">Cerrar Sesión</span>
-                        </a>
-                    </div>
+                    <button class="btn btn-grok w-100 mb-2" data-bs-toggle="modal" data-bs-target="#settingsModal" data-bs-dismiss="modal" aria-label="Abrir configuración" data-i18n="settings_button">Configuración</button>
+                    <button class="btn btn-grok w-100 mb-2" data-bs-toggle="modal" data-bs-target="#infoModal" data-bs-dismiss="modal" aria-label="Ver información" data-i18n="info_button">Información</button>
+                    <button id="clear-history" class="btn btn-grok w-100 mb-2" aria-label="Borrar historial" data-i18n="clear_history_button">Borrar Historial</button>
+                    <a href="{{ url_for('export_history') }}" class="btn btn-grok w-100 mb-2" aria-label="Exportar historial" data-i18n="export_history_button">Exportar Historial</a>
+                    <a href="{{ url_for('export_settings') }}" class="btn btn-grok w-100 mb-2" aria-label="Exportar configuración" data-i18n="export_settings_button">Exportar Configuración</a>
+                    <a href="{{ url_for('logout') }}" class="btn btn-grok w-100" aria-label="Cerrar sesión" data-i18n="logout_button">Cerrar Sesión</a>
                 </div>
             </div>
         </div>
@@ -733,13 +541,6 @@
                                 <option value="en" data-i18n="lang_english">Inglés</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="instant_response" class="form-label" data-i18n="instant_response_label">Respuestas Instantáneas</label>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="instant_response" name="instant_response" aria-label="Activar respuestas instantáneas">
-                                <label class="form-check-label" for="instant_response" data-i18n="instant_response_desc">Mostrar respuestas sin animación de escritura</label>
-                            </div>
-                        </div>
                         <button type="submit" class="btn btn-grok w-100" aria-label="Guardar configuración" data-i18n="save_button">Guardar</button>
                     </form>
                 </div>
@@ -765,21 +566,9 @@
         </div>
     </div>
 
-    <!-- Contenedor de Notificaciones Toast -->
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="action-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <strong class="me-auto">GarBotGPT</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Cerrar notificación"></button>
-            </div>
-            <div class="toast-body"></div>
-        </div>
-    </div>
-
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked@4.0.12/lib/marked.min.js"></script>
     <script>
         // Traducciones
         const translations = {
@@ -812,9 +601,6 @@
                 export_history_button: "Exportar Historial",
                 export_settings_button: "Exportar Configuración",
                 logout_button: "Cerrar Sesión",
-                menu_settings_group: "Opciones Generales",
-                menu_history_group: "Gestión de Historial",
-                menu_session_group: "Cuenta",
                 settings_title: "Configuración",
                 model_label: "Modelo de IA",
                 select_model: "Seleccionar modelo",
@@ -829,17 +615,11 @@
                 lang_catalan: "Catalán",
                 lang_english: "Inglés",
                 save_button: "Guardar",
-                instant_response_label: "Respuestas Instantáneas",
-                instant_response_desc: "Mostrar respuestas sin animación de escritura",
                 info_title: "Información",
                 info_description: "es un asistente de IA avanzado.",
                 info_version_label: "Versión:",
                 info_release_label: "Lanzamiento:",
-                info_creator_label: "Creador:",
-                copy_success: "¡Texto copiado al portapapeles!",
-                save_success: "¡Configuración guardada!",
-                error_empty_message: "Por favor, escribe un mensaje.",
-                error_server: "Error del servidor. Intenta de nuevo."
+                info_creator_label: "Creador:"
             },
             ca: {
                 title: "Xatejar amb GarBotGPT",
@@ -870,9 +650,6 @@
                 export_history_button: "Exportar Historial",
                 export_settings_button: "Exportar Configuració",
                 logout_button: "Tancar Sessió",
-                menu_settings_group: "Opcions Generals",
-                menu_history_group: "Gestió d'Historial",
-                menu_session_group: "Compte",
                 settings_title: "Configuració",
                 model_label: "Model d'IA",
                 select_model: "Seleccionar model",
@@ -887,17 +664,11 @@
                 lang_catalan: "Català",
                 lang_english: "Anglès",
                 save_button: "Desar",
-                instant_response_label: "Respostes Instantànies",
-                instant_response_desc: "Mostra respostes sense animació d'escriptura",
                 info_title: "Informació",
                 info_description: "és un assistent d'IA avançat.",
                 info_version_label: "Versió:",
                 info_release_label: "Llançament:",
-                info_creator_label: "Creador:",
-                copy_success: "Text copiat al portapapers!",
-                save_success: "Configuració desada!",
-                error_empty_message: "Si us plau, escriu un missatge.",
-                error_server: "Error del servidor. Torna a intentar."
+                info_creator_label: "Creador:"
             },
             en: {
                 title: "Chat with GarBotGPT",
@@ -928,9 +699,6 @@
                 export_history_button: "Export History",
                 export_settings_button: "Export Settings",
                 logout_button: "Log Out",
-                menu_settings_group: "General Options",
-                menu_history_group: "History Management",
-                menu_session_group: "Account",
                 settings_title: "Settings",
                 model_label: "AI Model",
                 select_model: "Select model",
@@ -945,26 +713,13 @@
                 lang_catalan: "Catalan",
                 lang_english: "English",
                 save_button: "Save",
-                instant_response_label: "Instant Responses",
-                instant_response_desc: "Show responses without typing animation",
                 info_title: "Information",
                 info_description: "is an advanced AI assistant.",
                 info_version_label: "Version:",
                 info_release_label: "Release:",
-                info_creator_label: "Creator:",
-                copy_success: "Text copied to clipboard!",
-                save_success: "Settings saved!",
-                error_empty_message: "Please type a message.",
-                error_server: "Server error. Try again."
+                info_creator_label: "Creator:"
             }
         };
-
-        // Función para mostrar notificaciones toast
-        function showToast(message) {
-            const toast = new bootstrap.Toast(document.getElementById('action-toast'));
-            document.querySelector('.toast-body').textContent = message;
-            toast.show();
-        }
 
         // Función para actualizar el idioma
         function updateLanguage(lang) {
@@ -1008,14 +763,12 @@
             document.getElementById('voice-btn').setAttribute('title', translations.es.voice_button + ' no soportado');
         }
 
-        // Cargar idioma, tema y configuración de respuestas instantáneas desde localStorage
+        // Cargar idioma y tema desde localStorage
         const savedLanguage = localStorage.getItem('language') || 'es';
         const savedTheme = localStorage.getItem('theme') || 'dark';
-        const instantResponse = localStorage.getItem('instant_response') === 'true';
         document.body.setAttribute('data-theme', savedTheme);
         document.getElementById('theme').value = savedTheme;
         document.getElementById('language').value = savedLanguage;
-        document.getElementById('instant_response').checked = instantResponse;
         if (recognition) {
             recognition.lang = savedLanguage === 'es' ? 'es-ES' : savedLanguage === 'ca' ? 'ca-ES' : 'en-US';
         }
@@ -1030,26 +783,19 @@
 
         // Función para simular escritura progresiva
         function typeResponse(element, text, speed = 25) {
-            if (instantResponse) {
-                element.innerHTML = marked.parse(text);
-                isGenerating = false;
-                document.getElementById('cancel-btn').classList.add('d-none');
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                return;
-            }
             let index = 0;
             element.innerHTML = '';
             isGenerating = true;
 
             function type() {
                 if (cancelGeneration) {
-                    element.innerHTML = marked.parse(text);
+                    element.innerHTML = text;
                     isGenerating = false;
                     document.getElementById('cancel-btn').classList.add('d-none');
                     return;
                 }
                 if (index < text.length) {
-                    element.innerHTML = marked.parse(text.substring(0, index + 1));
+                    element.innerHTML += text.charAt(index);
                     index++;
                     chatMessages.scrollTop = chatMessages.scrollHeight;
                     setTimeout(type, speed);
@@ -1072,10 +818,7 @@
 
             const input = document.getElementById('message-input');
             const message = input.value.trim();
-            if (!message) {
-                showToast(translations[savedLanguage].error_empty_message);
-                return;
-            }
+            if (!message) return;
 
             // Mostrar indicador de "escribiendo"
             const respondingIndicator = document.getElementById('responding-indicator');
@@ -1093,7 +836,7 @@
                 <div class="avatar user-avatar">T</div>
                 <div class="message-content">
                     <strong data-i18n="user_label">${translations[savedLanguage].user_label}</strong>
-                    <p>${marked.parse(message)}</p>
+                    <p>${message}</p>
                     <div class="message-meta">Ahora</div>
                     <div class="message-actions">
                         <button class="btn btn-sm btn-grok edit-btn" data-message-id="temp" data-message="${message}" aria-label="Editar mensaje" data-i18n="edit_button">${translations[savedLanguage].edit_button}</button>
@@ -1113,7 +856,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
-                    showToast(translations[savedLanguage].error_server);
+                    alert('Error: ' + data.error);
                     respondingIndicator.classList.add('d-none');
                     return;
                 }
@@ -1155,7 +898,6 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                showToast(translations[savedLanguage].error_server);
                 respondingIndicator.classList.add('d-none');
             });
         }
@@ -1170,7 +912,7 @@
             if (e.target.classList.contains('copy-btn')) {
                 const text = e.target.getAttribute('data-text');
                 navigator.clipboard.writeText(text).then(() => {
-                    showToast(translations[savedLanguage].copy_success);
+                    alert(translations[savedLanguage].copy_button + ' OK');
                 });
             }
         });
@@ -1207,7 +949,7 @@
                 messageContent.querySelector('.save-edit-btn').addEventListener('click', function() {
                     const newMessage = messageContent.querySelector('textarea').value.trim();
                     if (!newMessage) {
-                        showToast(translations[savedLanguage].error_empty_message);
+                        alert(translations[savedLanguage].input_placeholder);
                         return;
                     }
 
@@ -1219,14 +961,14 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.error) {
-                            showToast(translations[savedLanguage].error_server);
+                            alert('Error: ' + data.error);
                             return;
                         }
 
                         // Actualizar mensaje del usuario
                         messageContent.innerHTML = `
                             <strong data-i18n="user_label">${translations[savedLanguage].user_label}</strong>
-                            <p>${marked.parse(newMessage)}</p>
+                            <p>${newMessage}</p>
                             <div class="message-meta">Ahora</div>
                             <div class="message-actions">
                                 <button class="btn btn-sm btn-grok edit-btn" data-message-id="${messageId}" data-message="${newMessage}" aria-label="Editar mensaje" data-i18n="edit_button">${translations[savedLanguage].edit_button}</button>
@@ -1255,7 +997,6 @@
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        showToast(translations[savedLanguage].error_server);
                     });
                 });
 
@@ -1276,19 +1017,19 @@
                             <div class="suggestions" role="region" aria-label="Sugerencias iniciales">
                                 <h4 data-i18n="suggestions_title">${translations[savedLanguage].suggestions_title}</h4>
                                 <div class="suggestions-grid">
-                                    <div class="suggestion-card ai" data-message="Explora cómo funciona la inteligencia artificial" aria-label="Explorar inteligencia artificial">
+                                    <div class="suggestion-card" data-message="Explora cómo funciona la inteligencia artificial" aria-label="Explorar inteligencia artificial">
                                         <h5 data-i18n="suggestion_ai_title">${translations[savedLanguage].suggestion_ai_title}</h5>
                                         <p data-i18n="suggestion_ai_desc">${translations[savedLanguage].suggestion_ai_desc}</p>
                                     </div>
-                                    <div class="suggestion-card story" data-message="Escribe un cuento corto sobre una aventura espacial" aria-label="Crear cuento corto">
+                                    <div class="suggestion-card" data-message="Escribe un cuento corto sobre una aventura espacial" aria-label="Crear cuento corto">
                                         <h5 data-i18n="suggestion_story_title">${translations[savedLanguage].suggestion_story_title}</h5>
                                         <p data-i18n="suggestion_story_desc">${translations[savedLanguage].suggestion_story_desc}</p>
                                     </div>
-                                    <div class="suggestion-card math" data-message="Resuelve la ecuación 2x^2 + 5x - 3 = 0" aria-label="Resolver problema matemático">
+                                    <div class="suggestion-card" data-message="Resuelve la ecuación 2x^2 + 5x - 3 = 0" aria-label="Resolver problema matemático">
                                         <h5 data-i18n="suggestion_math_title">${translations[savedLanguage].suggestion_math_title}</h5>
                                         <p data-i18n="suggestion_math_desc">${translations[savedLanguage].suggestion_math_desc}</p>
                                     </div>
-                                    <div class="suggestion-card code" data-message="Explica cómo programar en Python" aria-label="Aprender a programar">
+                                    <div class="suggestion-card" data-message="Explica cómo programar en Python" aria-label="Aprender a programar">
                                         <h5 data-i18n="suggestion_code_title">${translations[savedLanguage].suggestion_code_title}</h5>
                                         <p data-i18n="suggestion_code_desc">${translations[savedLanguage].suggestion_code_desc}</p>
                                     </div>
@@ -1325,8 +1066,7 @@
                 max_tokens: formData.get('max_tokens'),
                 theme_color: formData.get('theme_color'),
                 theme: formData.get('theme'),
-                language: formData.get('language'),
-                instant_response: formData.get('instant_response') === 'on'
+                language: formData.get('language')
             };
             fetch('/update_chat_settings', {
                 method: 'POST',
@@ -1338,9 +1078,8 @@
                 if (data.success) {
                     document.body.setAttribute('data-theme', settings.theme);
                     localStorage.setItem('theme', settings.theme);
-                    localStorage.setItem('instant_response', settings.instant_response);
                     updateLanguage(settings.language);
-                    showToast(translations[settings.language].save_success);
+                    alert(translations[settings.language].save_button + ' OK');
                     document.querySelector('[data-bs-dismiss="modal"]').click();
                 }
             });
@@ -1359,7 +1098,7 @@
         // Manejar el botón de voz
         document.getElementById('voice-btn').addEventListener('click', function() {
             if (!recognition) {
-                showToast(translations[savedLanguage].voice_button + ' no soportado en este navegador.');
+                alert(translations[savedLanguage].voice_button + ' no soportado en este navegador.');
                 return;
             }
 
@@ -1399,7 +1138,7 @@
                 document.getElementById('voice-btn').innerHTML = '<i class="bi bi-mic-fill"></i>';
                 document.getElementById('voice-btn').setAttribute('title', translations[savedLanguage].voice_button);
                 bootstrap.Tooltip.getInstance(document.getElementById('voice-btn')).setContent({ '.tooltip-inner': translations[savedLanguage].voice_button });
-                showToast('Error: ' + event.error);
+                alert('Error: ' + event.error);
             };
         });
 
