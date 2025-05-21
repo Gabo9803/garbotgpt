@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatear con GarBotGPT - Estilo Grok</title>
+    <title>Chatear con GarBotGPT</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -96,6 +96,13 @@
             background: #039BE5;
             box-shadow: 0 3px 8px rgba(2, 136, 209, 0.4);
             transform: translateY(-1px);
+        }
+        #voice-btn.recording {
+            background: #F57C00; /* Color para indicar grabación */
+        }
+        #voice-btn[disabled] {
+            background: #555;
+            cursor: not-allowed;
         }
         .message-container {
             display: flex;
@@ -382,7 +389,7 @@
                 <button class="btn btn-grok" onclick="sendMessage()" aria-label="Enviar mensaje">
                     <i class="bi bi-send-fill"></i>
                 </button>
-                <button id="voice-btn" class="btn btn-grok" data-bs-toggle="tooltip" title="Entrada por voz" aria-label="Entrada por voz">
+                <button id="voice-btn" class="btn btn-grok" data-bs-toggle="tooltip" data-bs-placement="top" title="Entrada por voz" aria-label="Iniciar entrada por voz">
                     <i class="bi bi-mic-fill"></i>
                 </button>
                 <button id="cancel-btn" class="btn btn-grok d-none" onclick="cancelResponse()" aria-label="Cancelar respuesta">
@@ -654,16 +661,16 @@
                     <strong>Tú:</strong>
                     <textarea rows="3">${messageText}</textarea>
                     <div class="edit-actions">
-                        <button class="btn btn-sm btn-grok save-edit-btn" data-message-id="${messageId}" aria-label="Desar edició">Desar</button>
-                        <button class="btn btn-sm btn-grok cancel-edit-btn" aria-label="Cancel·lar edició">Cancel·lar</button>
+                        <button class="btn btn-sm btn-grok save-edit-btn" data-message-id="${messageId}" aria-label="Guardar edición">Guardar</button>
+                        <button class="btn btn-sm btn-grok cancel-edit-btn" aria-label="Cancelar edición">Cancelar</button>
                     </div>
                 `;
 
-                // Desar edició
+                // Guardar edición
                 messageContent.querySelector('.save-edit-btn').addEventListener('click', function() {
                     const newMessage = messageContent.querySelector('textarea').value.trim();
                     if (!newMessage) {
-                        alert('El missatge no pot estar buit');
+                        alert('El mensaje no puede estar vacío');
                         return;
                     }
 
@@ -714,7 +721,7 @@
                     });
                 });
 
-                // Cancel·lar edició
+                // Cancelar edición
                 messageContent.querySelector('.cancel-edit-btn').addEventListener('click', function() {
                     messageContent.innerHTML = originalContent;
                 });
@@ -788,6 +795,72 @@
                 document.getElementById('model').value = model;
             });
         });
+
+        // Soporte para reconocimiento de voz
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+        let isRecording = false;
+
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.lang = 'es-ES'; // Configurar idioma (español)
+            recognition.interimResults = true; // Mostrar resultados parciales
+            recognition.continuous = false; // Detener después de una sola entrada
+        } else {
+            document.getElementById('voice-btn').setAttribute('disabled', true);
+            document.getElementById('voice-btn').setAttribute('title', 'Entrada por voz no soportada en este navegador');
+        }
+
+        // Manejar el botón de voz
+        document.getElementById('voice-btn').addEventListener('click', function() {
+            if (!recognition) {
+                alert('El reconocimiento de voz no está soportado en este navegador.');
+                return;
+            }
+
+            if (isRecording) {
+                recognition.stop();
+                return;
+            }
+
+            const messageInput = document.getElementById('message-input');
+            messageInput.value = ''; // Limpiar el campo de entrada
+            isRecording = true;
+            this.classList.add('recording'); // Agregar clase para feedback visual
+            this.innerHTML = '<i class="bi bi-mic-mute-fill"></i>'; // Cambiar ícono
+            this.setAttribute('title', 'Detener grabación');
+            bootstrap.Tooltip.getInstance(this).setContent({ '.tooltip-inner': 'Detener grabación' });
+
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const transcript = Array.from(event.results)
+                    .map(result => result[0].transcript)
+                    .join('');
+                messageInput.value = transcript;
+            };
+
+            recognition.onend = function() {
+                isRecording = false;
+                document.getElementById('voice-btn').classList.remove('recording');
+                document.getElementById('voice-btn').innerHTML = '<i class="bi bi-mic-fill"></i>';
+                document.getElementById('voice-btn').setAttribute('title', 'Entrada por voz');
+                bootstrap.Tooltip.getInstance(document.getElementById('voice-btn')).setContent({ '.tooltip-inner': 'Entrada por voz' });
+            };
+
+            recognition.onerror = function(event) {
+                isRecording = false;
+                document.getElementById('voice-btn').classList.remove('recording');
+                document.getElementById('voice-btn').innerHTML = '<i class="bi bi-mic-fill"></i>';
+                document.getElementById('voice-btn').setAttribute('title', 'Entrada por voz');
+                bootstrap.Tooltip.getInstance(document.getElementById('voice-btn')).setContent({ '.tooltip-inner': 'Entrada por voz' });
+                alert('Error en el reconocimiento de voz: ' + event.error);
+            };
+        });
+
+        // Inicializar tooltips de Bootstrap
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
     </script>
 </body>
 </html>
