@@ -3,11 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatear con GarBotGPT</title>
+    <title data-i18n="title">Chatear con GarBotGPT</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #212121;
+            --text-color: #E8ECEF;
+            --header-bg: rgba(0, 0, 0, 0.8);
+            --footer-bg: rgba(0, 0, 0, 0.8);
+            --input-bg: rgba(255, 255, 255, 0.08);
+            --message-user-bg: #0288D1;
+            --message-ai-bg: rgba(255, 255, 255, 0.1);
+            --button-bg: #0288D1;
+            --button-hover-bg: #039BE5;
+            --accent-color: #0288D1;
+            --modal-bg: rgba(0, 0, 0, 0.85);
+        }
+        [data-theme="light"] {
+            --bg-color: #F5F5F5;
+            --text-color: #212121;
+            --header-bg: rgba(255, 255, 255, 0.9);
+            --footer-bg: rgba(255, 255, 255, 0.9);
+            --input-bg: rgba(0, 0, 0, 0.05);
+            --message-user-bg: #0288D1;
+            --message-ai-bg: rgba(0, 0, 0, 0.05);
+            --button-bg: #0288D1;
+            --button-hover-bg: #039BE5;
+            --accent-color: #0288D1;
+            --modal-bg: rgba(255, 255, 255, 0.95);
+        }
         * {
             margin: 0;
             padding: 0;
@@ -17,8 +43,8 @@
             height: 100vh;
             width: 100vw;
             overflow: hidden;
-            background: #212121;
-            color: #E8ECEF;
+            background: var(--bg-color);
+            color: var(--text-color);
             font-family: 'Inter', sans-serif;
         }
         .chat-container {
@@ -30,9 +56,9 @@
             z-index: 1;
         }
         .chat-header {
-            background: rgba(0, 0, 0, 0.8);
+            background: var(--header-bg);
             padding: 12px 20px;
-            border-bottom: 1px solid #0288D1;
+            border-bottom: 1px solid var(--accent-color);
             backdrop-filter: blur(10px);
         }
         .chat-header img {
@@ -55,13 +81,13 @@
             }
         }
         .chat-footer {
-            background: rgba(0, 0, 0, 0.8);
+            background: var(--footer-bg);
             padding: 12px 15px;
-            border-top: 1px solid #0288D1;
+            border-top: 1px solid var(--accent-color);
             backdrop-filter: blur(10px);
         }
         .input-group {
-            background: rgba(255, 255, 255, 0.08);
+            background: var(--input-bg);
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
@@ -73,18 +99,18 @@
         .form-control {
             background: transparent;
             border: none;
-            color: #E8ECEF;
+            color: var(--text-color);
             font-size: 1rem;
             padding: 10px 15px;
         }
         .form-control:focus {
             box-shadow: none;
             background: transparent;
-            color: #E8ECEF;
+            color: var(--text-color);
         }
         .btn-grok {
-            background: #0288D1;
-            color: #E8ECEF;
+            background: var(--button-bg);
+            color: var(--text-color);
             border: none;
             padding: 8px 12px;
             border-radius: 6px;
@@ -93,12 +119,12 @@
             font-size: 0.85rem;
         }
         .btn-grok:hover {
-            background: #039BE5;
+            background: var(--button-hover-bg);
             box-shadow: 0 3px 8px rgba(2, 136, 209, 0.4);
             transform: translateY(-1px);
         }
         #voice-btn.recording {
-            background: #F57C00; /* Color para indicar grabación */
+            background: #F57C00;
         }
         #voice-btn[disabled] {
             background: #555;
@@ -121,13 +147,13 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         }
         .user-message {
-            background: #0288D1;
+            background: var(--message-user-bg);
             margin-left: auto;
             border-top-right-radius: 3px;
             border-bottom-left-radius: 10px;
         }
         .ai-message {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--message-ai-bg);
             backdrop-filter: blur(8px);
             margin-right: auto;
             border-top-left-radius: 3px;
@@ -145,11 +171,11 @@
             justify-content: center;
             font-size: 1.2rem;
             font-weight: 600;
-            color: #E8ECEF;
+            color: var(--text-color);
         }
         .user-avatar {
             background: #01579B;
-            border: 2px solid #0288D1;
+            border: 2px solid var(--accent-color);
         }
         .ai-avatar {
             background: #F57C00;
@@ -172,17 +198,17 @@
         }
         .message-content textarea {
             width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid #0288D1;
+            background: var(--input-bg);
+            border: 1px solid var(--accent-color);
             border-radius: 6px;
-            color: #E8ECEF;
+            color: var(--text-color);
             padding: 8px;
             font-size: 0.9rem;
             resize: none;
         }
         .message-content textarea:focus {
             outline: none;
-            border-color: #039BE5;
+            border-color: var(--button-hover-bg);
             box-shadow: 0 0 6px rgba(2, 136, 209, 0.4);
         }
         .message-meta {
@@ -228,41 +254,60 @@
             margin-top: 15px;
         }
         .suggestions {
+            margin: 30px auto;
+            padding: 20px;
+            background: var(--input-bg);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            max-width: 800px;
+        }
+        .suggestions h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
             text-align: center;
-            margin: 30px 0;
+        }
+        .suggestions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .suggestion-card {
+            background: var(--message-ai-bg);
+            border: 1px solid var(--accent-color);
+            border-radius: 8px;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        .suggestion-btn {
-            background: transparent;
-            border: 1px solid #0288D1;
-            color: #0288D1;
-            margin: 6px;
-            padding: 6px 12px;
-            border-radius: 6px;
+        .suggestion-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(2, 136, 209, 0.3);
+        }
+        .suggestion-card h5 {
+            font-size: 0.95rem;
             font-weight: 500;
-            transition: all 0.2s ease;
+            margin-bottom: 8px;
         }
-        .suggestion-btn:hover {
-            background: #0288D1;
-            color: #E8ECEF;
-            box-shadow: 0 2px 6px rgba(2, 136, 209, 0.3);
+        .suggestion-card p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin: 0;
         }
         .modal-content {
-            background: rgba(0, 0, 0, 0.85);
+            background: var(--modal-bg);
             backdrop-filter: blur(12px);
-            border: 1px solid #0288D1;
-            color: #E8ECEF;
+            border: 1px solid var(--accent-color);
+            color: var(--text-color);
         }
         .modal-header, .modal-footer {
-            border-color: #0288D1;
+            border-color: var(--accent-color);
         }
         .form-select {
-            background: rgba(255, 255, 255, 0.08);
-            color: #E8ECEF;
-            border: 1px solid #0288D1;
+            background: var(--input-bg);
+            color: var(--text-color);
+            border: 1px solid var(--accent-color);
             font-family: 'Inter', sans-serif;
             appearance: none;
             padding: 8px 32px 8px 12px;
@@ -272,37 +317,37 @@
             cursor: pointer;
         }
         .form-select:focus {
-            background: rgba(255, 255, 255, 0.08);
-            color: #E8ECEF;
-            border-color: #0288D1;
+            background: var(--input-bg);
+            color: var(--text-color);
+            border-color: var(--accent-color);
             box-shadow: 0 0 6px rgba(2, 136, 209, 0.4);
             outline: none;
         }
         .form-select option {
-            background: #212121;
-            color: #E8ECEF;
+            background: var(--bg-color);
+            color: var(--text-color);
             padding: 8px;
         }
         .form-control-color {
-            background: rgba(255, 255, 255, 0.08);
-            color: #E8ECEF;
-            border: 1px solid #0288D1;
+            background: var(--input-bg);
+            color: var(--text-color);
+            border: 1px solid var(--accent-color);
             font-family: 'Inter', sans-serif;
         }
         .dropdown-menu {
-            background: rgba(0, 0, 0, 0.85);
-            border: 1px solid #0288D1;
+            background: var(--modal-bg);
+            border: 1px solid var(--accent-color);
             border-radius: 6px;
             padding: 0;
         }
         .dropdown-item {
-            color: #E8ECEF;
+            color: var(--text-color);
             padding: 8px 16px;
             font-weight: 500;
             transition: background 0.2s ease;
         }
         .dropdown-item:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--input-bg);
         }
         .dropdown-submenu {
             position: relative;
@@ -324,13 +369,11 @@
         <div class="chat-header d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
                 <img src="{{ url_for('static', filename='img/garbotgpt-logo.png') }}" alt="GarBotGPT Logo" aria-hidden="true">
-                <h3 class="mb-0">GarBotGPT</h3>
+                <h3 class="mb-0" data-i18n="header_title">GarBotGPT</h3>
             </div>
             <div>
-                <button class="btn btn-grok btn-sm me-2" data-bs-toggle="modal" data-bs-target="#menuModal" aria-label="Abrir menú">
-                    <i class="bi bi-list"></i> Menú
-                </button>
-                <span id="server-status" class="badge bg-success" role="status" aria-live="polite">Conectado</span>
+                <button class="btn btn-grok btn-sm me-2" data-bs-toggle="modal" data-bs-target="#menuModal" aria-label="Abrir menú" data-i18n="menu_button">Menú</button>
+                <span id="server-status" class="badge bg-success" role="status" aria-live="polite" data-i18n="server_status">Conectado</span>
             </div>
         </div>
 
@@ -338,10 +381,25 @@
         <div id="chat-messages" class="chat-body" role="log" aria-live="polite">
             {% if history|length == 0 %}
                 <div class="suggestions" role="region" aria-label="Sugerencias iniciales">
-                    <p class="mb-4">¡Bienvenido a GarBotGPT! ¿Cómo puedo asistirte hoy?</p>
-                    <button class="btn suggestion-btn" data-message="Explora la inteligencia artificial">Explora la IA</button>
-                    <button class="btn suggestion-btn" data-message="Escribe un cuento corto">Crea un cuento</button>
-                    <button class="btn suggestion-btn" data-message="Resuelve un problema matemático">Resuelve un problema</button>
+                    <h4 data-i18n="suggestions_title">¡Explora lo que GarBotGPT puede hacer!</h4>
+                    <div class="suggestions-grid">
+                        <div class="suggestion-card" data-message="Explora cómo funciona la inteligencia artificial" aria-label="Explorar inteligencia artificial">
+                            <h5 data-i18n="suggestion_ai_title">Inteligencia Artificial</h5>
+                            <p data-i18n="suggestion_ai_desc">Descubre cómo la IA puede transformar el mundo.</p>
+                        </div>
+                        <div class="suggestion-card" data-message="Escribe un cuento corto sobre una aventura espacial" aria-label="Crear cuento corto">
+                            <h5 data-i18n="suggestion_story_title">Cuento Corto</h5>
+                            <p data-i18n="suggestion_story_desc">Crea una historia épica en pocos minutos.</p>
+                        </div>
+                        <div class="suggestion-card" data-message="Resuelve la ecuación 2x^2 + 5x - 3 = 0" aria-label="Resolver problema matemático">
+                            <h5 data-i18n="suggestion_math_title">Matemáticas</h5>
+                            <p data-i18n="suggestion_math_desc">Soluciona problemas complejos al instante.</p>
+                        </div>
+                        <div class="suggestion-card" data-message="Explica cómo programar en Python" aria-label="Aprender a programar">
+                            <h5 data-i18n="suggestion_code_title">Programación</h5>
+                            <p data-i18n="suggestion_code_desc">Aprende los fundamentos de la codificación.</p>
+                        </div>
+                    </div>
                 </div>
             {% endif %}
             {% for entry in history %}
@@ -349,13 +407,13 @@
                     <div class="message user-message" role="article">
                         <div class="avatar user-avatar">T</div>
                         <div class="message-content">
-                            <strong>Tú:</strong>
+                            <strong data-i18n="user_label">Tú:</strong>
                             <p>{{ entry.message | safe }}</p>
                             <div class="message-meta">{{ entry.timestamp | default('Ahora') }}</div>
                             <div class="message-actions">
-                                <button class="btn btn-sm btn-grok edit-btn" data-message-id="{{ entry.id }}" data-message="{{ entry.message | safe }}" aria-label="Editar mensaje">Editar</button>
-                                <button class="btn btn-sm btn-grok copy-btn" data-text="{{ entry.response }}" aria-label="Copiar respuesta">Copiar</button>
-                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="{{ entry.message }}" aria-label="Regenerar respuesta">Regenerar</button>
+                                <button class="btn btn-sm btn-grok edit-btn" data-message-id="{{ entry.id }}" data-message="{{ entry.message | safe }}" aria-label="Editar mensaje" data-i18n="edit_button">Editar</button>
+                                <button class="btn btn-sm btn-grok copy-btn" data-text="{{ entry.response }}" aria-label="Copiar mensaje" data-i18n="copy_button">Copiar</button>
+                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="{{ entry.message }}" aria-label="Regenerar respuesta" data-i18n="regenerate_button">Regenerar</button>
                             </div>
                         </div>
                     </div>
@@ -366,8 +424,8 @@
                             <p>{{ entry.response | safe }}</p>
                             <div class="message-meta">{{ entry.timestamp | default('Ahora') }}</div>
                             <div class="message-actions">
-                                <button class="btn btn-sm btn-grok copy-btn" data-text="{{ entry.response }}" aria-label="Copiar respuesta">Copiar</button>
-                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="{{ entry.message }}" aria-label="Regenerar respuesta">Regenerar</button>
+                                <button class="btn btn-sm btn-grok copy-btn" data-text="{{ entry.response }}" aria-label="Copiar respuesta" data-i18n="copy_button">Copiar</button>
+                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="{{ entry.message }}" aria-label="Regenerar respuesta" data-i18n="regenerate_button">Regenerar</button>
                             </div>
                         </div>
                     </div>
@@ -385,14 +443,14 @@
         <!-- Pie del Chat -->
         <div class="chat-footer">
             <div class="input-group">
-                <input type="text" id="message-input" class="form-control" placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje">
-                <button class="btn btn-grok" onclick="sendMessage()" aria-label="Enviar mensaje">
+                <input type="text" id="message-input" class="form-control" placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje" data-i18n-placeholder="input_placeholder">
+                <button class="btn btn-grok" onclick="sendMessage()" aria-label="Enviar mensaje" data-i18n="send_button">
                     <i class="bi bi-send-fill"></i>
                 </button>
-                <button id="voice-btn" class="btn btn-grok" data-bs-toggle="tooltip" data-bs-placement="top" title="Entrada por voz" aria-label="Iniciar entrada por voz">
+                <button id="voice-btn" class="btn btn-grok" data-bs-toggle="tooltip" data-bs-placement="top" title="Entrada por voz" aria-label="Iniciar entrada por voz" data-i18n-tooltip="voice_button">
                     <i class="bi bi-mic-fill"></i>
                 </button>
-                <button id="cancel-btn" class="btn btn-grok d-none" onclick="cancelResponse()" aria-label="Cancelar respuesta">
+                <button id="cancel-btn" class="btn btn-grok d-none" onclick="cancelResponse()" aria-label="Cancelar respuesta" data-i18n="cancel_button">
                     <i class="bi bi-x-circle-fill"></i>
                 </button>
             </div>
@@ -404,16 +462,16 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="menuModalLabel"><i class="bi bi-list"></i> Menú</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar menú"></button>
+                    <h5 class="modal-title" id="menuModalLabel" data-i18n="menu_title"><i class="bi bi-list"></i> Menú</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar menú" data-i18n="close_button"></button>
                 </div>
                 <div class="modal-body">
-                    <button class="btn btn-grok w-100 mb-2" data-bs-toggle="modal" data-bs-target="#settingsModal" data-bs-dismiss="modal" aria-label="Abrir configuración">Configuración</button>
-                    <button class="btn btn-grok w-100 mb-2" data-bs-toggle="modal" data-bs-target="#infoModal" data-bs-dismiss="modal" aria-label="Ver información">Información</button>
-                    <button id="clear-history" class="btn btn-grok w-100 mb-2" aria-label="Borrar historial">Borrar Historial</button>
-                    <a href="{{ url_for('export_history') }}" class="btn btn-grok w-100 mb-2" aria-label="Exportar historial">Exportar Historial</a>
-                    <a href="{{ url_for('export_settings') }}" class="btn btn-grok w-100 mb-2" aria-label="Exportar configuración">Exportar Configuración</a>
-                    <a href="{{ url_for('logout') }}" class="btn btn-grok w-100" aria-label="Cerrar sesión">Cerrar Sesión</a>
+                    <button class="btn btn-grok w-100 mb-2" data-bs-toggle="modal" data-bs-target="#settingsModal" data-bs-dismiss="modal" aria-label="Abrir configuración" data-i18n="settings_button">Configuración</button>
+                    <button class="btn btn-grok w-100 mb-2" data-bs-toggle="modal" data-bs-target="#infoModal" data-bs-dismiss="modal" aria-label="Ver información" data-i18n="info_button">Información</button>
+                    <button id="clear-history" class="btn btn-grok w-100 mb-2" aria-label="Borrar historial" data-i18n="clear_history_button">Borrar Historial</button>
+                    <a href="{{ url_for('export_history') }}" class="btn btn-grok w-100 mb-2" aria-label="Exportar historial" data-i18n="export_history_button">Exportar Historial</a>
+                    <a href="{{ url_for('export_settings') }}" class="btn btn-grok w-100 mb-2" aria-label="Exportar configuración" data-i18n="export_settings_button">Exportar Configuración</a>
+                    <a href="{{ url_for('logout') }}" class="btn btn-grok w-100" aria-label="Cerrar sesión" data-i18n="logout_button">Cerrar Sesión</a>
                 </div>
             </div>
         </div>
@@ -424,15 +482,15 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="settingsModalLabel"><i class="bi bi-gear"></i> Configuración</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar configuración"></button>
+                    <h5 class="modal-title" id="settingsModalLabel" data-i18n="settings_title"><i class="bi bi-gear"></i> Configuración</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar configuración" data-i18n="close_button"></button>
                 </div>
                 <div class="modal-body">
                     <form id="chat-settings-form">
                         <div class="mb-3">
-                            <label for="model" class="form-label">Modelo de IA</label>
+                            <label for="model" class="form-label" data-i18n="model_label">Modelo de IA</label>
                             <div class="dropdown">
-                                <button class="form-select dropdown-toggle" type="button" id="modelDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Seleccionar modelo de IA">
+                                <button class="form-select dropdown-toggle" type="button" id="modelDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Seleccionar modelo de IA" data-i18n="select_model">
                                     {{ chat_settings.model if chat_settings.model else 'Seleccionar modelo' }}
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="modelDropdown">
@@ -455,18 +513,33 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="temperature" class="form-label">Temperatura</label>
+                            <label for="temperature" class="form-label" data-i18n="temperature_label">Temperatura</label>
                             <input type="number" class="form-control" id="temperature" name="temperature" step="0.1" min="0" max="1" value="{{ chat_settings.temperature }}" aria-label="Ajustar temperatura">
                         </div>
                         <div class="mb-3">
-                            <label for="max_tokens" class="form-label">Máximo de Tokens</label>
+                            <label for="max_tokens" class="form-label" data-i18n="max_tokens_label">Máximo de Tokens</label>
                             <input type="number" class="form-control" id="max_tokens" name="max_tokens" min="100" max="2000" value="{{ chat_settings.max_tokens }}" aria-label="Ajustar máximo de tokens">
                         </div>
                         <div class="mb-3">
-                            <label for="theme_color" class="form-label">Color del Tema</label>
+                            <label for="theme_color" class="form-label" data-i18n="theme_color_label">Color del Tema</label>
                             <input type="color" class="form-control form-control-color" id="theme_color" name="theme_color" value="{{ chat_settings.theme_color }}" aria-label="Seleccionar color del tema">
                         </div>
-                        <button type="submit" class="btn btn-grok w-100" aria-label="Guardar configuración">Guardar</button>
+                        <div class="mb-3">
+                            <label for="theme" class="form-label" data-i18n="theme_label">Tema</label>
+                            <select class="form-select" id="theme" name="theme" aria-label="Seleccionar tema">
+                                <option value="dark" data-i18n="theme_dark">Oscuro</option>
+                                <option value="light" data-i18n="theme_light">Claro</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="language" class="form-label" data-i18n="language_label">Idioma</label>
+                            <select class="form-select" id="language" name="language" aria-label="Seleccionar idioma">
+                                <option value="es" data-i18n="lang_spanish">Español</option>
+                                <option value="ca" data-i18n="lang_catalan">Catalán</option>
+                                <option value="en" data-i18n="lang_english">Inglés</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-grok w-100" aria-label="Guardar configuración" data-i18n="save_button">Guardar</button>
                     </form>
                 </div>
             </div>
@@ -478,14 +551,14 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="infoModalLabel"><i class="bi bi-info-circle"></i> Información</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar información"></button>
+                    <h5 class="modal-title" id="infoModalLabel" data-i18n="info_title"><i class="bi bi-info-circle"></i> Información</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar información" data-i18n="close_button"></button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>GarBotGPT</strong> es un asistente de IA avanzado.</p>
-                    <p><strong>Versión:</strong> 2.5</p>
-                    <p><strong>Lanzamiento:</strong> Abril 2025</p>
-                    <p><strong>Creador:</strong> GarolaCorp</p>
+                    <p><strong>GarBotGPT</strong> <span data-i18n="info_description">es un asistente de IA avanzado.</span></p>
+                    <p><strong data-i18n="info_version_label">Versión:</strong> 2.5</p>
+                    <p><strong data-i18n="info_release_label">Lanzamiento:</strong> Abril 2025</p>
+                    <p><strong data-i18n="info_creator_label">Creador:</strong> GarolaCorp</p>
                 </div>
             </div>
         </div>
@@ -495,6 +568,196 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
+        // Traducciones
+        const translations = {
+            es: {
+                title: "Chatear con GarBotGPT",
+                header_title: "GarBotGPT",
+                menu_button: "Menú",
+                server_status: "Conectado",
+                suggestions_title: "¡Explora lo que GarBotGPT puede hacer!",
+                suggestion_ai_title: "Inteligencia Artificial",
+                suggestion_ai_desc: "Descubre cómo la IA puede transformar el mundo.",
+                suggestion_story_title: "Cuento Corto",
+                suggestion_story_desc: "Crea una historia épica en pocos minutos.",
+                suggestion_math_title: "Matemáticas",
+                suggestion_math_desc: "Soluciona problemas complejos al instante.",
+                suggestion_code_title: "Programación",
+                suggestion_code_desc: "Aprende los fundamentos de la codificación.",
+                user_label: "Tú:",
+                edit_button: "Editar",
+                copy_button: "Copiar",
+                regenerate_button: "Regenerar",
+                input_placeholder: "Escribe tu mensaje...",
+                send_button: "Enviar",
+                voice_button: "Entrada por voz",
+                cancel_button: "Cancelar",
+                menu_title: "Menú",
+                close_button: "Cerrar",
+                settings_button: "Configuración",
+                info_button: "Información",
+                clear_history_button: "Borrar Historial",
+                export_history_button: "Exportar Historial",
+                export_settings_button: "Exportar Configuración",
+                logout_button: "Cerrar Sesión",
+                settings_title: "Configuración",
+                model_label: "Modelo de IA",
+                select_model: "Seleccionar modelo",
+                temperature_label: "Temperatura",
+                max_tokens_label: "Máximo de Tokens",
+                theme_color_label: "Color del Tema",
+                theme_label: "Tema",
+                theme_dark: "Oscuro",
+                theme_light: "Claro",
+                language_label: "Idioma",
+                lang_spanish: "Español",
+                lang_catalan: "Catalán",
+                lang_english: "Inglés",
+                save_button: "Guardar",
+                info_title: "Información",
+                info_description: "es un asistente de IA avanzado.",
+                info_version_label: "Versión:",
+                info_release_label: "Lanzamiento:",
+                info_creator_label: "Creador:"
+            },
+            ca: {
+                title: "Xatejar amb GarBotGPT",
+                header_title: "GarBotGPT",
+                menu_button: "Menú",
+                server_status: "Connectat",
+                suggestions_title: "Explora què pot fer GarBotGPT!",
+                suggestion_ai_title: "Intel·ligència Artificial",
+                suggestion_ai_desc: "Descobreix com la IA pot transformar el món.",
+                suggestion_story_title: "Conte Curt",
+                suggestion_story_desc: "Crea una història èpica en pocs minuts.",
+                suggestion_math_title: "Matemàtiques",
+                suggestion_math_desc: "Resol problemes complexos a l'instant.",
+                suggestion_code_title: "Programació",
+                suggestion_code_desc: "Aprèn els fonaments de la codificació.",
+                user_label: "Tu:",
+                edit_button: "Editar",
+                copy_button: "Copiar",
+                regenerate_button: "Regenerar",
+                input_placeholder: "Escriu el teu missatge...",
+                send_button: "Enviar",
+                voice_button: "Entrada per veu",
+                cancel_button: "Cancel·lar",
+                menu_title: "Menú",
+                close_button: "Tancar",
+                settings_button: "Configuració",
+                info_button: "Informació",
+                clear_history_button: "Esborrar Historial",
+                export_history_button: "Exportar Historial",
+                export_settings_button: "Exportar Configuració",
+                logout_button: "Tancar Sessió",
+                settings_title: "Configuració",
+                model_label: "Model d'IA",
+                select_model: "Seleccionar model",
+                temperature_label: "Temperatura",
+                max_tokens_label: "Màxim de Tokens",
+                theme_color_label: "Color del Tema",
+                theme_label: "Tema",
+                theme_dark: "Fosc",
+                theme_light: "Clar",
+                language_label: "Idioma",
+                lang_spanish: "Espanyol",
+                lang_catalan: "Català",
+                lang_english: "Anglès",
+                save_button: "Desar",
+                info_title: "Informació",
+                info_description: "és un assistent d'IA avançat.",
+                info_version_label: "Versió:",
+                info_release_label: "Llançament:",
+                info_creator_label: "Creador:"
+            },
+            en: {
+                title: "Chat with GarBotGPT",
+                header_title: "GarBotGPT",
+                menu_button: "Menu",
+                server_status: "Connected",
+                suggestions_title: "Explore what GarBotGPT can do!",
+                suggestion_ai_title: "Artificial Intelligence",
+                suggestion_ai_desc: "Discover how AI can transform the world.",
+                suggestion_story_title: "Short Story",
+                suggestion_story_desc: "Create an epic story in minutes.",
+                suggestion_math_title: "Mathematics",
+                suggestion_math_desc: "Solve complex problems instantly.",
+                suggestion_code_title: "Programming",
+                suggestion_code_desc: "Learn the basics of coding.",
+                user_label: "You:",
+                edit_button: "Edit",
+                copy_button: "Copy",
+                regenerate_button: "Regenerate",
+                input_placeholder: "Type your message...",
+                send_button: "Send",
+                voice_button: "Voice Input",
+                cancel_button: "Cancel",
+                menu_title: "Menu",
+                close_button: "Close",
+                settings_button: "Settings",
+                info_button: "Information",
+                clear_history_button: "Clear History",
+                export_history_button: "Export History",
+                export_settings_button: "Export Settings",
+                logout_button: "Log Out",
+                settings_title: "Settings",
+                model_label: "AI Model",
+                select_model: "Select model",
+                temperature_label: "Temperature",
+                max_tokens_label: "Max Tokens",
+                theme_color_label: "Theme Color",
+                theme_label: "Theme",
+                theme_dark: "Dark",
+                theme_light: "Light",
+                language_label: "Language",
+                lang_spanish: "Spanish",
+                lang_catalan: "Catalan",
+                lang_english: "English",
+                save_button: "Save",
+                info_title: "Information",
+                info_description: "is an advanced AI assistant.",
+                info_version_label: "Version:",
+                info_release_label: "Release:",
+                info_creator_label: "Creator:"
+            }
+        };
+
+        // Función para actualizar el idioma
+        function updateLanguage(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                element.placeholder = translations[lang][key];
+            });
+            document.querySelectorAll('[data-i18n-tooltip]').forEach(element => {
+                const key = element.getAttribute('data-i18n-tooltip');
+                const tooltip = bootstrap.Tooltip.getInstance(element);
+                if (tooltip) {
+                    tooltip.setContent({ '.tooltip-inner': translations[lang][key] });
+                } else {
+                    element.setAttribute('title', translations[lang][key]);
+                }
+            });
+            document.documentElement.lang = lang;
+            if (recognition) {
+                recognition.lang = lang === 'es' ? 'es-ES' : lang === 'ca' ? 'ca-ES' : 'en-US';
+            }
+            localStorage.setItem('language', lang);
+        }
+
+        // Cargar idioma y tema desde localStorage
+        const savedLanguage = localStorage.getItem('language') || 'es';
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.setAttribute('data-theme', savedTheme);
+        document.getElementById('theme').value = savedTheme;
+        document.getElementById('language').value = savedLanguage;
+        updateLanguage(savedLanguage);
+
         // Scroll automático
         const chatMessages = document.getElementById('chat-messages');
         chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -556,13 +819,13 @@
             userMessage.innerHTML = `
                 <div class="avatar user-avatar">T</div>
                 <div class="message-content">
-                    <strong>Tú:</strong>
+                    <strong data-i18n="user_label">${translations[savedLanguage].user_label}</strong>
                     <p>${message}</p>
                     <div class="message-meta">Ahora</div>
                     <div class="message-actions">
-                        <button class="btn btn-sm btn-grok edit-btn" data-message-id="temp" data-message="${message}" aria-label="Editar mensaje">Editar</button>
-                        <button class="btn btn-sm btn-grok copy-btn" data-text="${message}" aria-label="Copiar mensaje">Copiar</button>
-                        <button class="btn btn-sm btn-grok regenerate-btn" data-message="${message}" aria-label="Regenerar respuesta">Regenerar</button>
+                        <button class="btn btn-sm btn-grok edit-btn" data-message-id="temp" data-message="${message}" aria-label="Editar mensaje" data-i18n="edit_button">${translations[savedLanguage].edit_button}</button>
+                        <button class="btn btn-sm btn-grok copy-btn" data-text="${message}" aria-label="Copiar mensaje" data-i18n="copy_button">${translations[savedLanguage].copy_button}</button>
+                        <button class="btn btn-sm btn-grok regenerate-btn" data-message="${message}" aria-label="Regenerar respuesta" data-i18n="regenerate_button">${translations[savedLanguage].regenerate_button}</button>
                     </div>
                 </div>`;
             messageContainer.appendChild(userMessage);
@@ -599,8 +862,8 @@
                         <p></p>
                         <div class="message-meta">Ahora</div>
                         <div class="message-actions">
-                            <button class="btn btn-sm btn-grok copy-btn" data-text="${data.response}" aria-label="Copiar respuesta">Copiar</button>
-                            <button class="btn btn-sm btn-grok regenerate-btn" data-message="${message}" aria-label="Regenerar respuesta">Regenerar</button>
+                            <button class="btn btn-sm btn-grok copy-btn" data-text="${data.response}" aria-label="Copiar respuesta" data-i18n="copy_button">${translations[savedLanguage].copy_button}</button>
+                            <button class="btn btn-sm btn-grok regenerate-btn" data-message="${message}" aria-label="Regenerar respuesta" data-i18n="regenerate_button">${translations[savedLanguage].regenerate_button}</button>
                         </div>
                     </div>`;
                 messageContainer.appendChild(aiMessage);
@@ -633,7 +896,7 @@
             if (e.target.classList.contains('copy-btn')) {
                 const text = e.target.getAttribute('data-text');
                 navigator.clipboard.writeText(text).then(() => {
-                    alert('¡Texto copiado!');
+                    alert(translations[savedLanguage].copy_button + ' OK');
                 });
             }
         });
@@ -658,11 +921,11 @@
 
                 // Reemplazar contenido con campo de edición
                 messageContent.innerHTML = `
-                    <strong>Tú:</strong>
+                    <strong data-i18n="user_label">${translations[savedLanguage].user_label}</strong>
                     <textarea rows="3">${messageText}</textarea>
                     <div class="edit-actions">
-                        <button class="btn btn-sm btn-grok save-edit-btn" data-message-id="${messageId}" aria-label="Guardar edición">Guardar</button>
-                        <button class="btn btn-sm btn-grok cancel-edit-btn" aria-label="Cancelar edición">Cancelar</button>
+                        <button class="btn btn-sm btn-grok save-edit-btn" data-message-id="${messageId}" aria-label="Guardar edición" data-i18n="save_button">${translations[savedLanguage].save_button}</button>
+                        <button class="btn btn-sm btn-grok cancel-edit-btn" aria-label="Cancelar edición" data-i18n="cancel_button">${translations[savedLanguage].cancel_button}</button>
                     </div>
                 `;
 
@@ -670,7 +933,7 @@
                 messageContent.querySelector('.save-edit-btn').addEventListener('click', function() {
                     const newMessage = messageContent.querySelector('textarea').value.trim();
                     if (!newMessage) {
-                        alert('El mensaje no puede estar vacío');
+                        alert(translations[savedLanguage].input_placeholder);
                         return;
                     }
 
@@ -688,13 +951,13 @@
 
                         // Actualizar mensaje del usuario
                         messageContent.innerHTML = `
-                            <strong>Tú:</strong>
+                            <strong data-i18n="user_label">${translations[savedLanguage].user_label}</strong>
                             <p>${newMessage}</p>
                             <div class="message-meta">Ahora</div>
                             <div class="message-actions">
-                                <button class="btn btn-sm btn-grok edit-btn" data-message-id="${messageId}" data-message="${newMessage}" aria-label="Editar mensaje">Editar</button>
-                                <button class="btn btn-sm btn-grok copy-btn" data-text="${newMessage}" aria-label="Copiar mensaje">Copiar</button>
-                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="${newMessage}" aria-label="Regenerar respuesta">Regenerar</button>
+                                <button class="btn btn-sm btn-grok edit-btn" data-message-id="${messageId}" data-message="${newMessage}" aria-label="Editar mensaje" data-i18n="edit_button">${translations[savedLanguage].edit_button}</button>
+                                <button class="btn btn-sm btn-grok copy-btn" data-text="${newMessage}" aria-label="Copiar mensaje" data-i18n="copy_button">${translations[savedLanguage].copy_button}</button>
+                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="${newMessage}" aria-label="Regenerar respuesta" data-i18n="regenerate_button">${translations[savedLanguage].regenerate_button}</button>
                             </div>
                         `;
 
@@ -705,8 +968,8 @@
                             <p></p>
                             <div class="message-meta">Ahora</div>
                             <div class="message-actions">
-                                <button class="btn btn-sm btn-grok copy-btn" data-text="${data.response}" aria-label="Copiar respuesta">Copiar</button>
-                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="${newMessage}" aria-label="Regenerar respuesta">Regenerar</button>
+                                <button class="btn btn-sm btn-grok copy-btn" data-text="${data.response}" aria-label="Copiar respuesta" data-i18n="copy_button">${translations[savedLanguage].copy_button}</button>
+                                <button class="btn btn-sm btn-grok regenerate-btn" data-message="${newMessage}" aria-label="Regenerar respuesta" data-i18n="regenerate_button">${translations[savedLanguage].regenerate_button}</button>
                             </div>
                         `;
                         typeResponse(aiMessageContent.querySelector('p'), data.response);
@@ -736,10 +999,25 @@
                     if (data.success) {
                         chatMessages.innerHTML = `
                             <div class="suggestions" role="region" aria-label="Sugerencias iniciales">
-                                <p class="mb-4">¡Bienvenido a GarBotGPT! ¿Cómo puedo asistirte hoy?</p>
-                                <button class="btn suggestion-btn" data-message="Explora la inteligencia artificial">Explora la IA</button>
-                                <button class="btn suggestion-btn" data-message="Escribe un cuento corto">Crea un cuento</button>
-                                <button class="btn suggestion-btn" data-message="Resuelve un problema matemático">Resuelve un problema</button>
+                                <h4 data-i18n="suggestions_title">${translations[savedLanguage].suggestions_title}</h4>
+                                <div class="suggestions-grid">
+                                    <div class="suggestion-card" data-message="Explora cómo funciona la inteligencia artificial" aria-label="Explorar inteligencia artificial">
+                                        <h5 data-i18n="suggestion_ai_title">${translations[savedLanguage].suggestion_ai_title}</h5>
+                                        <p data-i18n="suggestion_ai_desc">${translations[savedLanguage].suggestion_ai_desc}</p>
+                                    </div>
+                                    <div class="suggestion-card" data-message="Escribe un cuento corto sobre una aventura espacial" aria-label="Crear cuento corto">
+                                        <h5 data-i18n="suggestion_story_title">${translations[savedLanguage].suggestion_story_title}</h5>
+                                        <p data-i18n="suggestion_story_desc">${translations[savedLanguage].suggestion_story_desc}</p>
+                                    </div>
+                                    <div class="suggestion-card" data-message="Resuelve la ecuación 2x^2 + 5x - 3 = 0" aria-label="Resolver problema matemático">
+                                        <h5 data-i18n="suggestion_math_title">${translations[savedLanguage].suggestion_math_title}</h5>
+                                        <p data-i18n="suggestion_math_desc">${translations[savedLanguage].suggestion_math_desc}</p>
+                                    </div>
+                                    <div class="suggestion-card" data-message="Explica cómo programar en Python" aria-label="Aprender a programar">
+                                        <h5 data-i18n="suggestion_code_title">${translations[savedLanguage].suggestion_code_title}</h5>
+                                        <p data-i18n="suggestion_code_desc">${translations[savedLanguage].suggestion_code_desc}</p>
+                                    </div>
+                                </div>
                             </div>
                             <div id="responding-indicator" class="message ai-message d-none" role="status">
                                 <div class="avatar ai-avatar">G</div>
@@ -755,8 +1033,8 @@
 
         // Enviar sugerencias
         document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('suggestion-btn')) {
-                const message = e.target.getAttribute('data-message');
+            if (e.target.closest('.suggestion-card')) {
+                const message = e.target.closest('.suggestion-card').getAttribute('data-message');
                 document.getElementById('message-input').value = message;
                 sendMessage();
             }
@@ -770,7 +1048,9 @@
                 model: formData.get('model'),
                 temperature: formData.get('temperature'),
                 max_tokens: formData.get('max_tokens'),
-                theme_color: formData.get('theme_color')
+                theme_color: formData.get('theme_color'),
+                theme: formData.get('theme'),
+                language: formData.get('language')
             };
             fetch('/update_chat_settings', {
                 method: 'POST',
@@ -780,7 +1060,10 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('Configuración actualizada');
+                    document.body.setAttribute('data-theme', settings.theme);
+                    localStorage.setItem('theme', settings.theme);
+                    updateLanguage(settings.language);
+                    alert(translations[settings.language].save_button + ' OK');
                     document.querySelector('[data-bs-dismiss="modal"]').click();
                 }
             });
@@ -803,18 +1086,18 @@
 
         if (SpeechRecognition) {
             recognition = new SpeechRecognition();
-            recognition.lang = 'es-ES'; // Configurar idioma (español)
-            recognition.interimResults = true; // Mostrar resultados parciales
-            recognition.continuous = false; // Detener después de una sola entrada
+            recognition.lang = savedLanguage === 'es' ? 'es-ES' : savedLanguage === 'ca' ? 'ca-ES' : 'en-US';
+            recognition.interimResults = true;
+            recognition.continuous = false;
         } else {
             document.getElementById('voice-btn').setAttribute('disabled', true);
-            document.getElementById('voice-btn').setAttribute('title', 'Entrada por voz no soportada en este navegador');
+            document.getElementById('voice-btn').setAttribute('title', translations[savedLanguage].voice_button + ' no soportado');
         }
 
         // Manejar el botón de voz
         document.getElementById('voice-btn').addEventListener('click', function() {
             if (!recognition) {
-                alert('El reconocimiento de voz no está soportado en este navegador.');
+                alert(translations[savedLanguage].voice_button + ' no soportado en este navegador.');
                 return;
             }
 
@@ -824,12 +1107,12 @@
             }
 
             const messageInput = document.getElementById('message-input');
-            messageInput.value = ''; // Limpiar el campo de entrada
+            messageInput.value = '';
             isRecording = true;
-            this.classList.add('recording'); // Agregar clase para feedback visual
-            this.innerHTML = '<i class="bi bi-mic-mute-fill"></i>'; // Cambiar ícono
-            this.setAttribute('title', 'Detener grabación');
-            bootstrap.Tooltip.getInstance(this).setContent({ '.tooltip-inner': 'Detener grabación' });
+            this.classList.add('recording');
+            this.innerHTML = '<i class="bi bi-mic-mute-fill"></i>';
+            this.setAttribute('title', translations[savedLanguage].cancel_button);
+            bootstrap.Tooltip.getInstance(this).setContent({ '.tooltip-inner': translations[savedLanguage].cancel_button });
 
             recognition.start();
 
@@ -844,17 +1127,17 @@
                 isRecording = false;
                 document.getElementById('voice-btn').classList.remove('recording');
                 document.getElementById('voice-btn').innerHTML = '<i class="bi bi-mic-fill"></i>';
-                document.getElementById('voice-btn').setAttribute('title', 'Entrada por voz');
-                bootstrap.Tooltip.getInstance(document.getElementById('voice-btn')).setContent({ '.tooltip-inner': 'Entrada por voz' });
+                document.getElementById('voice-btn').setAttribute('title', translations[savedLanguage].voice_button);
+                bootstrap.Tooltip.getInstance(document.getElementById('voice-btn')).setContent({ '.tooltip-inner': translations[savedLanguage].voice_button });
             };
 
             recognition.onerror = function(event) {
                 isRecording = false;
                 document.getElementById('voice-btn').classList.remove('recording');
                 document.getElementById('voice-btn').innerHTML = '<i class="bi bi-mic-fill"></i>';
-                document.getElementById('voice-btn').setAttribute('title', 'Entrada por voz');
-                bootstrap.Tooltip.getInstance(document.getElementById('voice-btn')).setContent({ '.tooltip-inner': 'Entrada por voz' });
-                alert('Error en el reconocimiento de voz: ' + event.error);
+                document.getElementById('voice-btn').setAttribute('title', translations[savedLanguage].voice_button);
+                bootstrap.Tooltip.getInstance(document.getElementById('voice-btn')).setContent({ '.tooltip-inner': translations[savedLanguage].voice_button });
+                alert('Error: ' + event.error);
             };
         });
 
