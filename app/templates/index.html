@@ -16,7 +16,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com; img-src 'self' data:;">
     <title>GarBotGPT - El Futuro de la Interacción con IA</title>
 
-    <!-- Preconnect for faster font and CDN loading -->
+    <!-- Preconnect for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -28,13 +28,13 @@
 
     <style>
         :root {
-            --primary: #7C3AED; /* Vibrant Purple */
-            --secondary: #06B6D4; /* Bright Cyan */
-            --accent: #EC4899; /* Vivid Pink */
-            --bg-light: #F1F5F9;
-            --bg-dark: #0F172A;
+            --primary: #6D28D9; /* Deep Purple */
+            --secondary: #14B8A6; /* Teal */
+            --accent: #DB2777; /* Vivid Pink */
+            --bg-light: #F3F4F6;
+            --bg-dark: #111827;
             --text-light: #1F2937;
-            --text-dark: #E2E8F0;
+            --text-dark: #D1D5DB;
             --glass-bg: rgba(255, 255, 255, 0.1);
             --glass-border: rgba(255, 255, 255, 0.2);
         }
@@ -42,7 +42,7 @@
         [data-theme="dark"] {
             --bg: var(--bg-dark);
             --text: var(--text-dark);
-            --card-bg: rgba(30, 41, 59, 0.95);
+            --card-bg: rgba(31, 41, 55, 0.95);
         }
 
         [data-theme="light"] {
@@ -64,7 +64,7 @@
             background: linear-gradient(to bottom, var(--glass-bg), transparent);
             backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--glass-border);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
             position: fixed;
             top: 0;
             width: 100%;
@@ -88,7 +88,7 @@
             width: 100%;
             height: 100%;
             z-index: 0;
-            opacity: 0.8;
+            opacity: 0.7;
         }
 
         .card {
@@ -219,31 +219,102 @@
             transform: scale(1.05);
         }
 
+        /* Testimonials Section */
+        .testimonial-section {
+            position: relative;
+            background: linear-gradient(to bottom, var(--bg), var(--bg-dark));
+            overflow: hidden;
+        }
+
         .testimonial-slider {
             display: flex;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
-            padding-bottom: 1rem;
+            padding: 1rem 0;
             gap: 1.5rem;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
 
-        .testimonial-slider .card {
-            flex: 0 0 90%;
-            max-width: 24rem;
+        .testimonial-slider::-webkit-scrollbar {
+            display: none;
+        }
+
+        .testimonial-card {
+            flex: 0 0 85%;
+            max-width: 22rem;
             scroll-snap-align: center;
             padding: 2rem;
             text-align: center;
-            transition: transform 0.4s ease, opacity 0.4s ease;
+            background: var(--card-bg);
+            border-radius: 1.5rem;
+            border: 1px solid var(--glass-border);
+            transition: transform 0.4s ease, box-shadow 0.4s ease, opacity 0.4s ease;
+            position: relative;
+            transform: perspective(1000px) rotateY(0deg);
         }
 
-        .testimonial-slider .card img {
+        .testimonial-card.active {
+            transform: scale(1.05) perspective(1000px) rotateY(0deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 20px var(--accent);
+            border-color: var(--accent);
+            z-index: 10;
+        }
+
+        .testimonial-card:hover {
+            transform: perspective(1000px) rotateY(5deg);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .testimonial-card img {
             border-radius: 50%;
-            width: 4rem;
-            height: 4rem;
+            width: 5rem;
+            height: 5rem;
             object-fit: cover;
             margin: 0 auto 1rem;
+            border: 2px solid var(--accent);
+        }
+
+        .testimonial-card .quote-icon {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            color: var(--accent);
+            opacity: 0.2;
+            font-size: 2rem;
+        }
+
+        .testimonial-card .stars {
+            color: #FBBF24;
+            margin: 0.5rem 0;
+        }
+
+        .testimonial-nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .testimonial-nav button {
+            width: 0.75rem;
+            height: 0.75rem;
+            background: var(--text);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .testimonial-nav button.active {
+            background: var(--accent);
+            transform: scale(1.3);
+        }
+
+        .testimonial-nav button:hover {
+            background: var(--accent);
         }
 
         .back-to-top {
@@ -293,25 +364,27 @@
 
         @media (max-width: 768px) {
             .hero-section h1 {
-                font-size: 2.5rem;
+                font-size: 2.25rem;
             }
             .hero-section p {
-                font-size: 1.125rem;
+                font-size: 1rem;
             }
             .navbar {
-                padding: 0.75rem;
+                padding: 0.5rem;
             }
             .card {
                 margin-bottom: 1.5rem;
             }
-            .testimonial-slider .card {
-                flex: 0 0 85%;
+            .testimonial-card {
+                flex: 0 0 90%;
+                max-width: 18rem;
             }
         }
 
         @media (min-width: 769px) {
-            .testimonial-slider .card {
+            .testimonial-card {
                 flex: 0 0 30%;
+                max-width: 24rem;
             }
         }
     </style>
@@ -573,43 +646,76 @@
         </div>
     </section>
 
-    <!-- Testimonials Section (Horizontal Scroll) -->
-    <section id="testimonios" class="py-16 bg-[var(--bg)]" aria-labelledby="testimonials-heading">
+    <!-- Testimonials Section -->
+    <section id="testimonios" class="py-16 testimonial-section" aria-labelledby="testimonials-heading">
         <div class="container mx-auto px-4">
             <h2 id="testimonials-heading" class="text-3xl md:text-4xl font-bold text-center font-rajdhani mb-10">Lo Que Dicen Nuestros Usuarios</h2>
             <div class="relative">
                 <div class="testimonial-slider" role="region" aria-label="Carrusel de testimonios">
-                    <div class="card">
+                    <div class="testimonial-card">
+                        <i class="fas fa-quote-left quote-icon" aria-hidden="true"></i>
                         <img src="{{ url_for('static', filename='img/avatar-lucia.webp') }}" alt="Avatar de Lucía M." loading="lazy">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
                         <p class="italic text-sm">"GarBotGPT revolucionó mi forma de estudiar con explicaciones claras y rápidas."</p>
                         <h4 class="mt-4 font-semibold">Lucía M.</h4>
                         <p class="text-sm">Estudiante</p>
                     </div>
-                    <div class="card">
+                    <div class="testimonial-card">
+                        <i class="fas fa-quote-left quote-icon" aria-hidden="true"></i>
                         <img src="{{ url_for('static', filename='img/avatar-javier.webp') }}" alt="Avatar de Javier T." loading="lazy">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
                         <p class="italic text-sm">"Un cambio radical para nuestro equipo de desarrollo. Rápido y preciso."</p>
                         <h4 class="mt-4 font-semibold">Javier T.</h4>
                         <p class="text-sm">Desarrollador</p>
                     </div>
-                    <div class="card">
+                    <div class="testimonial-card">
+                        <i class="fas fa-quote-left quote-icon" aria-hidden="true"></i>
                         <img src="{{ url_for('static', filename='img/avatar-sofia.webp') }}" alt="Avatar de Sofía R." loading="lazy">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
                         <p class="italic text-sm">"Escribir contenido nunca fue tan fácil. GarBotGPT es mi chispa creativa."</p>
                         <h4 class="mt-4 font-semibold">Sofía R.</h4>
                         <p class="text-sm">Escritora</p>
                     </div>
-                    <div class="card">
+                    <div class="testimonial-card">
+                        <i class="fas fa-quote-left quote-icon" aria-hidden="true"></i>
                         <img src="{{ url_for('static', filename='img/avatar-maria.webp') }}" alt="Avatar de María G." loading="lazy">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
                         <p class="italic text-sm">"La IA de GarBotGPT me ayudó a automatizar tareas repetitivas en minutos."</p>
                         <h4 class="mt-4 font-semibold">María G.</h4>
                         <p class="text-sm">Emprendedora</p>
                     </div>
                 </div>
-                <button class="absolute top-1/2 left-0 transform -translate-y-1/2 text-white bg-[var(--primary)] p-2 rounded-full hover:bg-[var(--accent)] transition" id="slider-prev" aria-label="Testimonio anterior">
+                <button class="absolute top-1/2 left-0 transform -translate-y-1/2 text-white bg-[var(--primary)] p-3 rounded-full hover:bg-[var(--accent)] transition" id="slider-prev" aria-label="Testimonio anterior">
                     <i class="fas fa-chevron-left"></i>
                 </button>
-                <button class="absolute top-1/2 right-0 transform -translate-y-1/2 text-white bg-[var(--primary)] p-2 rounded-full hover:bg-[var(--accent)] transition" id="slider-next" aria-label="Testimonio siguiente">
+                <button class="absolute top-1/2 right-0 transform -translate-y-1/2 text-white bg-[var(--primary)] p-3 rounded-full hover:bg-[var(--accent)] transition" id="slider-next" aria-label="Testimonio siguiente">
                     <i class="fas fa-chevron-right"></i>
                 </button>
+                <div class="testimonial-nav" role="tablist" aria-label="Navegación de testimonios"></div>
             </div>
         </div>
     </section>
@@ -810,17 +916,17 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-            const particleCount = 800;
+            const particleCount = 600;
             const positions = new Float32Array(particleCount * 3);
             const velocities = new Float32Array(particleCount * 3);
             const colors = new Float32Array(particleCount * 3);
             for (let i = 0; i < particleCount * 3; i += 3) {
-                positions[i] = (Math.random() - 0.5) * 1200;
-                positions[i + 1] = (Math.random() - 0.5) * 1200;
-                positions[i + 2] = (Math.random() - 0.5) * 1200;
-                velocities[i] = (Math.random() - 0.5) * 1.5;
-                velocities[i + 1] = (Math.random() - 0.5) * 1.5;
-                velocities[i + 2] = (Math.random() - 0.5) * 1.5;
+                positions[i] = (Math.random() - 0.5) * 1000;
+                positions[i + 1] = (Math.random() - 0.5) * 1000;
+                positions[i + 2] = (Math.random() - 0.5) * 1000;
+                velocities[i] = (Math.random() - 0.5) * 1.2;
+                velocities[i + 1] = (Math.random() - 0.5) * 1.2;
+                velocities[i + 2] = (Math.random() - 0.5) * 1.2;
                 colors[i] = Math.random();
                 colors[i + 1] = Math.random();
                 colors[i + 2] = 1;
@@ -829,30 +935,30 @@
             particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
             particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
             const material = new THREE.PointsMaterial({ 
-                size: 2.5, 
+                size: 2, 
                 vertexColors: true, 
                 transparent: true, 
-                opacity: 0.6,
+                opacity: 0.5,
                 blending: THREE.AdditiveBlending
             });
             const particleSystem = new THREE.Points(particles, material);
             scene.add(particleSystem);
-            camera.position.z = 400;
+            camera.position.z = 350;
 
             let animationFrameId;
             function animate() {
                 animationFrameId = requestAnimationFrame(animate);
                 const positions = particleSystem.geometry.attributes.position.array;
                 for (let i = 0; i < particleCount * 3; i += 3) {
-                    positions[i] += velocities[i] * 0.02;
-                    positions[i + 1] += velocities[i + 1] * 0.02;
-                    positions[i + 2] += velocities[i + 2] * 0.02;
-                    if (Math.abs(positions[i]) > 600) velocities[i] *= -1;
-                    if (Math.abs(positions[i + 1]) > 600) velocities[i + 1] *= -1;
-                    if (Math.abs(positions[i + 2]) > 600) velocities[i + 2] *= -1;
+                    positions[i] += velocities[i] * 0.015;
+                    positions[i + 1] += velocities[i + 1] * 0.015;
+                    positions[i + 2] += velocities[i + 2] * 0.015;
+                    if (Math.abs(positions[i]) > 500) velocities[i] *= -1;
+                    if (Math.abs(positions[i + 1]) > 500) velocities[i + 1] *= -1;
+                    if (Math.abs(positions[i + 2]) > 500) velocities[i + 2] *= -1;
                 }
                 particleSystem.geometry.attributes.position.needsUpdate = true;
-                particleSystem.rotation.y += 0.0002;
+                particleSystem.rotation.y += 0.00015;
                 renderer.render(scene, camera);
             }
             animate();
@@ -863,9 +969,9 @@
                 mouseX = (e.clientX / window.innerWidth) * 2 - 1;
                 mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
                 gsap.to(particleSystem.rotation, {
-                    x: mouseY * 0.15,
-                    y: mouseX * 0.15,
-                    duration: 0.7,
+                    x: mouseY * 0.1,
+                    y: mouseX * 0.1,
+                    duration: 0.6,
                     ease: 'power2.out'
                 });
             });
@@ -874,17 +980,17 @@
             gsap.registerPlugin(ScrollTrigger);
             gsap.from('.hero-section h1, .hero-section p, .hero-section .btn', {
                 opacity: 0,
-                y: 40,
-                duration: 1.2,
-                stagger: 0.2,
+                y: 30,
+                duration: 1,
+                stagger: 0.15,
                 ease: 'power4.out'
             });
 
-            gsap.utils.toArray('.card').forEach(card => {
+            gsap.utils.toArray('.card:not(.testimonial-card)').forEach(card => {
                 gsap.from(card, {
                     opacity: 0,
-                    y: 30,
-                    duration: 0.7,
+                    y: 25,
+                    duration: 0.6,
                     scrollTrigger: {
                         trigger: card,
                         start: 'top 80%',
@@ -896,9 +1002,9 @@
             gsap.utils.toArray('.chat-message').forEach((msg, i) => {
                 gsap.from(msg, {
                     opacity: 0,
-                    x: i % 2 === 0 ? 30 : -30,
-                    duration: 0.8,
-                    delay: i * 0.3,
+                    x: i % 2 === 0 ? 25 : -25,
+                    duration: 0.7,
+                    delay: i * 0.2,
                     ease: 'power3.out',
                     scrollTrigger: {
                         trigger: msg,
@@ -910,7 +1016,7 @@
             gsap.utils.toArray('.stats-number').forEach(number => {
                 gsap.from(number, {
                     innerText: 0,
-                    duration: 1.2,
+                    duration: 1,
                     snap: { innerText: 1 },
                     scrollTrigger: {
                         trigger: number,
@@ -922,28 +1028,25 @@
                 });
             });
 
-            // Scroll Progress
-            window.addEventListener('scroll', () => {
-                const scrollTop = window.scrollY;
-                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-                const scrollPercent = (scrollTop / docHeight) * 100;
-                document.querySelector('.scroll-progress').style.width = scrollPercent + '%';
-            });
-
-            // Parallax Effect
-            window.addEventListener('scroll', () => {
-                const scrollY = window.scrollY;
-                document.querySelectorAll('.parallax').forEach(el => {
-                    const speed = 0.25;
-                    el.style.transform = `translateY(${scrollY * speed}px)`;
-                });
-            });
-
             // Testimonial Slider
             const testimonialSlider = document.querySelector('.testimonial-slider');
+            const testimonials = document.querySelectorAll('.testimonial-card');
             const prevButton = document.getElementById('slider-prev');
             const nextButton = document.getElementById('slider-next');
-            const testimonials = document.querySelectorAll('.testimonial-slider .card');
+            const navContainer = document.querySelector('.testimonial-nav');
+
+            // Create Navigation Dots
+            testimonials.forEach((_, index) => {
+                const button = document.createElement('button');
+                button.setAttribute('role', 'tab');
+                button.setAttribute('aria-label', `Ver testimonio ${index + 1}`);
+                button.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+                button.classList.toggle('active', index === 0);
+                button.addEventListener('click', () => scrollToTestimonial(index));
+                navContainer.appendChild(button);
+            });
+
+            const navButtons = navContainer.querySelectorAll('button');
 
             function scrollToTestimonial(index) {
                 const cardWidth = testimonials[0].offsetWidth + 24; // Include gap
@@ -951,7 +1054,33 @@
                     left: index * cardWidth,
                     behavior: 'smooth'
                 });
+                updateActiveTestimonial(index);
             }
+
+            function updateActiveTestimonial(index) {
+                testimonials.forEach((card, i) => {
+                    card.classList.toggle('active', i === index);
+                });
+                navButtons.forEach((button, i) => {
+                    button.classList.toggle('active', i === index);
+                    button.setAttribute('aria-selected', i === index ? 'true' : 'false');
+                });
+            }
+
+            // IntersectionObserver to detect active testimonial
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const index = Array.from(testimonials).indexOf(entry.target);
+                            updateActiveTestimonial(index);
+                        }
+                    });
+                },
+                { root: testimonialSlider, threshold: 0.6 }
+            );
+
+            testimonials.forEach(card => observer.observe(card));
 
             prevButton.addEventListener('click', () => {
                 const currentScroll = testimonialSlider.scrollLeft;
@@ -967,36 +1096,73 @@
                 scrollToTestimonial(index);
             });
 
-            // Touch Swipe Support
-            let touchStartX = 0;
-            let touchEndX = 0;
-            testimonialSlider.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
+            // Touch Swipe and Drag Support
+            let isDragging = false;
+            let startX = 0;
+            let scrollLeftStart = 0;
+
+            testimonialSlider.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.pageX;
+                scrollLeftStart = testimonialSlider.scrollLeft;
+                testimonialSlider.style.cursor = 'grabbing';
             });
-            testimonialSlider.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                const diff = touchStartX - touchEndX;
-                if (Math.abs(diff) > 50) {
-                    const currentScroll = testimonialSlider.scrollLeft;
-                    const cardWidth = testimonials[0].offsetWidth + 24;
-                    let index = Math.round(currentScroll / cardWidth);
-                    if (diff > 0) {
-                        index = Math.min(testimonials.length - 1, index + 1);
-                    } else {
-                        index = Math.max(0, index - 1);
-                    }
-                    scrollToTestimonial(index);
+
+            testimonialSlider.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const x = e.pageX;
+                const walk = (x - startX) * 1.5; // Adjust drag sensitivity
+                testimonialSlider.scrollLeft = scrollLeftStart - walk;
+            });
+
+            testimonialSlider.addEventListener('mouseup', () => {
+                isDragging = false;
+                testimonialSlider.style.cursor = 'grab';
+                snapToClosestTestimonial();
+            });
+
+            testimonialSlider.addEventListener('mouseleave', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    testimonialSlider.style.cursor = 'grab';
+                    snapToClosestTestimonial();
                 }
             });
 
-            // Auto-scroll Testimonials
+            testimonialSlider.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                startX = e.touches[0].pageX;
+                scrollLeftStart = testimonialSlider.scrollLeft;
+            });
+
+            testimonialSlider.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                const x = e.touches[0].pageX;
+                const walk = (x - startX) * 1.5;
+                testimonialSlider.scrollLeft = scrollLeftStart - walk;
+            });
+
+            testimonialSlider.addEventListener('touchend', () => {
+                isDragging = false;
+                snapToClosestTestimonial();
+            });
+
+            function snapToClosestTestimonial() {
+                const currentScroll = testimonialSlider.scrollLeft;
+                const cardWidth = testimonials[0].offsetWidth + 24;
+                const index = Math.round(currentScroll / cardWidth);
+                scrollToTestimonial(index);
+            }
+
+            // Auto-scroll
             let autoScrollInterval = setInterval(() => {
                 const currentScroll = testimonialSlider.scrollLeft;
                 const cardWidth = testimonials[0].offsetWidth + 24;
                 let index = Math.round(currentScroll / cardWidth);
                 index = (index + 1) % testimonials.length;
                 scrollToTestimonial(index);
-            }, 6000);
+            }, 5000);
 
             testimonialSlider.addEventListener('mouseenter', () => clearInterval(autoScrollInterval));
             testimonialSlider.addEventListener('mouseleave', () => {
@@ -1006,7 +1172,24 @@
                     let index = Math.round(currentScroll / cardWidth);
                     index = (index + 1) % testimonials.length;
                     scrollToTestimonial(index);
-                }, 6000);
+                }, 5000);
+            });
+
+            // Scroll Progress
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollPercent = (scrollTop / docHeight) * 100;
+                document.querySelector('.scroll-progress').style.width = scrollPercent + '%';
+            });
+
+            // Parallax Effect
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                document.querySelectorAll('.parallax').forEach(el => {
+                    const speed = 0.2;
+                    el.style.transform = `translateY(${scrollY * speed}px)`;
+                });
             });
 
             // Contact Form
@@ -1068,12 +1251,11 @@
                 }
             });
 
-            // Language Switcher (Placeholder)
+            // Language Switcher
             const languageSelect = document.getElementById('language-select');
             languageSelect?.addEventListener('change', (e) => {
                 const lang = e.target.value;
                 alert(`Idioma cambiado a: ${lang} (Funcionalidad pendiente)`);
-                // Implement backend routing or content update here
             });
 
             // Back to Top Button
