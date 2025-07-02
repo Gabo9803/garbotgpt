@@ -39,7 +39,7 @@ def create_app():
             return redirect(url_for('maintenance'))
     
     # Import models before creating tables
-    from app.models import User, ChatHistory, ChatSettings
+    from app.models import User, ChatHistory, ChatSettings, Document
     
     # Create tables within the application context with retries
     with app.app_context():
@@ -64,7 +64,7 @@ def create_app():
                 created_tables = inspector.get_table_names()
                 logger.info("Tablas presentes en la base de datos: %s", created_tables)
                 
-                expected_tables = {'user', 'chat_history', 'chat_settings'}
+                expected_tables = {'user', 'chat_history', 'chat_settings', 'document'}
                 if not expected_tables.issubset(created_tables):
                     logger.error("No se encontraron las tablas esperadas: %s", expected_tables)
                     raise Exception("Fallo al crear tablas necesarias.")

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Documentos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-4">Documentos PDF</h3>
+    <form id="upload-form" class="mb-3" enctype="multipart/form-data">
+        <input type="file" name="file" id="pdf-file" accept="application/pdf" class="form-control" required>
+        <button type="submit" class="btn btn-primary mt-2">Subir y Resumir</button>
+    </form>
+    <div id="summary" class="mb-4"></div>
+    <ul class="list-group">
+        {% for doc in documents %}
+        <li class="list-group-item">
+            <strong>{{ doc.filename }}</strong> - {{ doc.created_at.strftime('%Y-%m-%d %H:%M') }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<script>
+document.getElementById('upload-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fileInput = document.getElementById('pdf-file');
+    if (!fileInput.files.length) return;
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    const resp = await fetch('/upload_pdf', { method: 'POST', body: formData });
+    const data = await resp.json();
+    if (data.summary) {
+        document.getElementById('summary').textContent = data.summary;
+        window.location.reload();
+    } else if (data.error) {
+        alert(data.error);
+    }
+});
+</script>
+{% endblock %}
+
