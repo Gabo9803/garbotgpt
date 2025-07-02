@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, current_app, send_file
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from app.models import User, ChatHistory, ChatSettings
+from app.models import User, ChatHistory, ChatSettings, Document
 from werkzeug.security import generate_password_hash, check_password_hash
 import openai
 import google.generativeai as genai
 from app.config import Config
 from app import db
+from PyPDF2 import PdfReader
 from sqlalchemy.exc import ProgrammingError, OperationalError
 from datetime import datetime
 import logging
@@ -384,6 +385,60 @@ def update_chat_settings():
     except Exception as e:
         logger.error(f"Error updating chat settings: {str(e)}")
         return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@current_app.route('/upload_pdf', methods=['POST'])
+@login_required
+def upload_pdf():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file provided'}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+    try:
+        reader = PdfReader(file)
+        text = ''
+        for page in reader.pages:
+            page_text = page.extract_text() or ''
+            text += page_text + '\n'
+
+        document = Document(user_id=current_user.id, filename=file.filename, content=text)
+        db.session.add(document)
+        db.session.commit()
+
+        chat_settings = ChatSettings.query.filter_by(user_id=current_user.id).first()
+        summary_prompt = f"Resume el siguiente documento:\n\n{text}"
+
+        if chat_settings.model.startswith('gemini'):
+            model_instance = genai.GenerativeModel(chat_settings.model)
+            response = model_instance.generate_content(
+                summary_prompt,
+                generation_config=genai.types.GenerationConfig(
+                    temperature=chat_settings.temperature,
+                    max_output_tokens=chat_settings.max_tokens
+                )
+            )
+            summary = response.text
+        else:
+            response = openai.chat.completions.create(
+                model=chat_settings.model,
+                messages=[{"role": "user", "content": summary_prompt}],
+                temperature=chat_settings.temperature,
+                max_tokens=chat_settings.max_tokens
+            )
+            summary = response.choices[0].message.content
+
+        return jsonify({'summary': summary})
+    except Exception as e:
+        logger.error(f"Error procesando PDF: {str(e)}")
+        return jsonify({'error': 'Error al procesar el PDF'}), 500
+
+
+@current_app.route('/documents')
+@login_required
+def documents():
+    docs = Document.query.filter_by(user_id=current_user.id).order_by(Document.created_at.desc()).all()
+    return render_template('documents.html', documents=docs, authenticated=current_user.is_authenticated)
 
 @current_app.route('/maintenance')
 def maintenance():
